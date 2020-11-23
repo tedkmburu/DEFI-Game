@@ -39,10 +39,10 @@ function preload()
 
 function setup()
 {
-    createCanvas(windowWidth, windowHeight);
+    createCanvas(812, 375);
     //textFont(calibri);
     textFont(fontRegular);
-    windowSize = createVector(windowWidth, windowHeight).mag();
+    windowSize = createVector(812, 375).mag();
 
     angleMode(DEGREES);
     textAlign(CENTER);

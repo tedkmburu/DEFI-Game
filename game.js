@@ -30,6 +30,8 @@ function preload()
     tracks = [
         {play: loadImage('images/tracks/track1.png'), build: loadImage('images/tracks/track1build.png')},
         {play: loadImage('images/tracks/track2.png'), build: loadImage('images/tracks/track2build.png')},
+        {play: loadImage('images/tracks/track3.png'), build: loadImage('images/tracks/track3build.png')},
+        {play: loadImage('images/tracks/track4.png'), build: loadImage('images/tracks/track4build.png')},
         // 1: {play: loadImage('images/tracks/redo.png'), build: },
         // 1: {play: loadImage('images/tracks/redo.png'), build: },
     ]
@@ -37,10 +39,10 @@ function preload()
 
 function setup()
 {
-    createCanvas(812, 375);
+    createCanvas(windowWidth, windowHeight);
     //textFont(calibri);
     textFont(fontRegular);
-    windowSize = createVector(812, 375).mag();
+    windowSize = createVector(windowWidth, windowHeight).mag();
 
     angleMode(DEGREES);
     textAlign(CENTER);
@@ -477,49 +479,47 @@ function updateLeaderBoard()
 
 function sendScore(level, group, timeElapsed, stars)
 {
-    let levelTime = timeElapsed;
-    let numberOfStarsCollected = 0;
-    stars.forEach(star =>
-    {
-        if(star.collected)
-        {
-            numberOfStarsCollected++;
-        }
-    });
+    // let levelTime = timeElapsed;
+    // let numberOfStarsCollected = 0;
+    // stars.forEach(star =>
+    // {
+    //     if(star.collected)
+    //     {
+    //         numberOfStarsCollected++;
+    //     }
+    // });
 
-    let score = 10000;
-    score = constrain(score - levelTime / 100, 100, 10000);
-    if (numberOfStarsCollected > 0) 
-    {
-        score *= numberOfStarsCollected
-    }
-    score = Math.round(score);
+    // let score = 10000;
+    // score = constrain(score - levelTime / 100, 100, 10000);
+    // if (numberOfStarsCollected > 0) 
+    // {
+    //     score *= numberOfStarsCollected
+    // }
+    // score = Math.round(score);
 
-    //{_id: “sdfsdf”, level: “level”, stars_collected: 10, score: 100000, time: 45 }
-    //let data = {_id: localStorage.userId, level: level, group: group, stars_collected: numberOfStarsCollected, score: score, time: timeElapsed };
-    let data = {_id: localStorage.userId, level: level, stars_collected: numberOfStarsCollected, score: score, time: timeElapsed };
-    let dataJSON = JSON.stringify(data);
-
-
-
-    fetch("http://ic-research.eastus.cloudapp.azure.com:8080/class/", {
-    method: "post",
-    headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-    },
-
-    //make sure to serialize your JSON body
-    body: JSON.stringify({_id: 11})
-
-    .then( (response) => { 
-        console.log(response);
-    //do something awesome that makes the world a better place
-    })
+    // //{_id: “sdfsdf”, level: “level”, stars_collected: 10, score: 100000, time: 45 }
+    // //let data = {_id: localStorage.userId, level: level, group: group, stars_collected: numberOfStarsCollected, score: score, time: timeElapsed };
+    // let data = {"_id": localStorage.userId, level: level, stars_collected: numberOfStarsCollected, score: score, time: timeElapsed };
+    // let dataJSON = JSON.stringify(data);
+    // console.log(data);
 
 
+
+    // fetch("http://ic-research.eastus.cloudapp.azure.com:8080/class/", {
+    // method: "post",
+    // headers: {
+    //     'Accept': 'application/json',
+    //     'Content-Type': 'application/json'
+    // },
+
+    // body: dataJSON
+
+    // }).then( (response) => { 
+    //     console.log(response);
+    // })
+
+    console.log("data sent");
         
-    })
 }
 
 

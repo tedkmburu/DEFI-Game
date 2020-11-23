@@ -20,7 +20,16 @@ function createTrack()
 
 function displayTrack()
 {
-    image(tracks[track.level].play, 150, 135, 550 , (550 / tracks[track.level].play.width) * height);
+
+    if(gameMode == "Play")
+    {
+        image(tracks[track.level].play, levels[currentLevelGroup].trackOffset.x, levels[currentLevelGroup].trackOffset.y, levels[currentLevelGroup].dimentions.x , levels[currentLevelGroup].dimentions.y);
+    }
+    else
+    {
+        image(tracks[track.level].build, levels[currentLevelGroup].trackOffset.x, levels[currentLevelGroup].trackOffset.y, levels[currentLevelGroup].dimentions.x , levels[currentLevelGroup].dimentions.y);
+    }
+    
     track.display();
     //image(tracks[track.level].play, 100, 100, tracks[track.level].play.width , tracks[track.level].play.height);
     

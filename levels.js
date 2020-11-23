@@ -1,7 +1,7 @@
 function createLevels()
 {
   levels = [
-    {name: "TRACK 1",
+      {name: "TRACK 1",
       locked: false,
       trackOffset: createVector(width/2 - 250, height/2 - 50),
       testChargeStartingPosition: createVector(50, 50), 
@@ -21,7 +21,9 @@ function createLevels()
         ],
       shapes: [
       {shape: "Rect",   x:   0, y:   0, width: 540, height: 100, type: "track"},
-      {shape: "Rect",   x: 485, y:  0, width:  55, height: 100, type: "finish"}]},
+      {shape: "Rect",   x: 485, y:  0, width:  50, height: 100, type: "finish"}],
+      dimentions: createVector(540, 100)
+    },
 
 
 
@@ -39,12 +41,14 @@ function createLevels()
         ],
       shapes: [
       {shape: "Rect",   x:   0, y:   0, width: 400, height: 100, type: "track"},
-      {shape: "Circle", x: 400, y: 125, radius:125,             type: "track"},
+      {shape: "Circle", x: 405, y: 115, radius:120,             type: "track"},
       {shape: "Rect",   x: 425, y: 125, width: 100, height: 125, type: "track"}, 
       {shape: "Rect",   x:   0, y: 100, width: 400, height:  50, type: "remove"},
-      {shape: "Circle", x: 400, y: 125, radius: 25,              type: "remove"},
+      {shape: "Circle", x: 397, y: 125, radius: 25,              type: "remove"},
       {shape: "Rect",   x: 225, y: 125, width: 200, height: 125, type: "remove"},
-      {shape: "Rect",   x: 425, y: 200, width: 100, height: 50, type: "finish"}]},
+      {shape: "Rect",   x: 425, y: 200, width: 100, height: 50, type: "finish"}],
+      dimentions: createVector(525, 250)
+    },
 
 
 
@@ -53,7 +57,7 @@ function createLevels()
 
       {name: "TRACK 3",
       locked: true,
-      trackOffset: createVector(width/2 - 150, height/2 - 100),
+      trackOffset: createVector(width/2 - 50, height/2 - 100),
       testChargeStartingPosition: createVector(125, 50), 
       starPositions: [
         [createVector(175, 75), createVector(200, 125), createVector(175, 200)],
@@ -63,16 +67,17 @@ function createLevels()
         [createVector(175, 75), createVector(200, 125), createVector(175, 200)],
       ],
       shapes: [
-      {shape: "Rect",   x: 100, y:   0, width: 50, height: 100,  type: "track"},
-      {shape: "Rect",   x: 100, y: 150, width: 50, height: 100,  type: "track"},
-      {shape: "Circle", x: 150, y: 125, radius: 125,             type: "track"}, 
+      {shape: "Rect",   x: 0, y:   0, width: 50, height: 100,  type: "track"},
+      {shape: "Rect",   x: 0, y: 150, width: 50, height: 100,  type: "track"},
+      {shape: "Circle", x: 50, y: 125, radius: 125,             type: "track"}, 
     
-      {shape: "Rect",   x:   0, y:   0, width: 100, height: 250, type: "remove"},
-      {shape: "Rect",   x:  50, y: 100, width: 100, height: 50,  type: "remove"},
-      {shape: "Circle", x: 150, y: 125, radius: 25,              type: "remove"},
+      {shape: "Rect",   x:   -100, y:   0, width: 100, height: 250, type: "remove"},
+      {shape: "Rect",   x:  -50, y: 100, width: 100, height: 50,  type: "remove"},
+      {shape: "Circle", x: 50, y: 125, radius: 25,              type: "remove"},
         
-      {shape: "Rect",   x: 100, y: 150, width:  50, height: 100, type: "finish"},
-      ]},
+      {shape: "Rect",   x: 0, y: 150, width:  50, height: 100, type: "finish"}],
+      dimentions: createVector(180, 255)
+    },
 
 
 
@@ -94,7 +99,9 @@ function createLevels()
       {shape: "Rect",   x:   0, y: 100, width: 400, height:  50, type: "remove"},
       {shape: "Circle", x: 400, y: 125, radius: 25,              type: "remove"},
       {shape: "Rect",   x:   0, y: 150, width:  50, height: 100, type: "finish"},
-      ]},
+      ],
+      dimentions: createVector(525, 250)
+    },
   ]
 }
 

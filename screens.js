@@ -37,8 +37,8 @@ function displayScreen()
                     text("Pick a Level", 3 * (width/4) ,90);
                     fill(0);
                     rect(50,100, width * scale, height * scale)
-                    let showTrack = new Track(currentLevelGroup, scale, p5.Vector.add(offset, createVector(50,100)), false);
-                    showTrack.display();
+                    
+                    image(tracks[currentLevelGroup].build, 10 + (levels[currentLevelGroup].trackOffset.x) /2, 100 + (levels[currentLevelGroup].trackOffset.y) / 2, levels[currentLevelGroup].dimentions.x / 2, levels[currentLevelGroup].dimentions.y / 2);
 
                     let squareWidth = 70;
                     let y = 100;
@@ -117,7 +117,7 @@ function displayScreen()
                             starsRequired += 12; 
                         }
 
-                        if ( starsRequired > totalStars) 
+                        if ( starsRequired/5 > totalStars) 
                         {
                             
                             image(icon.lock, x + 50, y + 60, squareWidth/2, squareWidth/2);
@@ -139,10 +139,17 @@ function displayScreen()
                             showTrack.display();
                         }
 
-                        if (i == 0) 
+                        if(i == 2)
                         {
-                            image(tracks[i].play, x + 15, height/2 + 25, 175 , (175 / tracks[i].play.width) * height);
+                            image(tracks[i].build, x + 60, height/2 - 15, levels[i].dimentions.x / 2, levels[i].dimentions.y / 2);
                         }
+                        else
+                        {
+                            image(tracks[i].build, x + 10, height/2 + 25, levels[i].dimentions.x / 3, levels[i].dimentions.y / 3);
+                        }
+
+                       
+                        
                     pop()
                 });
 
@@ -163,8 +170,8 @@ function displayScreen()
 
                 if (gameMode == "Play") 
                 {
-                    screen.buttons[2].onClick = "Build";
-                    screen.buttons[2].title = "Build";
+                    screen.buttons[1].onClick = "Build";
+                    screen.buttons[1].title = "Build";
                     if (currentLevelGroup == 0 && currentLevel == 0)
                     {
                         push();
@@ -180,8 +187,8 @@ function displayScreen()
                 }
                 else
                 {
-                    screen.buttons[2].onClick = "Play";
-                    screen.buttons[2].title = "Play";
+                    screen.buttons[1].onClick = "Play";
+                    screen.buttons[1].title = "Play";
                     if (currentLevelGroup == 0 && currentLevel == 0)
                     {
                         push();
@@ -255,7 +262,8 @@ function displayScreen()
                 
                 if(loadPercent < width)
                 {
-                    loadPercent += width / 90;
+                    //loadPercent += width / 90;
+                    loadPercent += width;
                     screen.buttons[0].visibility = "hidden";
                 }
                 else

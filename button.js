@@ -117,7 +117,7 @@ class Button
             userNameInput.visibility = "hidden";
         }
 
-        // console.log(button.name);
+         console.log(button.name);
         if (button.onClick == "Home" || button.onClick == "<")
         {
             navigateTo("Home");
@@ -198,7 +198,8 @@ class Button
             });
 
             removeAllCharges();
-            
+            console.log(timeElapsed);
+            timeElapsed = 0;
             createTrack(track.level);
             navigateTo("Level");
         }

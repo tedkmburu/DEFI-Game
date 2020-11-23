@@ -43,6 +43,8 @@ let screens = [];
 let screenStack = ["Home"];
 let currentScreen = "Home";
 
+let noiseValues = {x: 0, y: 0};
+
 const k = 8990000; // const k = 8.99 * Math.pow(10, 9) adjusted because all charges are in micro coulombs;
 const testChargeCharge = 0.000005; //5 micro coulombs
 const chargeDiameter = 40;

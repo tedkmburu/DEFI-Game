@@ -1,6 +1,7 @@
 'use strict';
 
 let groupSelectOffset = 0;
+let leaderboardOffset = 0;
 let loadPercent = 0;
 
 function displayScreen()
@@ -152,6 +153,7 @@ function displayScreen()
                         
                     pop()
                 });
+                
 
             }
             else if (screen.name == "Level") 
@@ -247,7 +249,15 @@ function displayScreen()
                 if(finished)
                 {
                     sendScore(currentLevel, currentLevelGroup,timeElapsed, stars);
-                    
+                    let allStars = JSON.parse(localStorage.getItem("userStars"))
+                    totalStars = 0;
+                    allStars.forEach(starGroup =>
+                    {
+                        starGroup.forEach(starsAdd =>
+                        {
+                            totalStars += starsAdd;
+                        })
+                    })
                     navigateTo("Level Complete");
                 }
                 else
@@ -492,23 +502,23 @@ function displayScreen()
                         //console.log(currentLeaderboard[i]);
                         fill("rgba(255, 255, 255, 0.25)")
                         noStroke();
-                        rect(75, y, width - 150, 65);
+                        rect(75, y + leaderboardOffset, width - 150, 65);
 
                         fill(255);
                         // rank
-                        text((i + 1) + ".", 100, y + 37.5);
+                        text((i + 1) + ".", 100, y + 37.5 + leaderboardOffset);
 
                         // name
-                        text(user.id, width/3.5, y + 37.5);
+                        text(user.id, width/3.5, y + 37.5 + leaderboardOffset);
 
                         // class
-                        text("IC PHYS 101", width /2, y + 37.5);
+                        text("IC PHYS 101", width /2, y + 37.5 + leaderboardOffset);
 
                         // time
-                        text(millisecondsToTimeFormat(user.time), width/1.4 , y + 37.5); 
+                        text(millisecondsToTimeFormat(user.time), width/1.4 , y + 37.5 + leaderboardOffset); 
                         
                         // score
-                        text(user.score, width - 130, y + 37.5);   
+                        text(user.score, width - 130, y + 37.5 + leaderboardOffset);   
                         
                         y += 75;
                     }
@@ -524,15 +534,37 @@ function displayScreen()
 
             if (screen.name == "Level Select") 
             {
+                let levelGroupStars = 0;
+                JSON.parse(localStorage.userStars)[currentLevelGroup].forEach(number => {
+                    levelGroupStars += number
+                })
+
                 image(icon.star, width - 50, 10, 30, 30);
                 textSize(24);
                 fill(255);
                 noStroke();
-                text("0/" + (levels.length * 3), width - 80, 35); 
+                text(levelGroupStars + "/" + (levels[currentLevelGroup].starPositions.length * 3), width - 80, 35); 
             }
             else if(screen.name == "Level")
             {
                 displayTime();
+            }
+            else if (screen.name == "Group Select")
+            {
+                image(icon.star, width - 50, 10, 30, 30);
+            }
+            else if (screen.name == "Noise")
+            {
+                if(testCharges.length == 0)
+                {
+                    testCharges = [new TestCharge(createVector(width/2, height/2), 5)]
+                }
+                
+                testCharges[0].display();
+
+                testCharges[0].trail.push(createVector(noise(noiseValues.x) * width, noise(noiseValues.y,noiseValues.y) * height))
+                noiseValues = createVector(noiseValues.x + 0.005, noiseValues.y + 0.005);
+                testCharges[0].position = createVector(noise(noiseValues.x) * width, noise(noiseValues.y,noiseValues.y) * height)
             }
 
 
@@ -757,7 +789,7 @@ function createScreens()
             name: "Group Select",
             header: true,
             title: totalStars + "/45",
-            titlePosition: createVector(width - 50, 35), 
+            titlePosition: createVector(width - 80, 35), 
             titleFontSize: 24,
             visibility: "hidden", 
             backgroundColor: "#212121", 
@@ -797,6 +829,18 @@ function createScreens()
                 new Button({x: width - 212 + 120, y: height/1.25, width: 60, height: 40, title: "Next", onClick: "Next"        , shape: "Oval", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}),
                 new Button({x: 140, y: height/1.25 + 10, width: 100, height: 40, title: "Leaderboard", onClick: "Leaderboard"        , shape: "Rect", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}), 
                 
+                ]
+            }),
+
+        new Screen({
+            name: "Noise",
+            title: "",
+            titlePosition: createVector(width/2, 50), 
+            titleFontSize: 24,
+            visibility: "hidden", 
+            backgroundColor: "#212121", 
+            buttons: [
+
                 ]
             }),
     ]

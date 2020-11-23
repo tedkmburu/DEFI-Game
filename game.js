@@ -422,6 +422,7 @@ function getUserData()
         
         
         let stars = JSON.parse(localStorage.getItem("userStars"))
+        totalStars = 0;
         stars.forEach(starGroup =>
         {
             starGroup.forEach(stars =>
@@ -535,10 +536,11 @@ function tryFetchData()
                     return;
                 }
         
-                // Examine the text in the response
+                
                 response.json().then(function(data) 
                 {
                     console.log(data);
+                    return data;
                 });
             }
         )
@@ -546,6 +548,8 @@ function tryFetchData()
     {
       console.log('Fetch Error :-S', err);
     });
+
+    
 
     // fetch("http://ic-research.eastus.cloudapp.azure.com:8080/class/", {
     // method: "post",

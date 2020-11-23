@@ -90,6 +90,10 @@ function mouseDragged()
             {
                 mouseDraggedGroupSelect();
             }
+            else if (screen.name == "Leaderboard")
+            {
+                mouseDraggedLeaderboard();
+            }
         }
     });
 
@@ -105,6 +109,13 @@ function mouseDraggedGroupSelect()
     let newOffset = groupSelectOffset - ((pmouseX - mouseX) / 1);
     let newOffsetConstrained = constrain(newOffset, -((levels.length - 2.5) * 300), 0);
     groupSelectOffset = newOffsetConstrained;
+}
+
+function mouseDraggedLeaderboard()
+{
+    let newOffset = leaderboardOffset - ((pmouseY - mouseY) / 1);
+    let newOffsetConstrained = constrain(newOffset, -(10 * 48), 0);
+    leaderboardOffset = newOffsetConstrained;
 }
 
 function mouseClickedGroupSelect()

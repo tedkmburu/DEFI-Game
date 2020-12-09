@@ -1,14 +1,16 @@
 'use strict';
 
-function mousePressed()
+function mouseClicked()
 {
     let mousePosition = createVector(mouseX, mouseY);
     let buttonClicked = false;
     let screenFound = false;
 
+ 
+
     screens.forEach(screen =>
     {
-        if (screen.visibility == "visible" && !screenFound) 
+        if (screen.visibility == "visible" && !screenFound ) 
         {
             screenFound = true;
             
@@ -67,10 +69,12 @@ function mousePressed()
         }
     });
 
-    if (slider.visibility != "visible")
-    {
-        return false;
-    }
+    // if (slider.visibility != "visible" )
+    // {
+    //     return false;
+    // }
+    
+    
     
 }
 

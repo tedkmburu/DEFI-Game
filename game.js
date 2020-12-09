@@ -39,10 +39,10 @@ function preload()
 
 function setup()
 {
-    createCanvas(812, 375);
+    createCanvas(windowWidth, windowHeight);
     //textFont(calibri);
     textFont(fontRegular);
-    windowSize = createVector(812, 375).mag();
+    windowSize = createVector(windowWidth, windowHeight).mag();
 
     angleMode(DEGREES);
     textAlign(CENTER);
@@ -119,19 +119,38 @@ function setup()
     let savedUsername;
     if (localStorage.userName != null)
     {
-        savedUsername = localStorage.userName
+        savedUsername = localStorage.userName;
     }
     else
     {
         savedUsername = "Enter Name Here"
     }
+
+    let classCode;
+    if (localStorage.classCode != null)
+    {
+        classCode = localStorage.classCode;
+    }
+    else
+    {
+        classCode = "KTN-EKS"
+    }
+
     userNameInput = createInput(savedUsername);
     userNameInput.size(width - 600);
     userNameInput.style("zIndex", "999");
-    userNameInput.style("visibility", "hidden");
+    userNameInput.position(300, 70);
     userNameInput.addClass("username");
-    //userNameInput.input(sliderChanged);
+    userNameInput.input(updateUsername);
     userNameInput.style("visibility", "hidden");
+
+    classCodeInput = createInput(classCode);
+    classCodeInput.size(width - 600);
+    classCodeInput.style("zIndex", "999");
+    classCodeInput.position(300, 130);
+    classCodeInput.addClass("classCode");
+    classCodeInput.input(updateClassCode);
+    classCodeInput.style("visibility", "hidden");
 
 
     
@@ -140,10 +159,27 @@ function setup()
 
 }
 
+function updateUsername()
+{
+    localStorage.userName = userNameInput.value()
+}
+
+function updateClassCode()
+{
+    localStorage.classCode = classCodeInput.value()
+}
+
 function draw()
 {
     // translate(-(width/2),-(height/2));
-    displayScreen();
+    // displayScreen();
+    screens.forEach(screen =>
+    {
+        if (screen.name == currentScreen) 
+        {
+            displayScreen(screen)    
+        }
+    })
 }
 
 
@@ -526,7 +562,9 @@ function sendScore(level, group, timeElapsed, stars)
 
 function tryFetchData()
 {
-    fetch('http://ic-research.eastus.cloudapp.azure.com:8080/class/')
+    //https://virtserver.swaggerhub.com/efieldrestful-api-IC/efield/1.0/device/
+    //http://ic-research.eastus.cloudapp.azure.com:8080/class/
+    fetch('https://virtserver.swaggerhub.com/efieldrestful-api-IC/efield/1.0/class/')
         .then(
             function(response) 
             {

@@ -16,6 +16,7 @@ class Button
         this.fontColor = props.fontColor;
         this.height = props.height;
         this.fontSize = props.fontSize;
+        this.font = props.font;
         this.visibility = props.visibility;
         
     }
@@ -111,13 +112,14 @@ class Button
         if (button.onClick == "Settings")
         {
             userNameInput.visibility = "visible";
+            userNameInput.elt.focus()
         }
         else
         {
             userNameInput.visibility = "hidden";
         }
 
-         console.log(button.name);
+        // console.log(button.title);
         if (button.onClick == "Home" || button.onClick == "<")
         {
             navigateTo("Home");
@@ -144,6 +146,7 @@ class Button
             colorBlindMode = !colorBlindMode;
             chargeColor = getColors();
             textColor = getTextColors();
+            //createScreens() 
         }
         else if (button.onClick == "Back")
         {

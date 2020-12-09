@@ -45,3 +45,30 @@ exports.teamlist = function(gname, callback) {
     }
   }); // end db.open
 };
+
+
+
+// [
+//   {
+//     "_id": "1f704bc5-5055-43eb-a851-c87b6b0bf7b9",
+//     "class_name": "PHYS101-1",
+//     "access_code": "adsf",
+//     "devices": [
+//       {
+//         "_id": "1f704bc5-5055-43eb-a851-c87b6b0bf7b9",
+//         "student_name": "string",
+//         "attempts": [
+//           {
+//             "_id": "1f704bc5-5055-43eb-a851-c87b6b0bf7b9",
+//             "level": "string",
+//             "track": "string",
+//             "stars_collected": 0,
+//             "score": 0,
+//             "time": 0,
+//             "timestamp": "2019-08-24"
+//           }
+//         ]
+//       }
+//     ]
+//   }
+// ]

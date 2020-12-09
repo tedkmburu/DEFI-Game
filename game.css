@@ -38,10 +38,21 @@ input.username
 {
   height: 50px;
   font-size: 18pt;
-  border-radius: 0px;
   background-color: "white";
-  top: 70px;
-  left: 300px;
+
+  position: absolute;
+  outline: none;
+  opacity: 0.9;
+  text-align: center;
+  z-index: 999;
+}
+
+input.classCode
+{
+  height: 50px;
+  font-size: 18pt;
+  background-color: "white";
+
   position: absolute;
   outline: none;
   opacity: 0.9;

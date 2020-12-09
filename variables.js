@@ -7,6 +7,7 @@ let blueprint;
 
 let tracks;
 let userNameInput;
+let classCodeInput;
 
 let dataSent;
 
@@ -27,7 +28,7 @@ let finished = false;
 let timeElapsed = 0;
 let currentFrameRate = 60;
 let currentLevel = 0;
-let currentLevelGroup = 3;
+let currentLevelGroup = 0;
 let noPositiveCharges = false;
 let score = 100;
 let totalStars = 0;
@@ -41,7 +42,7 @@ let icon;
 
 let screens = [];
 let screenStack = ["Home"];
-let currentScreen = "Home";
+let currentScreen = "Settings";
 
 let noiseValues = {x: 0, y: 0};
 

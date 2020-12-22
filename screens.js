@@ -33,19 +33,19 @@ function displayScreen(screen)
         // {
         //     level.display();
         // });
-        let scale = 0.5;
+        let scaleTrack = 0.5;
         let offset = p5.Vector.mult(levels[currentLevelGroup].trackOffset, scale);
 
         push()
             
             fill(0);
-            rect(50,100, width * scale, height * scale)
+            rect(50 * scale.x, 100 * scale.y, width * scaleTrack, height * scaleTrack)
             
             image(tracks[currentLevelGroup].build, 10 + (levels[currentLevelGroup].trackOffset.x) /2, 100 + (levels[currentLevelGroup].trackOffset.y) / 2, levels[currentLevelGroup].dimentions.x / 2, levels[currentLevelGroup].dimentions.y / 2);
 
-            let squareWidth = 70;
-            let y = 100;
-            let x = (width * scale);
+            let squareWidth = 70 * scale.x;
+            let y = 100 * scale.y;
+            let x = (width * scaleTrack);
             for (let i = 0; i < 5; i++) 
             {
                 x += ((squareWidth + (squareWidth/4)));
@@ -57,20 +57,21 @@ function displayScreen(screen)
                 fill(0);
                 rect(x, y, squareWidth, squareWidth);
                 fill(255);
+                textSize(24 * scale.x)
                 text(i + 1, x + squareWidth/2, y + squareWidth/2 + 15)
 
                 let levelsStars = JSON.parse(localStorage.getItem("userStars"))[currentLevelGroup][i];
 
                 for (let stars = 0; stars < levelsStars; stars++)
                 {
-                    image(icon.star, x + squareWidth/2 - (15 * stars) + 10, y + 5, squareWidth/5, squareWidth/5);
+                    image(icon.star, squareWidth/2 + x + (-1 * ((15 * scale.x) * stars) + (10 * scale.x)) , y + (5 * scale.y), squareWidth/5, squareWidth/5);
                 }
                 
             }
 
 
 
-            rect(0, height - 50, width, 50);
+            rect(0, 325 * scale.y, width, 50 * scale.y);
 
 
 
@@ -92,7 +93,7 @@ function displayScreen(screen)
             push()
                 let squareWidth = 200;
                 let x = squareWidth * (i * 1.5) + 100 + groupSelectOffset;
-                let y = height/3;
+                let y = 125 * scale.y;
 
                 
 
@@ -135,11 +136,11 @@ function displayScreen(screen)
 
                 if(i == 2)
                 {
-                    image(tracks[i].build, x + 60, height/2 - 15, levels[i].dimentions.x / 2, levels[i].dimentions.y / 2);
+                    image(tracks[i].build, x + 60, 185 * scale.y, levels[i].dimentions.x / 2, levels[i].dimentions.y / 2);
                 }
                 else
                 {
-                    image(tracks[i].build, x + 10, height/2 + 25, levels[i].dimentions.x / 3, levels[i].dimentions.y / 3);
+                    image(tracks[i].build, x + 10, 185 * scale.y, levels[i].dimentions.x / 3, levels[i].dimentions.y / 3);
                 }
 
                 
@@ -189,7 +190,7 @@ function displayScreen(screen)
                 push();
                     fill(255);
                     stroke(0);
-                    textSize(14);
+                    textSize(14 * scale.x);
 
                     // track.offset.x             track.offset.y
                     
@@ -382,7 +383,7 @@ function displayScreen(screen)
         text("Highest Score:", 190, 145);
         text("Fastest Time:" , 190, 235);
 
-        textSize(20);
+        textSize(20 * scale.x);
         text(score                              , 190, 185);
         text(millisecondsToTimeFormat(levelTime), 190, 265);
 
@@ -623,8 +624,8 @@ class Screen
     {
         this.name = props.name;
         this.title = props.title;
-        this.titlePosition = props.titlePosition;
-        this.titleFontSize = props.titleFontSize;
+        this.titlePosition = createVector(props.titlePosition.x  * scale.x, props.titlePosition.y  * scale.y);
+        this.titleFontSize = props.titleFontSize * scale.x;
         this.visibility = props.visibility;
         this.backgroundColor = props.backgroundColor;
         this.buttons = props.buttons;
@@ -648,11 +649,11 @@ class Screen
         let screen = this;
 
         push();
-
+            noStroke()
             if (screen.header != null) 
             {
                 fill("rgba(0,0,0,0.5)");
-                rect(0, 0, width, 50);
+                rect(0, 0, width, 50 * scale.y);
             }
 
             textSize(screen.titleFontSize);
@@ -690,11 +691,11 @@ function createScreens()
             visibility: "hidden", 
             backgroundColor: "rgba(0,0,0,0)", 
             buttons: [
-                new Button({x: width - 300, y: (1 * height) / 5 , width: 250, height: 50, title: "PLAY" , onClick: "Group Select", shape: "Home", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 24, font: spaceFont}), 
-                new Button({x: width - 320, y: (2 * height) / 5, width: 250, height: 50, title: "LEADERBOARD", onClick: "Leaderboard", shape: "Home", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 24, font: spaceFont}), 
-                new Button({x: width - 300, y: (3 * height) / 5, width: 250, height: 50, title: "SETTINGS", onClick: "Settings", shape: "Home", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 24, font: spaceFont}), 
-                new Button({x: width - 300, y: (4 * height) / 5, width: 250, height: 50, title: "HELP"    , onClick: "Help", shape: "Home", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 24, font: spaceFont}),
-                new Button({x: 10, y: 10, width: 140, height: 20, title: "Change Username", onClick: "Settings", shape: "Rect", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 16, font: fontRegular})
+                new Button({x: 662, y: 75, width: 100, height: 40, title: "PLAY" , onClick: "Group Select", shape: "Home", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 24, font: spaceFont}), 
+                new Button({x: 512, y: 150, width: 250, height: 40, title: "LEADERBOARD", onClick: "Leaderboard", shape: "Home", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 24, font: spaceFont}), 
+                new Button({x: 612, y: 225, width: 150, height: 40, title: "SETTINGS", onClick: "Settings", shape: "Home", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 24, font: spaceFont}), 
+                new Button({x: 662, y: 300, width: 100, height: 40, title: "HELP"    , onClick: "Help", shape: "Home", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 24, font: spaceFont}),
+                new Button({x:  10, y:  10, width: 140, height: 20, title: "Change Username", onClick: "Settings", shape: "Rect", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 16, font: fontRegular})
                 ],
             textBoxes: [],
             }), 
@@ -704,15 +705,17 @@ function createScreens()
             name: "Settings",
             header: true,
             title: "Settings",
-            titlePosition: createVector(width/2, 30), 
+            titlePosition: createVector(406, 30), 
             titleFontSize: 24,
             visibility: "hidden", 
             backgroundColor: "#212121", 
             buttons: [
-                new Button({x: 15          , y: 10 , width: 30 , height: 30, title: "<"              , onClick: "Home"           , shape: "Back", bgColor: "white"             , fontColor: "black", fontSize: 14}), 
-                new Button({x: width/2 - 90, y: 200, width: 180, height: 45, title: "Clear Data"     , onClick: "Clear Data"     , shape: "Rect"  , bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}), 
-                new Button({x: width/2 - 90, y: 250, width: 180, height: 45, title: "Colorblind Mode", onClick: "Colorblind Mode", shape: "Rect"  , bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}),
-                new Button({x: width/2 - 90, y: 300, width: 180, height: 45, title: "Credits", onClick: "Credits", shape: "Rect"  , bgColor: chargeColor.positive, fontColor: "white", fontSize: 14})
+                new Button({x: 15 , y: 10 , width: 30 , height: 30, title: "<"              , onClick: "Home"           , shape: "Back", bgColor: "white"             , fontColor: "black", fontSize: 14}), 
+                new Button({x: 316, y: 150, width: 180, height: 45, title: "Change Username"     , onClick: "ChangeUsername"     , shape: "Rect"  , bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}), 
+                new Button({x: 316, y: 200, width: 180, height: 45, title: "Enter Class Code", onClick: "ChangeClassCode", shape: "Rect"  , bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}),
+                new Button({x: 316, y: 300, width: 180, height: 45, title: "Clear All Data"     , onClick: "Clear Data"     , shape: "Rect"  , bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}), 
+                new Button({x: 316, y: 100, width: 180, height: 45, title: "Colorblind Mode", onClick: "Colorblind Mode", shape: "Rect"  , bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}),
+                new Button({x: 316, y: 250, width: 180, height: 45, title: "Credits", onClick: "Credits", shape: "Rect"  , bgColor: chargeColor.positive, fontColor: "white", fontSize: 14})
                 ],
             textBoxes: [],
             }),
@@ -721,23 +724,35 @@ function createScreens()
             name: "Credits",
             header: true,
             title: "Credits",
-            titlePosition: createVector(width/2, 35), 
+            titlePosition: createVector(406, 35), 
             titleFontSize: 24,
             visibility: "hidden", 
             backgroundColor: "#212121", 
             buttons: [
                 new Button({x: 15, y: 10, width: 30, height: 30, title: "Settings", onClick: "Settings", shape: "Back", bgColor: "white", fontColor: "black", fontSize: 14}), 
                 ],
-            textBoxes: [],
+            textBoxes: [
+                // new TextBox({x: 406, y: 90, id: "title", text: "Created By:", font: fontRegular, fontSize: 12, color: "white", visibility: "visible"}),
+                // new TextBox({x: 406, y: 90, id: "title", text: "Dr. John Barr", font: fontRegular, fontSize: 12, color: "white", visibility: "visible"}),
+                // new TextBox({x: 406, y: 90, id: "title", text: "Dr. Colleen Countyman", font: fontRegular, fontSize: 12, color: "white", visibility: "visible"}),
+                // new TextBox({x: 406, y: 90, id: "title", text: "Sean Blackford", font: fontRegular, fontSize: 12, color: "white", visibility: "visible"}),
+                // new TextBox({x: 406, y: 90, id: "title", text: "Amber Elliott", font: fontRegular, fontSize: 12, color: "white", visibility: "visible"}),
+                // new TextBox({x: 406, y: 90, id: "title", text: "Ted Mburu", font: fontRegular, fontSize: 12, color: "white", visibility: "visible"}),
+                // new TextBox({x: 406, y: 90, id: "title", text: "Eli Robinson", font: fontRegular, fontSize: 12, color: "white", visibility: "visible"}),
+                // new TextBox({x: 406, y: 90, id: "title", text: "Mark Volkov", font: fontRegular, fontSize: 12, color: "white", visibility: "visible"}),
+                // new TextBox({x: 406, y: 90, id: "title", text: "Special Thanks:", font: fontRegular, fontSize: 12, color: "white", visibility: "visible"}),
+                // new TextBox({x: 406, y: 90, id: "title", text: "Dr. Nate Presopnik", font: fontRegular, fontSize: 12, color: "white", visibility: "visible"}),
+                // new TextBox({x: 406, y: 90, id: "title", text: "Yemi Afobali", font: fontRegular, fontSize: 12, color: "white", visibility: "visible"}),
+                // new TextBox({x: 406, y: 90, id: "title", text: "Liana Rodelli", font: fontRegular, fontSize: 12, color: "white", visibility: "visible"}),
+            ],
             }),
-
 
 
         new Screen({
             name: "Help",
             header: true,
             title: "Tutorial/Help",
-            titlePosition: createVector(width/2, 35), 
+            titlePosition: createVector(406, 35), 
             titleFontSize: 24,
             visibility: "hidden", 
             backgroundColor: "#212121", 
@@ -754,17 +769,17 @@ function createScreens()
         new Screen({
             name: "Leaderboard",
             title: "",
-            titlePosition: createVector(width/2, 35), 
+            titlePosition: createVector(406, 35), 
             titleFontSize: 24,
             visibility: "hidden", 
             backgroundColor: "#212121", 
             buttons: [
-                new Button({x: 15, y: 10, width: 30, height: 30, title: "<", onClick: "Home", shape: "Back", bgColor: "white", fontColor: "black", fontSize: 14}), 
+                new Button({x:  15, y: 10, width:  30, height: 30, title: "<", onClick: "Home", shape: "Back", bgColor: "white", fontColor: "black", fontSize: 14}), 
                 new Button({x: 130, y: 30, width: 100, height: 25, title: "Score"    , onClick: "Level", shape: "Rect", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}),
-                new Button({x: 50, y: 60, width: width/2 - 50, height: 30, title: "Global"    , onClick: "Level", shape: "Rect", bgColor: "rgba(0,0,0,0.5)", fontColor: "white", fontSize: 14}),
-                new Button({x: width/2, y: 60, width: width/2 - 50, height: 30, title: "My Class"    , onClick: "Level", shape: "Rect", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 14}),
-                new Button({x: width - 200, y: 30, width: 40, height: 25, title: "1"    , onClick: "Level", shape: "Rect", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}),
-                new Button({x: width - 100, y: 30, width: 40, height: 25, title: "1"    , onClick: "Level", shape: "Rect", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14})
+                new Button({x:  50, y: 60, width: 356, height: 30, title: "Global"    , onClick: "Level", shape: "Rect", bgColor: "rgba(0,0,0,0.5)", fontColor: "white", fontSize: 14}),
+                new Button({x: 406, y: 60, width: 356, height: 30, title: "My Class"    , onClick: "Level", shape: "Rect", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 14}),
+                new Button({x: 612, y: 30, width:  40, height: 25, title: "1"    , onClick: "Level", shape: "Rect", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}),
+                new Button({x: 712, y: 30, width:  40, height: 25, title: "1"    , onClick: "Level", shape: "Rect", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14})
                 ],
             textBoxes: [],
             }),
@@ -776,12 +791,12 @@ function createScreens()
             name: "Loading Screen",
             header: false,
             title: "",
-            titlePosition: createVector(width/2, 35), 
+            titlePosition: createVector(406, 35), 
             titleFontSize: 24,
             visibility: "hidden", 
             backgroundColor: "#212121", 
             buttons: [
-                new Button({x: width - 120, y: height - 90, width: 100, height: 50, title: "Play >>"    , onClick: "Level", shape: "Rect", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14, visibility: "hidden"})
+                new Button({x: 692, y: 285, width: 100, height: 50, title: "Play >>"    , onClick: "Level", shape: "Rect", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14, visibility: "hidden"})
                 ],
             textBoxes: [],
             }),
@@ -791,19 +806,19 @@ function createScreens()
             name: "Level Select",
             header: true,
             title: "Level Select",
-            titlePosition: createVector(width/2, 40), 
+            titlePosition: createVector(406, 35), 
             titleFontSize: 24,
             visibility: "hidden", 
             backgroundColor: "#212121", 
             buttons: [
-                new Button({x: 15, y: 10, width: 30, height: 30, title: "<", onClick: "Group Select", shape: "Back", bgColor: "white", fontColor: "black", fontSize: 14}), 
-                new Button({x: width - 70, y: height - 40, width: 60, height: 30, title: "Why?", onClick: "Help", shape: "Rect", bgColor: "grey", fontColor: "black", fontSize: 14}), 
+                new Button({x:  15, y:  10, width: 30, height: 30, title: "<", onClick: "Group Select", shape: "Back", bgColor: "white", fontColor: "black", fontSize: 14}), 
+                new Button({x: 742, y: 335, width: 60, height: 30, title: "Why?", onClick: "Help", shape: "Rect", bgColor: "grey", fontColor: "black", fontSize: 14}), 
                 ],
                 
             textBoxes: [
-                new TextBox({x: width/3, y: 90, id: "title", text: "Track Preview", font: fontRegular, fontSize: 24, color: "white", visibility: "visible"}), 
-                new TextBox({x: 3 * (width/4), y: 90, id: "title2", text: "Pick a Level", font: fontRegular, fontSize: 24, color: "white", visibility: "visible"}), 
-                new TextBox({x: width/2, y: height - 20, id: "hint", text: "Hint: Test Charges don't always follow field lines", font: fontRegular, fontSize: 14, color: "black", visibility: "visible"}), 
+                new TextBox({x: 270.666, y:  90, id: "title", text: "Track Preview", font: fontRegular, fontSize: 24, color: "white", visibility: "visible"}), 
+                new TextBox({x: 609    , y:  90, id: "title2", text: "Pick a Level", font: fontRegular, fontSize: 24, color: "white", visibility: "visible"}), 
+                new TextBox({x: 406    , y: 355, id: "hint", text: "Hint: Test Charges don't always follow field lines", font: fontRegular, fontSize: 14, color: "black", visibility: "visible"}), 
                 ],
             // images: [
             //     new Button({x: 15, y: 10, width: 30, height: 30, title: "<", onClick: "Group Select", shape: "Back", bgColor: "white", fontColor: "black", fontSize: 14}), 
@@ -816,7 +831,7 @@ function createScreens()
             name: "Group Select",
             header: true,
             title: totalStars + "/45",
-            titlePosition: createVector(width - 80, 35), 
+            titlePosition: createVector(732, 35), 
             titleFontSize: 24,
             visibility: "hidden", 
             backgroundColor: "#212121", 
@@ -832,16 +847,16 @@ function createScreens()
             name: "Level",
             header: true,
             title: "",
-            titlePosition: createVector(width/2, 50), 
+            titlePosition: createVector(406, 50), 
             titleFontSize: 24,
             visibility: "hidden", 
             backgroundColor: "black", 
             buttons: [
-                new Button({x:         15, y:            10, width: 30, height: 30, title: "Level Select", onClick: "Level Select", shape: "Back", bgColor: "white", fontColor: "black", fontSize: 14}), 
+                new Button({x:  15, y:  10, width: 30, height: 30, title: "Level Select", onClick: "Level Select", shape: "Back", bgColor: "white", fontColor: "black", fontSize: 14}), 
                 // new Button({x: width - 40, y: height/2 - 80, width: 60, height: 60, title: "Next"        , onClick: "Next"        , shape: "Circle", bgColor: "white", fontColor: "black", fontSize: 14}), 
-                new Button({x: width - 40, y:   height - 40, width: 60, height: 60, title: "Build"       , onClick: "Play"        , shape: "Circle", bgColor: "white", fontColor: "black", fontSize: 14}), 
-                new Button({x: width - 45, y:            10, width: 30, height: 30, title: "Redo"        , onClick: "Redo"        , shape: "Redo", bgColor: "white", fontColor: "black", fontSize: 14}), 
-                new Button({x: width - 85, y:            10, width: 30, height: 30, title: "Help"        , onClick: "Help"        , shape: "Help", bgColor: "white", fontColor: "black", fontSize: 14}), 
+                new Button({x: 772, y: 335, width: 60, height: 60, title: "Build"       , onClick: "Play"        , shape: "Circle", bgColor: "white", fontColor: "black", fontSize: 14}), 
+                new Button({x: 767, y:  10, width: 30, height: 30, title: "Redo"        , onClick: "Redo"        , shape: "Redo", bgColor: "white", fontColor: "black", fontSize: 14}), 
+                new Button({x: 727, y:  10, width: 30, height: 30, title: "Help"        , onClick: "Help"        , shape: "Help", bgColor: "white", fontColor: "black", fontSize: 14}), 
 
                 ],
             textBoxes: [],
@@ -850,15 +865,15 @@ function createScreens()
         new Screen({
             name: "Level Complete",
             title: "",
-            titlePosition: createVector(width/2, 50), 
+            titlePosition: createVector(406, 50), 
             titleFontSize: 24,
             visibility: "hidden", 
             backgroundColor: "#212121", 
             buttons: [
-                new Button({x: width - 212 - 120, y: height/1.25, width: 60, height: 40, title: "Replay", onClick: "Redo"        , shape: "Oval", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}), 
-                new Button({x: width - 212      , y: height/1.25, width: 60, height: 40, title: "Menu", onClick: "Level Select", shape: "Oval", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}), 
-                new Button({x: width - 212 + 120, y: height/1.25, width: 60, height: 40, title: "Next", onClick: "Next"        , shape: "Oval", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}),
-                new Button({x: 140, y: height/1.25 + 10, width: 100, height: 40, title: "Leaderboard", onClick: "Leaderboard"        , shape: "Rect", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}), 
+                new Button({x: 480, y: 300, width: 60, height: 40, title: "Replay", onClick: "Redo"        , shape: "Oval", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}), 
+                new Button({x: 600, y: 300, width: 60, height: 40, title: "Menu", onClick: "Level Select", shape: "Oval", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}), 
+                new Button({x: 720, y: 300, width: 60, height: 40, title: "Next", onClick: "Next"        , shape: "Oval", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}),
+                new Button({x: 140, y: 300 + 10, width: 100, height: 40, title: "Leaderboard", onClick: "Leaderboard"        , shape: "Rect", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}), 
                 
                 ],
             textBoxes: [],
@@ -867,7 +882,7 @@ function createScreens()
         new Screen({
             name: "Noise",
             title: "",
-            titlePosition: createVector(width/2, 50), 
+            titlePosition: createVector(406, 50), 
             titleFontSize: 24,
             visibility: "hidden", 
             backgroundColor: "#212121", 

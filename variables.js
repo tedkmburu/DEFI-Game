@@ -35,6 +35,7 @@ let totalStars = 0;
 
 let slider;
 let windowSize;
+let scale;
 
 let colorBlindMode = false;
 
@@ -42,7 +43,7 @@ let icon;
 
 let screens = [];
 let screenStack = ["Home"];
-let currentScreen = "Settings";
+let currentScreen = "Home";
 
 let noiseValues = {x: 0, y: 0};
 

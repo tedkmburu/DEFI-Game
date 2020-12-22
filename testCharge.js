@@ -101,7 +101,7 @@ class TestCharge
         let testCharge = this;
         push();
             noStroke();
-            fill(0);
+            fill(255);
             testCharge.trail.forEach(dot => 
             {
                 ellipse(dot.x, dot.y, 2, 2);

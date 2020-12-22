@@ -43,6 +43,7 @@ function setup()
     //textFont(calibri);
     textFont(fontRegular);
     windowSize = createVector(windowWidth, windowHeight).mag();
+    scale = createVector(width/812, height/375);
 
     angleMode(DEGREES);
     textAlign(CENTER);
@@ -133,21 +134,21 @@ function setup()
     }
     else
     {
-        classCode = "KTN-EKS"
+        classCode = "Enter Class Code"
     }
 
     userNameInput = createInput(savedUsername);
-    userNameInput.size(width - 600);
+    userNameInput.size(212 * scale.x, 40 * scale.y);
     userNameInput.style("zIndex", "999");
-    userNameInput.position(300, 70);
+    userNameInput.position(300 * scale.x, 70 * scale.y);
     userNameInput.addClass("username");
     userNameInput.input(updateUsername);
     userNameInput.style("visibility", "hidden");
 
     classCodeInput = createInput(classCode);
-    classCodeInput.size(width - 600);
+    classCodeInput.size(212 * scale.x, 40 * scale.y);
     classCodeInput.style("zIndex", "999");
-    classCodeInput.position(300, 130);
+    classCodeInput.position(300 * scale.x, 130 * scale.y);
     classCodeInput.addClass("classCode");
     classCodeInput.input(updateClassCode);
     classCodeInput.style("visibility", "hidden");
@@ -340,8 +341,8 @@ function displayTime()
         textFont('Arial')
         noStroke();
         fill(255);
-        textSize(20);
-        text(millisecondsToTimeFormat(timeElapsed), width/2, 30);
+        textSize(20 * scale.x);
+        text(millisecondsToTimeFormat(timeElapsed), 406 * scale.x, 30 * scale.y);
     pop();
 }
 
@@ -536,7 +537,7 @@ function sendScore(level, group, timeElapsed, stars)
 
     // //{_id: “sdfsdf”, level: “level”, stars_collected: 10, score: 100000, time: 45 }
     // //let data = {_id: localStorage.userId, level: level, group: group, stars_collected: numberOfStarsCollected, score: score, time: timeElapsed };
-    // let data = {"_id": localStorage.userId, level: level, stars_collected: numberOfStarsCollected, score: score, time: timeElapsed };
+    // let data = {"_id": localStorage.userId, "level": level, "stars_collected": numberOfStarsCollected, score: score, time: timeElapsed };
     // let dataJSON = JSON.stringify(data);
     // console.log(data);
 
@@ -555,7 +556,7 @@ function sendScore(level, group, timeElapsed, stars)
     //     console.log(response);
     // })
 
-    console.log("data sent");
+    // console.log("data sent");
         
 }
 
@@ -564,7 +565,7 @@ function tryFetchData()
 {
     //https://virtserver.swaggerhub.com/efieldrestful-api-IC/efield/1.0/device/
     //http://ic-research.eastus.cloudapp.azure.com:8080/class/
-    fetch('https://virtserver.swaggerhub.com/efieldrestful-api-IC/efield/1.0/class/')
+    fetch('http://ic-research.eastus.cloudapp.azure.com:8080/class/')
         .then(
             function(response) 
             {
@@ -610,6 +611,51 @@ function tryFetchData()
     
 }
 
+function newDevice()
+{
+    // fetch('http://ic-research.eastus.cloudapp.azure.com:8080/device/-1/')
+    //     .then(
+    //         function(response) 
+    //         {
+    //             if (response.status !== 200) 
+    //             {
+    //                 console.log('Looks like there was a problem. Status Code: ' + response.status);
+    //                 return;
+    //             }
+        
+                
+    //             response.json().then(function({data}) 
+    //             {
+    //                 console.log({});
+    //                 return data;
+    //             });
+    //         }
+    //     )
+    // .catch(function(err) 
+    // {
+    //   console.log('Fetch Error :-S', err);
+    // });
+
+
+    fetch("http://ic-research.eastus.cloudapp.azure.com:8080/device/", 
+    {
+    method: "post",
+    headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+    },
+
+    }).then( (response) => { 
+        console.log(response);
+    })
+
+    // console.log("data sent");
+}
+
+
+
+
+
 // type Attempt struct {
 // 	AttemptId      primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
 // 	Level          string             `json:"level,omitempty" bson:"level,omitempty"`
@@ -636,3 +682,7 @@ function tryFetchData()
 // .then( (response) => { 
 //    //do something awesome that makes the world a better place
 // });
+
+
+
+// unlock hard mode at the end

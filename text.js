@@ -2,13 +2,13 @@ class TextBox
 {
     constructor(props)
     {
-        this.position = createVector(props.x, props.y);
-        this.x = props.x;
-        this.y = props.y;
+        this.position = createVector(props.x * scale.x, props.y * scale.y);
+        this.x = props.x * scale.x;
+        this.y = props.y * scale.y;
         this.id = props.id;
         this.text = props.text;
         this.font = props.font;
-        this.fontSize = props.fontSize;
+        this.fontSize = props.fontSize * scale.x;
         this.color = props.color;
     }
 

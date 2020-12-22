@@ -36,7 +36,6 @@ input.slider
 }
 input.username
 {
-  height: 50px;
   font-size: 18pt;
   background-color: "white";
 
@@ -49,7 +48,6 @@ input.username
 
 input.classCode
 {
-  height: 50px;
   font-size: 18pt;
   background-color: "white";
 

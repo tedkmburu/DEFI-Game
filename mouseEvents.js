@@ -172,10 +172,10 @@ function mouseClickedLevelSelect()
 {
     let mousePosition = createVector(mouseX, mouseY);
 
-    let squareWidth = 70;
-    let scale = 0.5;
-    let y = 100;
-    let x = (width * scale);
+    let squareWidth = 70 * scale.x;
+    let scale2 = 0.5;
+    let y = 100 * scale.y;
+    let x = 406 * scale.x;
 
     for (let i = 0; i < levels[currentLevelGroup].starPositions.length; i++) 
     {

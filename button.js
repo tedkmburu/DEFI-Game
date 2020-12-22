@@ -4,18 +4,18 @@ class Button
 {
     constructor(props)
     {
-        this.position = createVector(props.x, props.y);
-        this.x = props.x;
-        this.y = props.y;
+        this.position = createVector(props.x * scale.x, props.y * scale.y);
+        this.x = props.x * scale.x;
+        this.y = props.y * scale.y;
+        this.width = props.width * scale.x;
+        this.height = props.height * scale.y;
+        this.fontSize = props.fontSize * scale.x;
+
+        this.bgColor = props.bgColor;
+        this.fontColor = props.fontColor;
         this.title = props.title;
         this.onClick = props.onClick;
         this.shape = props.shape;
-        this.width = props.width;
-        this.height = props.height;
-        this.bgColor = props.bgColor;
-        this.fontColor = props.fontColor;
-        this.height = props.height;
-        this.fontSize = props.fontSize;
         this.font = props.font;
         this.visibility = props.visibility;
         
@@ -81,13 +81,15 @@ class Button
                 }
                 else if (button.shape == "Home")
                 {
-                    
+                    fill(button.bgColor);
+                    rect(button.x, button.y, button.width, button.height);
+
                     textFont(spaceFont);
                     fill(button.fontColor);
                     textSize(button.fontSize);
                     noStroke();
-                    textAlign(RIGHT);
-                    text(button.title, button.x + (button.width / 1),  button.y + (button.height / 2) + 7);
+                    textAlign(CENTER);
+                    text(button.title, button.x + (button.width / 2),  button.y + (button.height / 2) + 7);
                 }
                 else
                 {

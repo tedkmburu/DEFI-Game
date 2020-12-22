@@ -18,7 +18,7 @@ function displayScreen(screen)
     }
     else
     {
-        image(backgroundImage, 0, 0, width, height);
+        image(backgroundImages[currentLevelGroup], 0, 0, width, height);
     }
     
     
@@ -134,7 +134,7 @@ function displayScreen(screen)
                     showTrack.display();
                 }
 
-                if(i == 2)
+                if(i == 1)
                 {
                     image(tracks[i].build, x + 60, 185 * scale.y, levels[i].dimentions.x / 2, levels[i].dimentions.y / 2);
                 }

@@ -10,7 +10,7 @@ function preload()
     spaceFont = loadFont('fonts/Anurati.otf');
     fontRegular = loadFont('fonts/Helvetica.ttf');
 
-    backgroundImage = loadImage('images/background.png');
+    backgroundImages = [loadImage('images/background1.png'), loadImage('images/background2.jpg'), loadImage('images/background3.jpg'), loadImage('images/background4.jpg')];
     homeTrack = loadImage('images/homeTrack.png');
     blueprint = loadImage('images/blueprint.png');
 
@@ -44,6 +44,8 @@ function setup()
     textFont(fontRegular);
     windowSize = createVector(windowWidth, windowHeight).mag();
     scale = createVector(width/812, height/375);
+
+    checkScreenRotation()
 
     angleMode(DEGREES);
     textAlign(CENTER);
@@ -173,7 +175,7 @@ function updateClassCode()
 function draw()
 {
     // translate(-(width/2),-(height/2));
-    // displayScreen();
+
     screens.forEach(screen =>
     {
         if (screen.name == currentScreen) 
@@ -181,8 +183,39 @@ function draw()
             displayScreen(screen)    
         }
     })
+
+    checkScreenRotation()
 }
 
+
+
+function checkScreenRotation()
+{
+    if (window.screen.orientation.type != "landscape-primary" &&  window.screen.orientation.type != "landscape-secondary")
+    {
+        // document.body.setAttribute( "style", "-webkit-transform: rotate(-90deg);");
+
+        // resizeCanvas(windowHeight, windowWidth);
+        // scale = createVector(height/375, width/812);
+        // windowSize = createVector(width, height).mag(); 
+        push()
+            fill(0);
+            rect(0, 0, width, height);
+        pop()
+        
+    }
+    else
+    {
+        // document.body.setAttribute( "style", "-webkit-transform: rotate(0deg);");
+    }
+    //createScreens();
+}
+
+window.addEventListener("orientationchange", function(event) 
+{
+    console.log("the orientation of the device is now " + event.target.screen.orientation.type);
+    checkScreenRotation();
+});
 
 function mouseClickedLevel(buttonClicked)
 {
@@ -379,9 +412,13 @@ function millisecondsToTimeFormat(millis)
 
 function windowResized()
 {
-  resizeCanvas(windowWidth, windowHeight);
-  //levelSelectTileSize = window.innerWidth / 2.5;
-  windowSize = createVector(width, height).mag();
+    resizeCanvas(windowWidth, windowHeight);
+//   levelSelectTileSize = window.innerWidth / 2.5;
+    scale = createVector(width/812, height/375);
+    windowSize = createVector(width, height).mag(); 
+    createScreens();
+
+    
 }
 
 function openFullscreen() 
@@ -581,7 +618,7 @@ function tryFetchData()
                     console.log(data);
                     return data;
                 });
-            }
+            } 
         )
     .catch(function(err) 
     {

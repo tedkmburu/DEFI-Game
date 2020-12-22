@@ -6,7 +6,7 @@ function mouseClicked()
     let buttonClicked = false;
     let screenFound = false;
 
- 
+    //console.log("createVector(" + (mousePosition.x - levels[3].trackOffset.x) + ", " + (mousePosition.y - levels[3].trackOffset.y) + ")");
 
     screens.forEach(screen =>
     {

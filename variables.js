@@ -1,7 +1,7 @@
 'use strict';
 let spaceFont;
 let fontRegular;
-let backgroundImage;
+let backgroundImages;
 let homeTrack;
 let blueprint;
 
@@ -43,7 +43,7 @@ let icon;
 
 let screens = [];
 let screenStack = ["Home"];
-let currentScreen = "Home";
+let currentScreen = "Level Select";
 
 let noiseValues = {x: 0, y: 0};
 

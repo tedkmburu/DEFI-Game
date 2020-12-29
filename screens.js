@@ -34,7 +34,7 @@ function displayScreen(screen)
         //     level.display();
         // });
         let scaleTrack = 0.5;
-        let offset = p5.Vector.mult(levels[currentLevelGroup].trackOffset, scale);
+        //let offset = p5.Vector.mult(levels[currentLevelGroup].trackOffset, scale);
 
         push()
             

@@ -32,8 +32,7 @@ function preload()
         {play: loadImage('images/tracks/track2.png'), build: loadImage('images/tracks/track2build.png')},
         {play: loadImage('images/tracks/track3.png'), build: loadImage('images/tracks/track3build.png')},
         {play: loadImage('images/tracks/track4.png'), build: loadImage('images/tracks/track4build.png')},
-        // 1: {play: loadImage('images/tracks/redo.png'), build: },
-        // 1: {play: loadImage('images/tracks/redo.png'), build: },
+        //{play: loadImage('images/tracks/track5.png'), build: loadImage('images/tracks/track5build.png')},
     ]
 }
 
@@ -674,15 +673,18 @@ function newDevice()
     // });
 
 
-    fetch("http://ic-research.eastus.cloudapp.azure.com:8080/device/", 
+    fetch("http://ic-research.eastus.cloudapp.azure.com:8080/class/", 
     {
     method: "post",
     headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': authenticateUser("test", "test"),
+        
+        
     },
 
-    }).then( (response) => { 
+    }).then((response) => { 
         console.log(response);
     })
 
@@ -690,7 +692,16 @@ function newDevice()
 }
 
 
+function authenticateUser(user, password)
+{
+    let token = user + ":" + password;
 
+    // Should i be encoding this value????? does it matter???
+    // Base64 Encoding -> btoa
+    let hash = btoa(token); 
+
+    return "Basic " + hash;
+}
 
 
 // type Attempt struct {

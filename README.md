@@ -53,19 +53,33 @@
       <a href="#about-the-project">About The Project</a>
       <ul>
         <li><a href="#Languages-and-Libraries">Languages and Libraries</a></li>
+        <li><a href="#Learning-Objectives">Learning Objectives</a></li>
       </ul>
     </li>
     <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
+        <a href="#Design">Design</a>
+        <ul>
+            <li><a href="#Mayer">Mayer</a></li>
+            <li><a href="#inspiration">inspiration</a></li>
+        </ul>
     </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
+    <li>
+        <a href="#Code">Code</a>
+        <ul>
+            <li><a href="#p5.js-Basics">p5.js Basics</a></li>
+            <li><a href="#Screens">Screens</a></li>
+            <li><a href="#Collision-Detection">Collision Detection</a></li>
+            <li><a href="#Screens">Screens</a></li>
+        </ul>
+    </li>
+    <li>
+        <a href="#Physics">Physics</a>
+        <ul>
+            <li><a href="#Test-Charge-Movement">Test Charge Movement</a></li>
+            <li><a href="#Field-Lines">Field Lines</a></li>
+        </ul>
+    </li>
     <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
     <li><a href="#acknowledgements">Acknowledgements</a></li>
   </ol>
@@ -83,7 +97,8 @@ Because electric fields cannot be touched or seen, simulations are often utilize
 The core physics principles of the simulation have also been used as the foundation of the mechanics of an educational game. Our aim in the gamification of the simulation is to improve motivation and engagement in the material. Both the simulation and game were built in JavaScript so they will run on most browsers on a computer or mobile device. 
 
 
-Learning Objectives:
+### Learning Objectives
+Students will be able to:
 * Predict the general shape and direction of electric field lines for a system of charges
 * Relate the shape of equipotential lines to the shape of electric field lines
 * Compare the curve of the electric field lines to the trajectory of a test charge
@@ -99,7 +114,7 @@ The entire game runs inside a canvas tag in a webpage. HTML and CSS are used to 
 
 
 
-<!-- GETTING STARTED -->
+
 ## Design
 
 The game is primarily designed the game itself to target the learning goals listed above. Intuition and other resources were used when making the smaller decisions in the game. 
@@ -117,7 +132,9 @@ While in "Play" mode:
 * If the test charge hits the edge of the track, it stops moving and you need to click the "Build" button to edit your electric field
 
 
-### Mayer's 
+### Mayer
+
+### Inspiraion
 
 
 
@@ -243,11 +260,6 @@ The getFieldLinePoints() function in fieldLines.js has 3 inputs. The first input
 
 The createFieldLines() funcion will create all of the field lines necessary for the configuration of charges on screen. 
 
-
-<!-- ROADMAP -->
-## Roadmap
-
-See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a list of proposed features (and known issues).
 
 
 

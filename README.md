@@ -28,7 +28,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/othneildrew/Best-README-Template">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="images/edit.png" alt="Logo" width="80" height="80">
   </a>
 
   <h3 align="center">DEFI Game</h3>
@@ -59,8 +59,8 @@
     <li>
         <a href="#Design">Design</a>
         <ul>
-            <li><a href="#Mayer">Mayer</a></li>
-            <li><a href="#inspiration">inspiration</a></li>
+            <li><a href="#Mayer">Mayers Principles of Multimedia Learning</a></li>
+            <li><a href="#Inspiration">Inspiration</a></li>
         </ul>
     </li>
     <li>
@@ -132,11 +132,22 @@ While in "Play" mode:
 * If the test charge hits the edge of the track, it stops moving and you need to click the "Build" button to edit your electric field
 
 
-### Mayer
+### Mayers Principles of Multimedia Learning
+
+* Manage the extraneous load by limit the cognitive effort on material or details that don’t support the learning outcomes while still making the game engaging
+
+* Manage the intrinsic load (the cognitive effort required to represent the material in working memory) by focusing narrowly on the essential material and eschewing everything that could distract learners
+
+* Manage the germane load (the effort required of learners to actually understand the material) to keep players motivated
+We tried to optimize the germane load by scaffolding learning and pacing material appropriately.
+
+More info [here](https://ctl.wiley.com/principles-of-multimedia-learning/)
 
 ### Inspiration
 
+Games used as inspiration for this
 
+Screenshots of games with brief explaination 
 
 
 
@@ -206,6 +217,66 @@ This is how a Button is created.
        font: spaceFont      // font of text displayed - Font decared in preload()
        })
    ```
+
+
+### Charges
+
+
+This is how a Button is created. 
+   ```sh
+class Charge
+    {
+    constructor(x, y, charge)
+    {
+        this.x = x;
+        this.y = y;
+        this.position = createVector(x,y);
+        this.charge = charge || 0;
+        this.selected = true;
+        this.dragging = false;
+    }
+
+    display()
+    {
+        let charge = this;
+        
+    
+        push();
+        strokeWeight(2);
+        if (charge.selected)
+        {
+            stroke(255);
+            charge.charge = slider.value();
+        }
+        else
+        {
+            noStroke();
+        }
+
+        if (charge.charge > 0){ fill(chargeColor.positive); }
+        else if (charge.charge == 0){ fill(chargeColor.neutral); }
+        else { fill(chargeColor.negative); }
+        ellipse(charge.x, charge.y, chargeDiameter, chargeDiameter);
+
+        textSize(16);
+        if (charge.charge > 0){ fill(textColor.positive); }
+        else if (charge.charge == 0){ fill(textColor.neutral); }
+        else { fill(textColor.negative); }
+        noStroke();
+        if (charge.charge > 0)
+        {
+            text(`+${charge.charge}`, charge.x, charge.y + 7);
+        }
+        else
+        {
+            text(charge.charge, charge.x, charge.y + 7);
+        }
+        pop();
+    }
+    
+    }
+   ```
+
 ### Collision Detection
 
 

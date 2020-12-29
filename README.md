@@ -130,9 +130,9 @@ While in "Play" mode:
 
 Object oriented programming is used throughout the game. The Screen, Button, FieldLine, Image, Screen, Star, TestCharge and Track classes can be found in own their self-titled files. Functions that primarily only use that one class can also be found in that classes self-titled file. 
 
+The p5.js library is inside the file titled p5.min.js. It should not be tampered with. The library creates the game loop and has useful Vector math funcitions
+
 There is a file called variables.js that has all global variables in it. They can technically be declared anywhere but this is a little more organized. 
-
-
 
 
 
@@ -151,17 +151,19 @@ All of these functions can be found in the game.js file.
 ### Screens
 The game works around different "screens" that are all created when the game first launches but only one screen is visible and can be interacted with at any given time. The createScreens() function in the screens.js file creates each screen and gives it its unique properties. These include the name of the screen, the textboxes and the buttons that are used in said screen. All screens are stored in an array called screens. 
 
+The draw() function displays whichever screen the user is on every frame. While that screen is being displayed, all the buttons, textboxes and images that are associated with the screen are also shown. 
+
 This is how a screen is created. 
    ```sh
    new Screen({
             name: "",       // Will not be seen by tthe user. Only used for navigaiton - STRING
             title: "",      // This will be displayed on the screen - STRING
             titlePosition: createVector(0, 0),      // x-y vector position of title
-            titleFontSize: 24,      // title font size - INT
-            visibility: "",       // visibiliy of screen. Only visible when user is on the screen - STRING
-            backgroundColor: "",       //  Background color - STRING 
-            buttons: [],        // Create button objects for every button that will appear - ARRAY of objects
-            textBoxes: [],      // create textbox objects fot every textbox that will appear - ARRAY of objects
+            titleFontSize: 24,          // title font size - INT
+            visibility: "",             // visibiliy of screen. Only visible when user is on the screen - STRING
+            backgroundColor: "",        //  Background color - STRING 
+            buttons: [],                // Create button objects for every button that will appear - ARRAY of objects
+            textBoxes: [],              // create textbox objects fot every textbox that will appear - ARRAY of objects
             })
    ```
 
@@ -169,23 +171,77 @@ This is how a screen is created.
 ### Buttons
 Each Screen has reassigned buttons. Buttons will visually showup on the screen and will do whatever funtion is assigned to them when they are clicked. They know they are clicked because of collision detection based on the buttons shape and size. 
 
+The clicked() function inside the Button class in the button.js file tells the game what to do when the button is clicked. For now, there is a giant if statement that checks which button was clicked and runs he functions needed.
 
 This is how a Button is created. 
    ```sh
    new Button({
-       x: 662,      // x position - INT
-       y: 75,       // y position - INT
-       width: 100,      //  width - INT
-       height: 40,      // 
-       title: "PLAY" ,      //  - STRING
-       onClick: "Group Select",         // function ran when button is clicked - STRING
-       shape: "Home",       // shape used for collision detection - STRING
-       bgColor: "rgba(0,0,0,0)",        // background color - STRING
-       fontColor: "white",      // font color - STRING
+       x: 662,              // x position - INT
+       y: 75,               // y position - INT
+       width: 100,          // width - INT
+       height: 40,          // height - INT
+       title: "" ,          // text shown on button - STRING
+       onClick: "",         // function ran when button is clicked - STRING
+       shape: "",           // shape used for collision detection - STRING
+       bgColor: "",         // background color - STRING
+       fontColor: "",       // font color - STRING
        fontSize: 24,        // font size - INT
-       font: spaceFont      //  - Font decared in preload()
+       font: spaceFont      // font of text displayed - Font decared in preload()
        })
    ```
+### Collision Detection
+
+
+## Physics
+
+Physics concepts are used to run the game. 
+
+### Test Charge Movement
+There is a netForceAtPoint() function in game.js that is given an x-y position vector as an input and outputs an x-y magnitude vector. It does this using coulomb's Law and trig. 
+
+   ```sh
+   function netForceAtPoint(position) // the position comes in in a createVector(x,y) format
+{
+    let finalVector = createVector(0,0);        // starts with a 0 vector
+    
+    charges.forEach(charge =>       // calculates force from each charge and adds them to the finalVector variable
+    {
+        let chargePosition = createVector(charge.x, charge.y);      //position of charge object
+
+        //F = KQ / (r^2)                                    // k is a constant that is used to fine tune the size of the force vector
+        let kq = charge.charge * k;                         // q is the magnitude and sign of the charges charge
+        let r = p5.Vector.dist(position, chargePosition);   // gets the distance from the charge to the point in pixels
+        if (r < 10)
+        {                                                   // this prevents the radius from being too small
+            r = 10;                                         // and keeps the net force capped at a resonable size. 
+        }                                                   // also prevents dividing by zero    
+        let rSquared = Math.pow(r,2);
+
+        //F = KQ / (r^2)                                    // coulombs law
+        let force = kq / rSquared;                          // magnitude of force
+
+        let theta = chargePosition.sub(position).heading();     // angle from point to charge
+        let forceX = force * cos(theta);
+        let forceY = force * sin(theta);
+
+        let forceVector = createVector(forceX, forceY).mult(-1);    // force from the one charge
+        
+        finalVector.add(forceVector);                               // adds the one force to the net force
+    });
+
+    return finalVector;         // returns net force in a vector format
+}
+   ```
+
+This function is used to move test charges by calculating the net force on the charge every frame and using newton's method to translate the net force to an acceleration to a velocity to an x-y position on the screen. 
+
+
+### Field Lines
+The netForceAtPoint() function seen above is also used to draw field lines by creating a starting point inside a charge and converting the net force at that point into a unit vector of length 5 pixels. Recursion is then used to keep adding a new force unit vector to the tip of the previous one until one end of the vector has collided with a charge.  
+
+The getFieldLinePoints() function in fieldLines.js has 3 inputs. The first input is an x position and the second input is a y position. The third input is the position of the charge in the charges array that the field line will come out of. When the field line either hits a charge with a different index in the charges array or is very far from it's original starting point, then field line is finished. The function will return an array of points that can be connected together in order to make a field line. 
+
+The createFieldLines() funcion will create all of the field lines necessary for the configuration of charges on screen. 
 
 
 <!-- ROADMAP -->
@@ -198,45 +254,57 @@ See the [open issues](https://github.com/othneildrew/Best-README-Template/issues
 <!-- CONTRIBUTING -->
 ## Contributing
 
-Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-
 1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
+2. Create your Feature Branch 
+3. Commit your Changes
+4. Push to the Branch 
 5. Open a Pull Request
 
 
-
-<!-- LICENSE -->
-## License
-
-Distributed under the MIT License. See `LICENSE` for more information.
 
 
 
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@your_twitter](https://twitter.com/your_username) - email@example.com
+Dr. Colleen Countryman - [Assistant Professor](https://faculty.ithaca.edu/ccountryman/) - ccountryman@ithaca.edu
+<!-- Dr. John Barr - [@your_twitter](https://twitter.com/your_username) - tmburu@example.com -->
 
-Project Link: [https://github.com/your_username/repo_name](https://github.com/your_username/repo_name)
+<!-- Your Name - [@your_twitter](https://twitter.com/your_username) - tmburu@example.com
+Your Name - [@your_twitter](https://twitter.com/your_username) - tmburu@example.com
+Your Name - [@your_twitter](https://twitter.com/your_username) - tmburu@example.com
+Your Name - [@your_twitter](https://twitter.com/your_username) - tmburu@example.com -->
+
+<!-- Sean Blackford
+Amber Elliott
+Ted Mburu
+Eli Robinson
+Mark Volkov -->
+
+
+Project Link: [https://github.com/tedkmburu/DEFI-Game](https://github.com/tedkmburu/DEFI-Game)
 
 
 
 <!-- ACKNOWLEDGEMENTS -->
 ## Acknowledgements
-* [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
-* [Img Shields](https://shields.io)
-* [Choose an Open Source License](https://choosealicense.com)
-* [GitHub Pages](https://pages.github.com)
-* [Animate.css](https://daneden.github.io/animate.css)
-* [Loaders.css](https://connoratherton.com/loaders)
-* [Slick Carousel](https://kenwheeler.github.io/slick)
-* [Smooth Scroll](https://github.com/cferdinandi/smooth-scroll)
-* [Sticky Kit](http://leafo.net/sticky-kit)
-* [JVectorMap](http://jvectormap.com)
-* [Font Awesome](https://fontawesome.com)
+
+* Dr. Colleen Countryman
+* Dr. John Barr
+
+<br>
+* Sean Blackford
+* Amber Elliott
+* Ted Mburu
+* Eli Robinson
+* Mark Volkov
+* Yemi Afobali
+* Liana Rodelli
+
+Ithaca College Physics & Astronomy Department
+Ithaca College IT
+P5.js (p5js.org)
+Daniel Shiffman (The Coding Train)
 
 
 

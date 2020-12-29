@@ -52,7 +52,7 @@
     <li>
       <a href="#about-the-project">About The Project</a>
       <ul>
-        <li><a href="#built-with">Built With</a></li>
+        <li><a href="#Languages-Used">Built With</a></li>
       </ul>
     </li>
     <li>
@@ -78,16 +78,15 @@
 
 [![Product Name Screen Shot][product-screenshot]](https://efieldsim.ithaca.edu/site/game.html)
 
-There are many great README templates available on GitHub, however, I didn't find one that really suit my needs so I created this enhanced one. I want to create a README template so amazing that it'll be the last one you ever need -- I think this is it.
+Because electric fields cannot be touched or seen, simulations are often utilized to build students' understanding of them by providing them with a visual of electric fields and the motion of test charges through them. The objective of the simulation is to improve students’ qualitative understanding of how electric fields are impacted by a configuration of charges by creating a dynamic representation of the electric field lines, field vectors, equipotential lines and the voltage created by the charges on screen. After creating a charge configuration, the simulation visualizes the motion of test charges through the electric field. 
+The core physics principles of the simulation have also been used as the foundation of the mechanics of an educational game. Our aim in the gamification of the simulation is to improve motivation and engagement in the material. Both the simulation and game were built in JavaScript so they will run on most browsers on a computer or mobile device. 
 
-Here's why:
-* Your time should be focused on creating something amazing. A project that solves a problem and helps others
-* You shouldn't be doing the same tasks over and over like creating a README from scratch
-* You should element DRY principles to the rest of your life :smile:
 
-Of course, no one template will serve all projects since your needs may be different. So I'll be adding more in the near future. You may also suggest changes by forking this repo and creating a pull request or opening an issue. Thanks to all the people have have contributed to expanding this template!
+Learning Objectives:
+* Predict the general shape and direction of electric field lines for a system of charges
+* Relate the shape of equipotential lines to the shape of electric field lines
+* Compare the curve of the electric field lines to the trajectory of a test charge
 
-A list of commonly used resources that I find helpful are listed in the acknowledgements.
 
 ### Languages Used
 
@@ -100,12 +99,12 @@ The entire game runs inside a canvas tag in a webpage. HTML and CSS are used to 
 
 
 <!-- GETTING STARTED -->
-## Getting Started
+## Design
 
 This is an example of how you may give instructions on setting up your project locally.
 To get a local copy up and running follow these simple example steps.
 
-### Prerequisites
+### Mayer's 
 
 This is an example of how to list things you need to use the software and how to install them.
 * npm
@@ -113,7 +112,18 @@ This is an example of how to list things you need to use the software and how to
   npm install npm@latest -g
   ```
 
-### Installation
+
+
+
+
+<!-- USAGE EXAMPLES -->
+## Code
+
+Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+
+_For more examples, please refer to the [Documentation](https://example.com)_
+
+### Screens
 
 1. Get a free API Key at [https://example.com](https://example.com)
 2. Clone the repo
@@ -128,16 +138,6 @@ This is an example of how to list things you need to use the software and how to
    ```JS
    const API_KEY = 'ENTER YOUR API';
    ```
-
-
-
-<!-- USAGE EXAMPLES -->
-## Usage
-
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [Documentation](https://example.com)_
-
 
 
 <!-- ROADMAP -->

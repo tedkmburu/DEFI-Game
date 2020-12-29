@@ -134,7 +134,7 @@ While in "Play" mode:
 
 ### Mayer
 
-### Inspiraion
+### Inspiration
 
 
 

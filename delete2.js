@@ -2,6 +2,7 @@ let strokeColor = "rgb(0,0,0)";
 let testCharge;
 let polygons;
 let shape;
+let shapes = [];
 let currentFrameRate;
 
 let collided = false;
@@ -25,6 +26,8 @@ function setup()
     {x: 395, y: 100},
     {x: 1, y: 100},
     {x: 0, y: 0}]);
+
+  shapes[0] = shape; 
 
   frameRate(60);
 }
@@ -73,8 +76,6 @@ function draw()
   {
     strokeColor = "rgb(0,0,0)";
   }
-
-
 
   displayFrameRate()
 

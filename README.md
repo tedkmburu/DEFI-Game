@@ -59,7 +59,7 @@
     <li>
         <a href="#Design">Design</a>
         <ul>
-            <li><a href="#Mayer">Mayers Principles of Multimedia Learning</a></li>
+            <li><a href="#Mayer's-Principles-of-Multimedia-Learning">Mayers Principles of Multimedia Learning</a></li>
             <li><a href="#Inspiration">Inspiration</a></li>
         </ul>
     </li>
@@ -106,7 +106,7 @@ Students will be able to:
 
 ### Languages and Libraries
 
-The entire game runs inside a canvas tag in a webpage. HTML and CSS are used to set up the page then p5.js creates the canvas with the game loop and everything else. Everything else is done in Javascript. 
+The entire game runs inside a canvas tag in a webpage, so it is accessible from both mobile phones and computers. HTML and CSS are used to set up the page then p5.js creates the canvas with the game loop and everything else. Everything else is done in Javascript. 
 * [Javascript](https://www.w3schools.com/js/default.asp)
 * [p5.js](https://p5js.org/)
 * [HTML](https://www.w3schools.com/html/default.asp)
@@ -117,9 +117,12 @@ The entire game runs inside a canvas tag in a webpage. HTML and CSS are used to 
 
 ## Design
 
-The game is primarily designed the game itself to target the learning goals listed above. Intuition and other resources were used when making the smaller decisions in the game. 
+The game is primarily designed to target the learning goals listed above. Intuition and multimedia learning resources were used when making the smaller decisions in the game. 
 
-The gameplay is broken down into a few distinct parts
+### Game Play
+
+The gameplay is broken down into a few distinct parts.
+
 While in "Build" mode:
 * You add neutral charges to the screen by touching anywhere on the screen 
 * You can then use the slider that appears on the bottom of the screen to adjust the magnitude and sign of the charge that you just created. 
@@ -129,19 +132,19 @@ While in "Build" mode:
 While in "Play" mode:
 * you cannot edit any charges location or magniude but not the test charge will move in accordace to the electric field. 
 * When the test charge touches any of the stars, they are collected and will improve your score
-* If the test charge hits the edge of the track, it stops moving and you need to click the "Build" button to edit your electric field
+* If the test charge hits the edge of the track, it stops moving and you need to click the "Build" button to edit your charge configuration to change the resulting electric field.
 
 
-### Mayers Principles of Multimedia Learning
+### Mayer's Principles of Multimedia Learning
 
-* Manage the extraneous load by limit the cognitive effort on material or details that don’t support the learning outcomes while still making the game engaging
+* Manage the extraneous load by limiting the cognitive effort on material or details that don’t support the learning outcomes while still making the game engaging
 
 * Manage the intrinsic load (the cognitive effort required to represent the material in working memory) by focusing narrowly on the essential material and eschewing everything that could distract learners
 
 * Manage the germane load (the effort required of learners to actually understand the material) to keep players motivated
 We tried to optimize the germane load by scaffolding learning and pacing material appropriately.
 
-More info [here](https://ctl.wiley.com/principles-of-multimedia-learning/)
+More info on Mayer's Principles of Multimedia Learning [here](https://ctl.wiley.com/principles-of-multimedia-learning/).
 
 ### Inspiration
 
@@ -153,7 +156,7 @@ Screenshots of games with brief explaination
 
 
 
-<!-- USAGE EXAMPLES -->
+
 ## Code
 
 Object oriented programming is used throughout the game. The Screen, Button, FieldLine, Image, Screen, Star, TestCharge and Track classes can be found in own their self-titled files. Functions that primarily only use that one class can also be found in that classes self-titled file. 
@@ -180,6 +183,12 @@ All of these functions can be found in the game.js file.
 The game works around different "screens" that are all created when the game first launches but only one screen is visible and can be interacted with at any given time. The createScreens() function in the screens.js file creates each screen and gives it its unique properties. These include the name of the screen, the textboxes and the buttons that are used in said screen. All screens are stored in an array called screens. 
 
 The draw() function displays whichever screen the user is on every frame. While that screen is being displayed, all the buttons, textboxes and images that are associated with the screen are also shown. 
+
+These are examples of screens:
+
+<img src="images/screen2.png" alt="Logo" width="32%" >
+<img src="images/screen1.png" alt="Logo" width="32%">
+<img src="images/screen3.png" alt="Logo" width="32%">
 
 This is how a screen is created. 
    ```sh
@@ -278,6 +287,67 @@ class Charge
    ```
 
 ### Collision Detection
+
+There are a few different methods of collision deection throuout the game. The first kind works only with circles and squares and the second type works with all shapes. The key difference between the two types of collisions is that the first kind will return true whenever a point is inside another shape and the second type of collision will only return true when a point collides with the edge of a shape. 
+
+This is how the first kind of collision detection is used for something like button collisions. This can be seen in the mouseEvents.js file inside the mouseClicked() function.
+```sh
+if (button.shape == "Circle") 
+{
+    let distance = mousePosition.dist(button.position);     // vector.dist(vector) gets the distance between two vectors 
+    if (distance < button.width / 2)                        // if that distance is less than the radius of the circle
+    {                                                       // the user clicked inside the circle
+        button.clicked();
+        buttonClicked = true;
+    }
+}
+else
+{
+    if (mousePosition.x > button.x &&                       // if the button is a rectangle, the mouse position is 
+        mousePosition.y > button.y &&                       // compared to the edges of the rectangle to see if it lies
+        mousePosition.x < button.x + button.width &&        // bewtween the shapes bounds
+        mousePosition.y < button.y + button.height)
+    {
+        button.clicked();
+        buttonClicked = true;
+    }
+}
+```
+
+The second type of collision detection is used to see if a test charge has collided with the walls of a track or not. The tracks collision bot is made up of points around the perimiter of the track. The points are listed in a connect-the-dots style order. The points are then connected and turned into "sides" of a shape. All of the sides are straight lines. The testcharge is treated as a decagon eventhough it appears as a circle on the screen. This is to check the collisions between the straight lines that make up the decagon and the straight lines that make up the perimiter of a shape. 
+
+The code below will check if two straight lines intersect at any point. 
+```sh
+function collide(p1, p2)        // p1 and p2 are two different shapes
+{
+  for(let i in p1.n)            // p1.n and p2.n are the lines that make up the edges of each shape
+  {
+        for(let j in p2.n)          // they are in a nested loop to check each lines disance from all the other lines
+        {
+            let t = intersect(p1.n[i],p2.n[j]);         // this function can be seen below and will check if the two lines
+            if(t === 'collinear') {continue;}           // intersect or not
+            if(t[0] <= 1 && t[0] >= 0 && t[1] <= 1 && t[1] >= 0) 
+            {
+                return true;        // this happens if they are not colinear
+            }
+        }
+  }
+  return false;                 // this happens if they are colinear
+}
+
+function intersect(s1,s2)       // s1 and s2 are two different lines. They are each made up of two sets of points 
+{                               // to mark the begining and end of each line. 
+    if(((s2[1].x - s2[0].x)*(s1[0].y - s1[1].y) - (s1[0].x - s1[1].x)*(s2[1].y - s2[0].y)) === 0) 
+    {
+        return 'collinear';         // if they are collinear, they are intersecting. 
+    }
+    let tA =  ((s2[0].y - s2[1].y) * (s1[0].x - s2[0].x) + (s2[1].x - s2[0].x) * (s1[0].y - s2[0].y))/
+              ((s2[1].x - s2[0].x) * (s1[0].y - s1[1].y) - (s1[0].x - s1[1].x) * (s2[1].y - s2[0].y)),
+        tB =  ((s1[0].y - s1[1].y) * (s1[0].x - s2[0].x) + (s1[1].x - s1[0].x) * (s1[0].y - s2[0].y))/
+              ((s2[1].x - s2[0].x) * (s1[0].y - s1[1].y) - (s1[0].x - s1[1].x) * (s2[1].y - s2[0].y));
+    return [tA, tB];
+}
+```
 
 
 ## Physics

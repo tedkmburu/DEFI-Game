@@ -1,81 +1,15 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-
-  </head>
-  <body>
-
-
-
-    <script>
-        getData();
-        async function getData() 
-        {
-            const response = await fetch('/api');
-            const data = await response.json();
-            console.log(data);
-        }
-
-
-    //{_id: “sdfsdf”, level: “level”, stars_collected: 10, score: 100000, time: 45 }
-
-
-
-    //     // Making a map and tiles
-    //     const mymap = L.map('issMap').setView([0, 0], 1);
-    //     const attribution =
-    //         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
-
-    //     const tileUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-    //     const tiles = L.tileLayer(tileUrl, { attribution });
-    //     tiles.addTo(mymap);
-
-    //   // Making a marker with a custom icon
-    //   const issIcon = L.icon({
-    //     iconUrl: 'iss200.png',
-    //     iconSize: [50, 32],
-    //     iconAnchor: [25, 16]
-    //   });
-    //   const marker = L.marker([0, 0], { icon: issIcon }).addTo(mymap);
-
-    //   const api_url = 'https://api.wheretheiss.at/v1/satellites/25544';
-
-    //   let firstTime = true;
-
-    //   async function getISS() {
-    //     const response = await fetch(api_url);
-    //     const data = await response.json();
-    //     const { latitude, longitude } = data;
-
-    //     marker.setLatLng([latitude, longitude]);
-    //     if (firstTime) {
-    //       mymap.setView([latitude, longitude], 2);
-    //       firstTime = false;
-    //     }
-    //     document.getElementById('lat').textContent = latitude.toFixed(2);
-    //     document.getElementById('lon').textContent = longitude.toFixed(2);
-    //   }
-
-    //   getISS();
-
-      //setInterval(getISS, 1000);
-    </script>
-  </body>
-</html> -->
-
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Polygon Collision</title>
     <link rel="stylesheet" href="delete.css" />
-    <script src="delete.js"></script>
+    <script src="delete2.js"></script>
+    <script src="p5.min.js"></script>
   </head>
-  <body onload="load()" onresize="resize()">
+  <body>
     <canvas id="canvas"></canvas>
   </body>
 </html>

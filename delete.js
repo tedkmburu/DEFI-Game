@@ -135,27 +135,35 @@ var canvas, ctx, mx, my;
 var color = "#000000";
 var poly1, poly2;
 
-function load() {
+function setup() 
+{
   canvas = document.getElementById("canvas");
   ctx = canvas.getContext("2d");
   resize();
-
-  setInterval(draw, 50);
+  frameRate(1);
 }
 function resize() {
   canvas.height = window.innerHeight;
-  canvas.width = document.body.offsetWidth;
+  canvas.width = window.innerWidth;
 }
 
-window.addEventListener('mousemove', function(event) {
-  mx = event.clientX;
-  my = event.clientY;
-});
 
-function draw() {
+
+function mouseMoved()
+{
+  mx = mouseX;
+  my = mouseY;
+}
+
+function draw() 
+{
   ctx.clearRect(0,0,canvas.width,canvas.height);
+
   poly1 = polygon(canvas.width/2,canvas.height/2,80,8);
   poly2 = polygon(mx,my,25,6);
+
+  console.log(poly1);
+
   if(collide(poly1,poly2)) {
     color = "#ff0000";
   }
@@ -165,8 +173,9 @@ function draw() {
   ctx.fillText(mx + ", " + my, 10, 10);
 }
 
-function polygon(x,y,r,s) {
-  var a = Math.PI*3/2;
+function polygon(x,y,r,s) 
+{
+  var a = Math.PI * 3/2;
   var points = [];
   var sides = []; // [[{x,y},{x,y}], ...]
   var max = {x:0,y:0};
@@ -192,6 +201,7 @@ function polygon(x,y,r,s) {
   ctx.strokeStyle = color;
   ctx.lineWidth = 2;
   ctx.stroke();
+  //console.log({p:points, s:sides,max,min});
   return {p:points, s:sides,max,min};
 }
 

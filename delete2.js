@@ -1,33 +1,60 @@
 let strokeColor = "rgb(0,0,0)";
 let testCharge;
-let polygons;
 let shape;
 let shapes = [];
-let currentFrameRate;
+let off = {x: 0, y: 0}
 
 let collided = false;
 
+function preload() 
+{
+    spaceFont = loadFont('fonts/Anurati.otf');
+    fontRegular = loadFont('fonts/Helvetica.ttf');
+
+    backgroundImages = [loadImage('images/background1.png'), loadImage('images/background2.jpg'), loadImage('images/background3.jpg'), loadImage('images/background4.jpg')];
+    homeTrack = loadImage('images/homeTrack.png');
+    blueprint = loadImage('images/blueprint.png');
+
+    icon = {
+        redo: loadImage('images/redo.png'), 
+        star: loadImage('images/star.png'), 
+        starEmpty: loadImage('images/starEmpty.png'), 
+        delete: loadImage('images/delete.png'), 
+        circle: loadImage('images/circle.png'), 
+        back: loadImage('images/back.png'), 
+        edit: loadImage('images/edit.png'), 
+        help: loadImage('images/help.png'), 
+        lock: loadImage('images/lock.png'), 
+        play: loadImage('images/play.png')
+    };
+
+    tracks = [
+        {play: loadImage('images/tracks/track1.png'), build: loadImage('images/tracks/track1build.png')},
+        {play: loadImage('images/tracks/track2.png'), build: loadImage('images/tracks/track2build.png')},
+        {play: loadImage('images/tracks/track3.png'), build: loadImage('images/tracks/track3build.png')},
+        {play: loadImage('images/tracks/track4.png'), build: loadImage('images/tracks/track4build.png')},
+        //{play: loadImage('images/tracks/track5.png'), build: loadImage('images/tracks/track5build.png')},
+    ]
+}
+
+
 function setup() 
 {
-  createCanvas(windowWidth, windowHeight)
-  testCharge = new Polygon(mouseX, mouseY, 5, 10)
-  polygons = [new Polygon(width/2, height/2, 80, 4), new Polygon(width/3, height/2, 80, 8)]
-  
-  shape = new Shape([
-    {x: 0, y: 0},
-    {x: 400, y: 0},
-    {x: 460, y: 7},
-    {x: 498, y: 31},
-    {x: 522, y: 82},
-    {x: 523, y: 250},
-    {x: 423, y: 250},
-    {x: 425, y: 125},
-    {x: 413, y: 100},
-    {x: 395, y: 100},
-    {x: 1, y: 100},
-    {x: 0, y: 0}]);
+  currentLevelGroup = 0;
 
-  shapes[0] = shape; 
+  createCanvas(windowWidth, windowHeight)
+
+  createLevels(); 
+  testCharge = new Polygon(width/2, height/2, 5, 10)
+  // points, level, scale, offset, locked
+  for (let i = 0; i < levels.length; i++) 
+  {
+    shapes.push(new Shape(levels[currentLevelGroup].points, i, 1, levels[currentLevelGroup].trackOffset, "locked"));
+  }
+  
+  
+
+
 
   frameRate(60);
 }
@@ -35,9 +62,9 @@ function setup()
 
 function draw() 
 {
-  background(255)
+  background(255/2)
 
-  shape.display();
+  shapes[currentLevelGroup].display();
 
   
 
@@ -47,23 +74,11 @@ function draw()
   testCharge.x = mouseX;
   testCharge.y = mouseY;
 
-  // polygons.forEach(polygon =>
-  // {
-  //   polygon.display();
-  // })
 
   testCharge.display();
 
-  // polygons.forEach(polygon =>
-  // {
-  //   //onsole.log(polygon.returned);
-  //   if(collide(testCharge.returned, polygon.returned) && !collided) 
-  //   {
-  //     collided = true;
-  //   }
-  // })
 
-  if(collide(testCharge.returned, shape.returned) && !collided) 
+  if(collide(testCharge.returned, shapes[currentLevelGroup].returned) && !collided) 
   {
     collided = true;
   }
@@ -82,7 +97,10 @@ function draw()
 }
 
 
-
+function mouseClicked()
+{
+  console.log("{x: " + Math.round(mouseX - levels[currentLevelGroup].trackOffset.x) + ", y: " + Math.round(mouseY - levels[currentLevelGroup].trackOffset.y) + "}");
+}
 
 function displayFrameRate()
 {
@@ -103,57 +121,62 @@ function displayFrameRate()
 
 class Shape
 {
-  constructor(points)
+  constructor(points, level, scale, offset, locked)
   {
+    
+    this.level = level;
+    this.scale = scale || 1;
+    this.offset = offset || createVector(0,0);
+    this.locked = locked;
+
     points.forEach(point => {
-      point.x += 100;
-      point.y += 100;
+      point.x += levels[this.level].trackOffset.x;
+      point.y += levels[this.level].trackOffset.y;
     });
     this.points = points;
-    this.sides = []; // [[{x,y},{x,y}], ...]
+
+    this.sides = [];
     this.max = {x:0, y:0};
     this.min = {x:Infinity, y:Infinity};
 
-    this.returned;
 
-    //console.log(this.points);
-  }
 
-  display()
-  {
-    this.sides = []; // [[{x,y},{x,y}], ...]
-    this.max = {x:0, y:0};
-    this.min = {x:Infinity, y:Infinity};
 
-    stroke(strokeColor);
-    strokeWeight(2); 
-    beginShape();
-    for(let i = 0; i < this.points.length; i++) 
+    for(let i = 1; i < this.points.length; i++) 
     {
-      //console.log("asdf: " + this.points[i].x);
       let px = this.points[i].x;
       let py = this.points[i].y;
-      if(i === 0) 
-      {
-        vertex(px, py);
-      }
-      else 
-      {
-        vertex(px , py);
-        this.sides.push([{x: this.points[i-1].x, y: this.points[i-1].y}, {x: px, y: py}])
-      }
+
+      this.sides.push([{x: this.points[i-1].x, y: this.points[i-1].y}, {x: px, y: py}])
+      
       if(px > this.max.x) {this.max.x = px;}
       if(py > this.max.y) {this.max.y = py;}
       if(px < this.min.x) {this.min.x = px;}
       if(py < this.min.y) {this.min.y = py;}
-
- 
     }
 
-      
-    endShape();
-
     this.returned =  {p:this.points, n:this.sides, max: this.max, min: this.min}
+
+  }
+
+  display()
+  {
+    image(tracks[this.level].build, levels[this.level].trackOffset.x, levels[this.level].trackOffset.y, levels[this.level].dimentions.x , levels[this.level].dimentions.y);
+    
+    push()
+      noFill()
+      stroke(strokeColor);
+      strokeWeight(2); 
+      beginShape();
+        for(let i = 0; i < this.points.length; i++) 
+        {
+          let x = this.points[i].x;
+          let y = this.points[i].y;
+
+          vertex(x, y);
+        }
+      endShape();
+    pop()
   }
     
 }

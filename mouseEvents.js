@@ -6,7 +6,7 @@ function mouseClicked()
     let buttonClicked = false;
     let screenFound = false;
 
-    console.log("vertex(" + (mousePosition.x - levels[3].trackOffset.x) + ", " + (mousePosition.y - levels[3].trackOffset.y) + ")");
+    console.log("{x: " + (mousePosition.x - levels[2].trackOffset.x) + ", y: " + (mousePosition.y - levels[2].trackOffset.y) + "}");
 
     screens.forEach(screen =>
     {

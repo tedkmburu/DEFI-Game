@@ -1,3 +1,64 @@
+// class Track
+// {
+//   constructor(points, level, scale, offset, locked)
+//   {
+//     points.forEach(point => {
+//       point.x += 100;
+//       point.y += 100;
+//     });
+//     this.points = points;
+//     this.level = level;
+    // this.scale = scale || 1;
+    // this.offset = offset || createVector(0,0);
+    // this.locked = locked;
+
+//     this.sides = []; // [[{x,y},{x,y}], ...]
+//     this.max = {x:0, y:0};
+//     this.min = {x:Infinity, y:Infinity};
+
+//     this.returned;
+//   }
+
+//   display()
+//   {
+//     this.sides = []; // [[{x,y},{x,y}], ...]
+//     this.max = {x:0, y:0};
+//     this.min = {x:Infinity, y:Infinity};
+
+//     stroke(strokeColor);
+//     strokeWeight(2); 
+//     beginShape();
+//     for(let i = 0; i < this.points.length; i++) 
+//     {
+//       //console.log("asdf: " + this.points[i].x);
+//       let px = this.points[i].x;
+//       let py = this.points[i].y;
+//       if(i === 0) 
+//       {
+//         vertex(px, py);
+//       }
+//       else 
+//       {
+//         vertex(px , py);
+//         this.sides.push([{x: this.points[i-1].x, y: this.points[i-1].y}, {x: px, y: py}])
+//       }
+//       if(px > this.max.x) {this.max.x = px;}
+//       if(py > this.max.y) {this.max.y = py;}
+//       if(px < this.min.x) {this.min.x = px;}
+//       if(py < this.min.y) {this.min.y = py;}
+
+ 
+//     }
+
+      
+//     endShape();
+
+//     this.returned =  {p:this.points, n:this.sides, max: this.max, min: this.min}
+//   }
+    
+// }
+
+
 'use strict';
 function createTrack()
 {

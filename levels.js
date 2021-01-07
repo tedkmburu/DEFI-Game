@@ -22,8 +22,25 @@ function createLevels()
       shapes: [
       {shape: "Rect",   x:   0, y:   0, width: 540, height: 100, type: "track"},
       {shape: "Rect",   x: 485, y:  0, width:  50, height: 100, type: "finish"}],
-      dimentions: createVector(540, 100)
+      dimentions: createVector(540, 100),
+      points: [
+        {x: 2, y: 2},
+        {x: 538, y: 2},
+        {x: 538, y: 98},
+        {x: 2, y: 98},
+        {x: 2, y: 2},
+      ]
     },
+
+
+
+    
+
+
+
+
+
+
 
 
 
@@ -53,7 +70,28 @@ function createLevels()
       {shape: "Circle", x: 53, y: 125, radius: 25,              type: "remove"},
         
       {shape: "Rect",   x: 0, y: 150, width:  50, height: 100, type: "finish"}],
-      dimentions: createVector(180, 255)
+      dimentions: createVector(180, 255),
+      points: [
+        {x: 5, y: 5},
+        {x: 66, y: 5},
+        {x: 107, y: 15},
+        {x: 139, y: 37},
+        {x: 164, y: 73},
+        {x: 174, y: 115},
+        {x: 171, y: 151},
+        {x: 161, y: 183},
+        {x: 141, y: 213},
+        {x: 115, y: 232},
+        {x: 80, y: 247},
+        {x: 5, y: 247},
+        {x: 5, y: 151},
+        {x: 61, y: 151},
+        {x: 77, y: 136},
+        {x: 77, y: 118},
+        {x: 61, y: 104},
+        {x: 5, y: 103},
+        {x: 5, y: 5}
+      ]
     },
 
 
@@ -78,7 +116,25 @@ function createLevels()
       {shape: "Circle", x: 405, y: 120, radius: 20,              type: "remove"},
       {shape: "Rect",   x: 225, y: 125, width: 200, height: 125, type: "remove"},
       {shape: "Rect",   x: 425, y: 200, width: 100, height: 50, type: "finish"}],
-      dimentions: createVector(525, 250)
+      dimentions: createVector(525, 250),
+
+      points: [
+        {x: 2, y: 2},
+        {x: 400, y: 2},
+        {x: 444, y: 2},
+        {x: 485, y: 20},
+        {x: 512, y: 50},
+        {x: 523, y: 81},
+        {x: 523, y: 126},
+        {x: 523, y: 246},
+        {x: 423, y: 246},
+        {x: 423, y: 123},
+        {x: 420, y: 107},
+        {x: 409, y: 100},
+        {x: 400, y: 100},
+        {x: 2, y: 100},
+        {x: 2, y: 2}
+      ]
     },
 
 

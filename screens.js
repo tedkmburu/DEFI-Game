@@ -41,7 +41,7 @@ function displayScreen(screen)
             fill(0);
             rect(50 * scale.x, 100 * scale.y, width * scaleTrack, height * scaleTrack)
             
-            image(tracks[currentLevelGroup].build, 10 + (levels[currentLevelGroup].trackOffset.x) /2, 100 + (levels[currentLevelGroup].trackOffset.y) / 2, levels[currentLevelGroup].dimentions.x / 2, levels[currentLevelGroup].dimentions.y / 2);
+            image(trackImages[currentLevelGroup].build, 10 + (levels[currentLevelGroup].trackOffset.x) /2, 100 + (levels[currentLevelGroup].trackOffset.y) / 2, levels[currentLevelGroup].dimentions.x / 2, levels[currentLevelGroup].dimentions.y / 2);
 
             let squareWidth = 70 * scale.x;
             let y = 100 * scale.y;
@@ -130,18 +130,23 @@ function displayScreen(screen)
                 {
                     levels[i].locked = false;
 
-                    let showTrack = new Track(i, 0.25, createVector(x + 40,y + 100), false);
-                    showTrack.display();
+                    // let showTrack = new Track(levels[i].points, i, scale.y * 0.30, createVector(x - 30, y + 50), false);
+                    // showTrack.display();
+
+                    // levels[i].locked = false;
+
+                    // allTracks[i].display();
+                    image(trackImages[i].play, x - (((levels[i].dimentions.x * 0.30) * scale.x) - squareWidth)/2, y - (((levels[i].dimentions.y * 0.30) * scale.y) - squareWidth)/2, (levels[i].dimentions.x * 0.30) * scale.x, (levels[i].dimentions.y * 0.30) * scale.y)
                 }
 
-                if(i == 1)
-                {
-                    image(tracks[i].build, x + 60, 185 * scale.y, levels[i].dimentions.x / 2, levels[i].dimentions.y / 2);
-                }
-                else
-                {
-                    image(tracks[i].build, x + 10, 185 * scale.y, levels[i].dimentions.x / 3, levels[i].dimentions.y / 3);
-                }
+                // if(i == 1)
+                // {
+                //     image(tracks[i].build, x + 60, 185 * scale.y, levels[i].dimentions.x / 2, levels[i].dimentions.y / 2);
+                // }
+                // else
+                // {
+                //     image(tracks[i].build, x + 10, 185 * scale.y, levels[i].dimentions.x / 3, levels[i].dimentions.y / 3);
+                // }
 
                 
                 

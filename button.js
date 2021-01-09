@@ -183,7 +183,7 @@ class Button
             if (currentLevel < levels[currentLevelGroup].starPositions.length - 1) 
             {
                 currentLevel++;
-                createTrack(track.level);
+                changeTrack(track.level);
 
                 removeAllCharges();
 
@@ -205,7 +205,7 @@ class Button
             removeAllCharges();
             console.log(timeElapsed);
             timeElapsed = 0;
-            createTrack(track.level);
+            changeTrack(track.level);
             navigateTo("Level");
         }
         else if (button.onClick == "Clear Data") 

@@ -3,8 +3,9 @@ function displayTestCharges()
 {
     for (var i = 0; i < testCharges.length; i++)
     {
-        testCharges[i].move();
         testCharges[i].display();
+        testCharges[i].move();
+        
     }
 }
 
@@ -92,6 +93,17 @@ class TestCharge
         {
             this.color = "rgba(50,50,50,1)";
         }
+
+
+        this.numberOfSides = 10;
+
+        this.points = [];
+        this.sides = []; // [[{x,y},{x,y}], ...]
+        this.max = {x:0, y:0};
+        this.min = {x:Infinity, y:Infinity};
+        this.a = Math.PI * 3/2;
+
+        this.returned;
     }
 
 
@@ -99,6 +111,15 @@ class TestCharge
     display()
     {
         let testCharge = this;
+
+        this.points = [];
+        this.sides = []; // [[{x,y},{x,y}], ...]
+        this.max = {x:0, y:0};
+        this.min = {x:Infinity, y:Infinity};  
+
+        
+
+
         push();
             noStroke();
             fill(255);
@@ -126,6 +147,40 @@ class TestCharge
             fill(testCharge.color);
             ellipse(testCharge.position.x, testCharge.position.y, testChargeDiameter, testChargeDiameter);
         pop();
+
+
+
+
+        stroke(0);
+        noFill();
+        strokeWeight(2); 
+        beginShape();
+        for(let i = 0; i <= this.numberOfSides; i++) 
+        {
+            let px = this.position.x - testChargeRadius * Math.cos(this.a);
+            let py = this.position.y - testChargeRadius * Math.sin(this.a);
+            if(i === 0) 
+            {
+                vertex(px, py);
+            }
+            else 
+            {
+                vertex(px , py);
+                this.sides.push([{x: this.points[i-1].x, y: this.points[i-1].y}, {x: px, y: py}])
+            }
+            if(px > this.max.x) {this.max.x = px;}
+            if(py > this.max.y) {this.max.y = py;}
+            if(px < this.min.x) {this.min.x = px;}
+            if(py < this.min.y) {this.min.y = py;}
+
+            this.points.push({x: px,y:py});
+            this.a += Math.PI * 2 / this.numberOfSides;
+        }
+        this.points.pop();
+        
+        endShape();
+
+        this.returned =  {p:this.points, n:this.sides, max: this.max, min: this.min}
     }
 
 
@@ -232,43 +287,62 @@ class TestCharge
     checkCollisions()
     {
         let testCharge = this;
-        let moving;
+        let moving = true;
+        let collided = false;
 
-        levels[track.level].shapes.forEach(shape => 
+        if(collide(testCharges[0].returned, track.returned) && !collided) 
         {
-            let trackOffset = levels[track.level].trackOffset;
-            let shapeOne, shapeTwo;
+            collided = true;
+        }
 
-            shapeOne = {shape: "Circle", position: testCharge.position, radius: (testChargeDiameter/2)};
+        if(collided) 
+        {
+           moving = false
+        }
+
+        let shapeOne = {shape: "Circle", position: testCharge.position, radius: (testChargeRadius)};
+        let shapeTwo = {shape: "Rect", position: createVector(track.finishLine.x, track.finishLine.y), width: track.finishLine.width, height: track.finishLine.height};
+
+        if (checkCollision(shapeOne, shapeTwo)) 
+        {
+            finished = true;
+        }
+
+        // levels[track.level].shapes.forEach(shape => 
+        // {
+        //     let trackOffset = levels[track.level].trackOffset;
+        //     let shapeOne, shapeTwo;
+
+        //     shapeOne = {shape: "Circle", position: testCharge.position, radius: (testChargeDiameter/2)};
             
-            if (shape.shape == "Rect")
-            {
-                shapeTwo = {shape: shape.shape, position: createVector(shape.x, shape.y).add(trackOffset), width: shape.width, height: shape.height};
-            }
-            if (shape.shape == "Circle")
-            {
-                shapeTwo = {shape: shape.shape, position: createVector(shape.x, shape.y).add(trackOffset), radius: shape.radius};
-            }
+        //     if (shape.shape == "Rect")
+        //     {
+        //         shapeTwo = {shape: shape.shape, position: createVector(shape.x, shape.y).add(trackOffset), width: shape.width, height: shape.height};
+        //     }
+        //     if (shape.shape == "Circle")
+        //     {
+        //         shapeTwo = {shape: shape.shape, position: createVector(shape.x, shape.y).add(trackOffset), radius: shape.radius};
+        //     }
             
 
-            if (checkCollision(shapeOne, shapeTwo)) 
-            {
-                if (shape.type == "track") 
-                { 
-                    moving = true; 
-                }
-                else if (shape.type == "finish") 
-                {
-                    moving = true;
-                    finished = true;
-                }
-                else if (shape.type == "remove")  
-                { 
-                    moving = false; 
-                }
-            }
+        //     if (checkCollision(shapeOne, shapeTwo)) 
+        //     {
+        //         if (shape.type == "track") 
+        //         { 
+        //             moving = true; 
+        //         }
+        //         else if (shape.type == "finish") 
+        //         {
+        //             moving = true;
+        //             finished = true;
+        //         }
+        //         else if (shape.type == "remove")  
+        //         { 
+        //             moving = false; 
+        //         }
+        //     }
         
-        });
+        // });
 
         if(gameMode == "Build")
         {

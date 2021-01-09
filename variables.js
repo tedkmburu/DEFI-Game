@@ -5,7 +5,7 @@ let backgroundImages;
 let homeTrack;
 let blueprint;
 
-let tracks;
+let trackImages;
 let userNameInput;
 let classCodeInput;
 
@@ -28,10 +28,11 @@ let finished = false;
 let timeElapsed = 0;
 let currentFrameRate = 60;
 let currentLevel = 0;
-let currentLevelGroup = 0;
+let currentLevelGroup = 1;
 let noPositiveCharges = false;
 let score = 100;
 let totalStars = 0;
+let allTracks = [];
 
 let slider;
 let windowSize;

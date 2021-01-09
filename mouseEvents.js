@@ -6,7 +6,7 @@ function mouseClicked()
     let buttonClicked = false;
     let screenFound = false;
 
-    console.log("{x: " + (mousePosition.x - levels[2].trackOffset.x) + ", y: " + (mousePosition.y - levels[2].trackOffset.y) + "}");
+    // console.log("{x: " + (mousePosition.x - levels[2].trackOffset.x) + ", y: " + (mousePosition.y - levels[2].trackOffset.y) + "}");
 
     screens.forEach(screen =>
     {
@@ -205,7 +205,7 @@ function mouseClickedLevelSelect()
             mousePosition.y < y + squareWidth)
         {
             currentLevel = i;
-            createTrack(currentLevelGroup);
+            changeTrack(currentLevelGroup);
             //navigateTo("Level");
             loadPercent = 0;
             navigateTo("Loading Screen");

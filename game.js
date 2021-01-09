@@ -27,7 +27,7 @@ function preload()
         play: loadImage('images/play.png')
     };
 
-    tracks = [
+    trackImages = [
         {play: loadImage('images/tracks/track1.png'), build: loadImage('images/tracks/track1build.png')},
         {play: loadImage('images/tracks/track2.png'), build: loadImage('images/tracks/track2build.png')},
         {play: loadImage('images/tracks/track3.png'), build: loadImage('images/tracks/track3build.png')},
@@ -38,6 +38,7 @@ function preload()
 
 function setup()
 {
+    console.log("setup");
     createCanvas(windowWidth, windowHeight);
     //textFont(calibri);
     textFont(fontRegular);
@@ -103,6 +104,7 @@ function setup()
     // });
 
     createScreens();
+    createTracks();
 
     
 
@@ -649,59 +651,25 @@ function tryFetchData()
 
 function newDevice()
 {
-    // fetch('http://ic-research.eastus.cloudapp.azure.com:8080/device/-1/')
-    //     .then(
-    //         function(response) 
-    //         {
-    //             if (response.status !== 200) 
-    //             {
-    //                 console.log('Looks like there was a problem. Status Code: ' + response.status);
-    //                 return;
-    //             }
-        
-                
-    //             response.json().then(function({data}) 
-    //             {
-    //                 console.log({});
-    //                 return data;
-    //             });
-    //         }
-    //     )
-    // .catch(function(err) 
-    // {
-    //   console.log('Fetch Error :-S', err);
-    // });
 
 
-    fetch("http://ic-research.eastus.cloudapp.azure.com:8080/class/", 
-    {
-    method: "post",
-    headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': authenticateUser("test", "test"),
-        
-        
-    },
-
-    }).then((response) => { 
-        console.log(response);
+    fetch('http://ic-research.eastus.cloudapp.azure.com:8080/class/', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Basic ' + window.btoa("test:test")
+        },
+    }).then((res) => {
+        return res.json();
+    }).then((json) => {
+        localStorage.userId = json.InsertedID;
+        //console.log(json)
     })
 
-    // console.log("data sent");
+
 }
 
-
-function authenticateUser(user, password)
-{
-    let token = user + ":" + password;
-
-    // Should i be encoding this value????? does it matter???
-    // Base64 Encoding -> btoa
-    let hash = btoa(token); 
-
-    return "Basic " + hash;
-}
 
 
 // type Attempt struct {

@@ -28,7 +28,7 @@ function preload()
         play: loadImage('images/play.png')
     };
 
-    tracks = [
+    trackImages = [
         {play: loadImage('images/tracks/track1.png'), build: loadImage('images/tracks/track1build.png')},
         {play: loadImage('images/tracks/track2.png'), build: loadImage('images/tracks/track2build.png')},
         {play: loadImage('images/tracks/track3.png'), build: loadImage('images/tracks/track3build.png')},

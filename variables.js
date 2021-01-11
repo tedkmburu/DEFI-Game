@@ -44,7 +44,7 @@ let icon;
 
 let screens = [];
 let screenStack = ["Home"];
-let currentScreen = "Level Select";
+let currentScreen = "Group Select";
 
 let noiseValues = {x: 0, y: 0};
 
@@ -90,12 +90,10 @@ let chargeColor = getColors();
 let textColor = getTextColors();
 let testChargeColor = "#D32F2F";
  
-let trackColor = {play: "black", build: "black"};
-let backgroundColor = {play: "black", build: "#37474F"};
-let finishLineColor = {play: "grey", build: "white"};
+// let trackColor = {play: "black", build: "black"};
+// let backgroundColor = {play: "black", build: "#37474F"};
+// let finishLineColor = {play: "grey", build: "white"};
  
-let decorationText = ["E = F/q", "E = V/D", "E = (kQ)/(d^2)", "Equation", "Equation", "Equation", "Equation", "Equation", "Equation", "Equation"];
-
 
 // context.font='14px FontAwesome';
 // context.fillText('\uF047',20,50);

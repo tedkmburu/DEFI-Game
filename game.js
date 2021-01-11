@@ -159,7 +159,29 @@ function setup()
 
     
     updateLeaderBoard();
+
+    screens.forEach(screen =>
+    {
+        if (screen.name == "Group Select") 
+        {
+            for (let i = 0; i < levels.length; i++) 
+            {
+                let buttonX = ((200 * scale.x * (i * 1.5  * scale.x) ) + (100 * scale.x) + groupSelectOffset) / scale.x;
+                let buttonY = height/3 / scale.y;
+                let buttonWidth = 200;
+                let buttonHeight = 200;
+
+                screen.buttons.push(new Button({x: buttonX, y: buttonY, width: buttonWidth, height: buttonHeight, title: "TRACK " + (i + 1), onClick: function(){ currentLevelGroup = i; navigateTo("Level Select");  } , shape: "Group", bgColor: "rgba(0,0,0,0.5)", fontColor: "white", fontSize: 14}))
+            } 
+        }
+    })
+
+        
+    
+
     navigateTo(currentScreen);
+
+    console.log("setup complete");
 
 }
 
@@ -186,6 +208,8 @@ function draw()
     })
 
     checkScreenRotation()
+
+    // console.log("draw");
 }
 
 

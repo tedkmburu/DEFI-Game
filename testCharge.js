@@ -226,6 +226,8 @@ class TestCharge
             testCharge.acceleration = force.mult(testCharge.charge);
             testCharge.velocity.add(testCharge.acceleration);
             testCharge.position.add(testCharge.velocity);
+
+            //console.log(testCharge.velocity.mag());
         }
         else if (!testCharge.moving)
         {

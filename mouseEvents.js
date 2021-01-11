@@ -62,10 +62,6 @@ function mouseClicked()
             {
                 mouseClickedLevelSelect();
             }
-            else if (screen.name == "Group Select")
-            {
-                mouseClickedGroupSelect();
-            }
         }
     });
 
@@ -101,17 +97,14 @@ function mouseDragged()
         }
     });
 
-    
-    
 }
-
 
 
 
 function mouseDraggedGroupSelect()
 {
-    let newOffset = groupSelectOffset - ((pmouseX - mouseX) / 1);
-    let newOffsetConstrained = constrain(newOffset, -((levels.length - 2.5) * 300), 0);
+    let newOffset = groupSelectOffset - (pmouseX - mouseX);
+    let newOffsetConstrained = constrain(newOffset, -((levels.length - 2.5) * (300 * scale.x)) * scale.x, 0);
     groupSelectOffset = newOffsetConstrained;
 }
 
@@ -122,49 +115,6 @@ function mouseDraggedLeaderboard()
     leaderboardOffset = newOffsetConstrained;
 }
 
-function mouseClickedGroupSelect()
-{
-    let mousePosition = createVector(mouseX, mouseY);
-
-    // console.log(mousePosition);
-    // console.log(groupSelectOffset);
-
-
-    //(200 * (i * 1.5) + 100 + groupSelectOffset)
-
-    // stroke("red")
-    // strokeWeight(5)
-    // rect(100,height/3,100,100)
-    // strokeWeight(0)
-
-
-    for (let i = 0; i < levels.length; i++) 
-    {
-        if (mousePosition.x > (200 * (i * 1.5) + 100 + groupSelectOffset)  &&
-            mousePosition.y > height/3 &&
-            mousePosition.y < height/3 + 200 &&
-            mousePosition.x < (200 * (i * 1.5) + 100 + groupSelectOffset) + (200) &&
-            !levels[i].locked)
-        {
-            currentLevelGroup = i;
-            navigateTo("Level Select");
-        }
-    }
-
-    
-    
-    // levelTemplates.forEach(button => 
-    // {
-    //     if (mousePosition.x > button.x + groupSelectOffset &&
-    //         mousePosition.y > 75 &&
-    //         mousePosition.x < button.x + (levelSelectTileSize) + groupelectOffset)
-    //     {
-    //         button.clicked();
-    //     }
-        
-    // });
-
-}
 
 
 

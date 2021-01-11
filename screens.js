@@ -4,10 +4,6 @@ let groupSelectOffset = 0;
 let leaderboardOffset = 0;
 let loadPercent = 0;
 
-function displayThisScreen(screen)
-{
-    //console.log(screen);
-}
 
 function displayScreen(screen)
 {
@@ -80,79 +76,7 @@ function displayScreen(screen)
     }
     else if (screen.name == "Group Select") 
     {
-        
-        levels.forEach((level,i) => {
-
-            // if (mouseIsPressed) {
-            //     stroke("red")
-            //     strokeWeight(5)
-            //     rect((200 * (i * 1.5) + 100 + groupSelectOffset) , height/3, 200, 200)
-            //     strokeWeight(0)
-            // }
-
-            push()
-                let squareWidth = 200;
-                let x = squareWidth * (i * 1.5) + 100 + groupSelectOffset;
-                let y = 125 * scale.y;
-
-                
-
-                
-                strokeWeight(0)
-                fill(0);
-                rect(x, y, squareWidth, squareWidth);
-                fill(255);
-                noStroke();
-                textSize(16)
-                text((i + 1) + ". " + level.name,x + squareWidth/2,y + 30)
-
-                let starsRequired = 0;
-                for (let a = 0; a < i; a++) 
-                {
-                    starsRequired += 12; 
-                }
-
-                if ( starsRequired/5 > totalStars) 
-                {
-                    
-                    image(icon.lock, x + 50, y + 60, squareWidth/2, squareWidth/2);
-                    image(icon.star, x + 90, y + 110, squareWidth/5, squareWidth/5);
-                    
-                    
-                    
-
-                    push();
-                        fill(0);
-                        text(starsRequired, x + 80,y + 140);
-                    pop();
-                }
-                else
-                {
-                    levels[i].locked = false;
-
-                    // let showTrack = new Track(levels[i].points, i, scale.y * 0.30, createVector(x - 30, y + 50), false);
-                    // showTrack.display();
-
-                    // levels[i].locked = false;
-
-                    // allTracks[i].display();
-                    image(trackImages[i].play, x - (((levels[i].dimentions.x * 0.30) * scale.x) - squareWidth)/2, y - (((levels[i].dimentions.y * 0.30) * scale.y) - squareWidth)/2, (levels[i].dimentions.x * 0.30) * scale.x, (levels[i].dimentions.y * 0.30) * scale.y)
-                }
-
-                // if(i == 1)
-                // {
-                //     image(tracks[i].build, x + 60, 185 * scale.y, levels[i].dimentions.x / 2, levels[i].dimentions.y / 2);
-                // }
-                // else
-                // {
-                //     image(tracks[i].build, x + 10, 185 * scale.y, levels[i].dimentions.x / 3, levels[i].dimentions.y / 3);
-                // }
-
-                
-                
-            pop()
-        });
-        
+  
 
     }
     else if (screen.name == "Level") 
@@ -171,8 +95,6 @@ function displayScreen(screen)
 
         if (gameMode == "Play") 
         {
-            screen.buttons[1].onClick = "Build";
-            screen.buttons[1].title = "Build";
             if (currentLevelGroup == 0 && currentLevel == 0)
             {
                 push();
@@ -188,8 +110,8 @@ function displayScreen(screen)
         }
         else
         {
-            screen.buttons[1].onClick = "Play";
-            screen.buttons[1].title = "Play";
+            // screen.buttons[1].onClick = "Play";
+            // screen.buttons[1].title = "Play";
             if (currentLevelGroup == 0 && currentLevel == 0)
             {
                 push();
@@ -282,7 +204,7 @@ function displayScreen(screen)
     }
     else if (screen.name == "Home") 
     {
-        image(homeTrack, 50, 50, width/1.125, height/1.125);
+        image(homeTrack, 50, 50, 721 / scale.x, 333 / scale.y);
     }
     else if (screen.name == "Level Complete") 
     {
@@ -551,6 +473,21 @@ function displayScreen(screen)
     else if (screen.name == "Group Select")
     {
         image(icon.star, width - 50, 10, 30, 30);
+
+        levels.forEach((level,i) => {
+
+            let buttonX = ((200 * scale.x * (i * 1.5 * scale.x) ) + (100 * scale.x) + groupSelectOffset) / scale.x;
+
+            let imageScale = Math.sqrt( 50 / levels[i].dimentions.x );
+            let imageX = buttonX - (((levels[i].dimentions.x * imageScale) * scale.x) - (200* scale.x)) / 2;
+            let imageY = screen.buttons[i + 1].y - (((levels[i].dimentions.y * imageScale) * scale.y) - (200* scale.y)) / 2;
+            let imageWidth = (levels[i].dimentions.x * imageScale) * scale.x;
+            let imageHeight = (levels[i].dimentions.y * imageScale) * scale.y;
+
+            screen.buttons[i + 1].x = buttonX;
+
+            image(trackImages[i].play, imageX, imageY, imageWidth, imageHeight)
+        })
     }
     else if (screen.name == "Noise")
     {
@@ -592,10 +529,14 @@ function displayScreen(screen)
 
 
 
-function navigateTo(screenToShow)
+function navigateTo(screenToShow, backButton)
 {
     //screenStack.push(screenToShow);
-    
+
+    if (screenToShow == "Level") 
+    {
+        dataSent = false;    
+    }
 
     slider.style("visibility", "hidden");
     
@@ -611,16 +552,22 @@ function navigateTo(screenToShow)
         }
     });
     currentScreen = screenToShow;
+
+    if (!backButton && screenToShow != "Loading Screen") 
+    {
+        screenStack.push(screenToShow);
+    }
+   
 }
 
 function navigateBack()
 {
-    let i = screenStack.length - 1;
-    let screenToShow;
-
-    screenToShow = screenStack[i - 1];
-        
-    navigateTo(screenToShow);
+    if (screenStack.length > 1) 
+    {
+        screenStack.pop()
+        let screenToShow = screenStack[screenStack.length - 1]
+        navigateTo(screenToShow, true);
+    }
 }
 
 class Screen
@@ -696,11 +643,11 @@ function createScreens()
             visibility: "hidden", 
             backgroundColor: "rgba(0,0,0,0)", 
             buttons: [
-                new Button({x: 662, y: 75, width: 100, height: 40, title: "PLAY" , onClick: "Group Select", shape: "Home", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 24, font: spaceFont}), 
-                new Button({x: 512, y: 150, width: 250, height: 40, title: "LEADERBOARD", onClick: "Leaderboard", shape: "Home", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 24, font: spaceFont}), 
-                new Button({x: 612, y: 225, width: 150, height: 40, title: "SETTINGS", onClick: "Settings", shape: "Home", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 24, font: spaceFont}), 
-                new Button({x: 662, y: 300, width: 100, height: 40, title: "HELP"    , onClick: "Help", shape: "Home", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 24, font: spaceFont}),
-                new Button({x:  10, y:  10, width: 140, height: 20, title: "Change Username", onClick: "Settings", shape: "Rect", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 16, font: fontRegular})
+                new Button({x: 662, y: 75, width: 100, height: 40, title: "PLAY" , onClick: function(){ navigateTo("Group Select"); }, shape: "Home", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 24, font: spaceFont}), 
+                new Button({x: 512, y: 150, width: 250, height: 40, title: "LEADERBOARD", onClick: function(){ navigateTo("Leaderboard"); }, shape: "Home", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 24, font: spaceFont}), 
+                new Button({x: 612, y: 225, width: 150, height: 40, title: "SETTINGS", onClick: function(){ navigateTo("Settings"); }, shape: "Home", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 24, font: spaceFont}), 
+                new Button({x: 662, y: 300, width: 100, height: 40, title: "HELP"    , onClick: function(){ navigateTo("Help"); }, shape: "Home", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 24, font: spaceFont}),
+                new Button({x:  10, y:  10, width: 140, height: 20, title: "Change Username", onClick: function(){ navigateTo("Settings"); }, shape: "Rect", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 16, font: fontRegular})
                 ],
             textBoxes: [],
             }), 
@@ -715,10 +662,10 @@ function createScreens()
             visibility: "hidden", 
             backgroundColor: "#212121", 
             buttons: [
-                new Button({x: 15 , y: 10 , width: 30 , height: 30, title: "<"              , onClick: "Home"           , shape: "Back", bgColor: "white"             , fontColor: "black", fontSize: 14}), 
-                new Button({x: 316, y: 150, width: 180, height: 45, title: "Change Username"     , onClick: "ChangeUsername"     , shape: "Rect"  , bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}), 
+                new Button({x: 15 , y: 10 , width: 30 , height: 30, title: "<"              , onClick: function(){ navigateBack() }, shape: "Back", bgColor: "white"             , fontColor: "black", fontSize: 14}), 
+                new Button({x: 316, y: 150, width: 180, height: 45, title: "Change Username", onClick: "ChangeUsername"     , shape: "Rect"  , bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}), 
                 new Button({x: 316, y: 200, width: 180, height: 45, title: "Enter Class Code", onClick: "ChangeClassCode", shape: "Rect"  , bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}),
-                new Button({x: 316, y: 300, width: 180, height: 45, title: "Clear All Data"     , onClick: "Clear Data"     , shape: "Rect"  , bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}), 
+                new Button({x: 316, y: 300, width: 180, height: 45, title: "Clear All Data"  , onClick: "Clear Data"     , shape: "Rect"  , bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}), 
                 new Button({x: 316, y: 100, width: 180, height: 45, title: "Colorblind Mode", onClick: "Colorblind Mode", shape: "Rect"  , bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}),
                 new Button({x: 316, y: 250, width: 180, height: 45, title: "Credits", onClick: "Credits", shape: "Rect"  , bgColor: chargeColor.positive, fontColor: "white", fontSize: 14})
                 ],
@@ -734,7 +681,7 @@ function createScreens()
             visibility: "hidden", 
             backgroundColor: "#212121", 
             buttons: [
-                new Button({x: 15, y: 10, width: 30, height: 30, title: "Settings", onClick: "Settings", shape: "Back", bgColor: "white", fontColor: "black", fontSize: 14}), 
+                new Button({x: 15, y: 10, width: 30, height: 30, title: "Settings", onClick: function(){ navigateBack() }, shape: "Back", bgColor: "white", fontColor: "black", fontSize: 14}), 
                 ],
             textBoxes: [
                 // new TextBox({x: 406, y: 90, id: "title", text: "Created By:", font: fontRegular, fontSize: 12, color: "white", visibility: "visible"}),
@@ -762,7 +709,7 @@ function createScreens()
             visibility: "hidden", 
             backgroundColor: "#212121", 
             buttons: [
-                new Button({x: 15, y: 10, width: 30, height: 30, title: "<", onClick: "Home", shape: "Back", bgColor: "white", fontColor: "black", fontSize: 14}), 
+                new Button({x: 15, y: 10, width: 30, height: 30, title: "<", onClick: function(){ navigateBack() }, shape: "Back", bgColor: "white", fontColor: "black", fontSize: 14}), 
                 ],
             textBoxes: [],
             }),
@@ -779,12 +726,12 @@ function createScreens()
             visibility: "hidden", 
             backgroundColor: "#212121", 
             buttons: [
-                new Button({x:  15, y: 10, width:  30, height: 30, title: "<", onClick: "Home", shape: "Back", bgColor: "white", fontColor: "black", fontSize: 14}), 
-                new Button({x: 130, y: 30, width: 100, height: 25, title: "Score"    , onClick: "Level", shape: "Rect", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}),
-                new Button({x:  50, y: 60, width: 356, height: 30, title: "Global"    , onClick: "Level", shape: "Rect", bgColor: "rgba(0,0,0,0.5)", fontColor: "white", fontSize: 14}),
-                new Button({x: 406, y: 60, width: 356, height: 30, title: "My Class"    , onClick: "Level", shape: "Rect", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 14}),
-                new Button({x: 612, y: 30, width:  40, height: 25, title: "1"    , onClick: "Level", shape: "Rect", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}),
-                new Button({x: 712, y: 30, width:  40, height: 25, title: "1"    , onClick: "Level", shape: "Rect", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14})
+                new Button({x:  15, y: 10, width:  30, height: 30, title: "<", onClick: function(){ navigateBack() }, shape: "Back", bgColor: "white", fontColor: "black", fontSize: 14}), 
+                new Button({x: 130, y: 30, width: 100, height: 25, title: "Score"    , onClick: "Levels", shape: "Rect", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}),
+                new Button({x:  50, y: 60, width: 356, height: 30, title: "Global"    , onClick: "Levels", shape: "Rect", bgColor: "rgba(0,0,0,0.5)", fontColor: "white", fontSize: 14}),
+                new Button({x: 406, y: 60, width: 356, height: 30, title: "My Class"    , onClick: "Levels", shape: "Rect", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 14}),
+                new Button({x: 612, y: 30, width:  40, height: 25, title: "1"    , onClick: "Levels", shape: "Rect", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}),
+                new Button({x: 712, y: 30, width:  40, height: 25, title: "1"    , onClick: "Levels", shape: "Rect", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14})
                 ],
             textBoxes: [],
             }),
@@ -801,7 +748,7 @@ function createScreens()
             visibility: "hidden", 
             backgroundColor: "#212121", 
             buttons: [
-                new Button({x: 692, y: 285, width: 100, height: 50, title: "Play >>"    , onClick: "Level", shape: "Rect", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14, visibility: "hidden"})
+                new Button({x: 692, y: 285, width: 100, height: 50, title: "Play >>"    , onClick: function(){ navigateTo("Level"); }, shape: "Rect", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14, visibility: "hidden"})
                 ],
             textBoxes: [],
             }),
@@ -816,8 +763,8 @@ function createScreens()
             visibility: "hidden", 
             backgroundColor: "#212121", 
             buttons: [
-                new Button({x:  15, y:  10, width: 30, height: 30, title: "<", onClick: "Group Select", shape: "Back", bgColor: "white", fontColor: "black", fontSize: 14}), 
-                new Button({x: 742, y: 335, width: 60, height: 30, title: "Why?", onClick: "Help", shape: "Rect", bgColor: "grey", fontColor: "black", fontSize: 14}), 
+                new Button({x:  15, y:  10, width: 30, height: 30, title: "<", onClick: function(){ navigateBack() }, shape: "Back", bgColor: "white", fontColor: "black", fontSize: 14}), 
+                new Button({x: 742, y: 335, width: 60, height: 30, title: "Why?", onClick: function(){ navigateTo("Help"); }, shape: "Rect", bgColor: "grey", fontColor: "black", fontSize: 14}), 
                 ],
                 
             textBoxes: [
@@ -841,7 +788,7 @@ function createScreens()
             visibility: "hidden", 
             backgroundColor: "#212121", 
             buttons: [
-                new Button({x: 15, y: 10, width: 30, height: 30, title: "<", onClick: "Home", shape: "Back", bgColor: "white", fontColor: "black", fontSize: 14}), 
+                new Button({x: 15, y: 10, width: 30, height: 30, title: "<", onClick: function(){ navigateBack() }, shape: "Back", bgColor: "white", fontColor: "black", fontSize: 14}), 
                 ],
             textBoxes: [
                 // new TextBox({x: width/3, y: 90, id: "title", text: "Track Preview", font: fontRegular, fontSize: 24, color: "white", visibility: "visible"}), 
@@ -857,10 +804,10 @@ function createScreens()
             visibility: "hidden", 
             backgroundColor: "black", 
             buttons: [
-                new Button({x:  15, y:  10, width: 30, height: 30, title: "Level Select", onClick: "Level Select", shape: "Back", bgColor: "white", fontColor: "black", fontSize: 14}), 
-                // new Button({x: width - 40, y: height/2 - 80, width: 60, height: 60, title: "Next"        , onClick: "Next"        , shape: "Circle", bgColor: "white", fontColor: "black", fontSize: 14}), 
-                new Button({x: 772, y: 335, width: 60, height: 60, title: "Build"       , onClick: "Play"        , shape: "Circle", bgColor: "white", fontColor: "black", fontSize: 14}), 
-                new Button({x: 767, y:  10, width: 30, height: 30, title: "Redo"        , onClick: "Redo"        , shape: "Redo", bgColor: "white", fontColor: "black", fontSize: 14}), 
+                new Button({x:  15, y:  10, width: 30, height: 30, title: "<", onClick: function(){ navigateBack() }, shape: "Back", bgColor: "white", fontColor: "black", fontSize: 14}), 
+                // new Button({x: width - 40, y: height/2 - 80, width: 60, height: 60, title: "Next"        , onClick: function(){ pressNext(); }        , shape: "Circle", bgColor: "white", fontColor: "black", fontSize: 14}), 
+                new Button({x: 772, y: 335, width: 60, height: 60, title: "Build"       , onClick: function(){ toggleGameMode(); }, shape: "Circle", bgColor: "white", fontColor: "black", fontSize: 14}), 
+                new Button({x: 767, y:  10, width: 30, height: 30, title: "Redo"        , onClick: function(){ pressRedo(); }     , shape: "Redo", bgColor: "white", fontColor: "black", fontSize: 14}), 
                 new Button({x: 727, y:  10, width: 30, height: 30, title: "Help"        , onClick: "Help"        , shape: "Help", bgColor: "white", fontColor: "black", fontSize: 14}), 
 
                 ],
@@ -875,10 +822,10 @@ function createScreens()
             visibility: "hidden", 
             backgroundColor: "#212121", 
             buttons: [
-                new Button({x: 480, y: 300, width: 60, height: 40, title: "Replay", onClick: "Redo"        , shape: "Oval", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}), 
-                new Button({x: 600, y: 300, width: 60, height: 40, title: "Menu", onClick: "Level Select", shape: "Oval", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}), 
-                new Button({x: 720, y: 300, width: 60, height: 40, title: "Next", onClick: "Next"        , shape: "Oval", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}),
-                new Button({x: 140, y: 300 + 10, width: 100, height: 40, title: "Leaderboard", onClick: "Leaderboard"        , shape: "Rect", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}), 
+                new Button({x: 480, y: 300, width: 60, height: 40, title: "Replay", onClick: function(){ pressRedo(); }        , shape: "Oval", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}), 
+                new Button({x: 600, y: 300, width: 60, height: 40, title: "Menu", onClick: function(){ navigateTo("Level Select"); }, shape: "Oval", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}), 
+                new Button({x: 720, y: 300, width: 60, height: 40, title: "Next", onClick: function(){ pressNext(); }        , shape: "Oval", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}),
+                new Button({x: 140, y: 300 + 10, width: 100, height: 40, title: "Leaderboard", onClick: function(){ navigateTo("Leaderboard"); } , shape: "Rect", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}), 
                 
                 ],
             textBoxes: [],

@@ -10,6 +10,7 @@ let userNameInput;
 let classCodeInput;
 
 let dataSent;
+let consoleLog = "";
 
 let currentLeaderboard;
 
@@ -28,7 +29,7 @@ let finished = false;
 let timeElapsed = 0;
 let currentFrameRate = 60;
 let currentLevel = 0;
-let currentLevelGroup = 1;
+let currentLevelGroup = 0;
 let noPositiveCharges = false;
 let score = 100;
 let totalStars = 0;
@@ -46,6 +47,8 @@ let screens = [];
 let screenStack = ["Home"];
 let currentScreen = "Group Select";
 
+let leaderboardData = {sort: "Score", group: 1, level: 1, section: "Global"};
+
 let noiseValues = {x: 0, y: 0};
 
 const k = 8990000; // const k = 8.99 * Math.pow(10, 9) adjusted because all charges are in micro coulombs;
@@ -54,7 +57,7 @@ const chargeDiameter = 40;
 const chargeRadius = chargeDiameter / 2;
 const testChargeDiameter = 10;
 const testChargeRadius = testChargeDiameter / 2;
-const starRadius = 5;
+const starRadius = 7;
 const starDiameter = starRadius * 2;
 const buttonRadius = 30;
 

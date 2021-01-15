@@ -34,10 +34,11 @@ function toggleGameMode()
     console.log(gameMode);
     
 }
-function pressBuild()
-{
-    
-}
+
+
+
+
+
 function pressNext()
 {
     if (currentLevel < levels[currentLevelGroup].starPositions.length - 1) 
@@ -55,6 +56,11 @@ function pressNext()
         navigateTo("Level");
     }  
 }
+
+
+
+
+
 function pressRedo()
 {
     testCharges.forEach(testCharge => 
@@ -68,6 +74,9 @@ function pressRedo()
     changeTrack(track.level);
     navigateTo("Level");
 }
+
+
+
 
 
 class Button
@@ -101,20 +110,25 @@ class Button
             noStroke();
             if(button.shape == "Circle")
             {
-                ellipse(button.x, button.y, button.width, button.height);
-
-                fill(button.fontColor);
+                
 
                 if (button.title == "Build")
                 {
-                    image(icon.edit, button.x - 20, button.y - 20, (button.width) - 20, (button.height) - 20);
+                    ellipse(button.x, button.y, button.width / scale.x, button.height / scale.y);
+
+                    image(icon.edit, button.x - 20, button.y - 20, (button.width / scale.x) - 20, (button.height / scale.y) - 20);
                 }
                 else if (button.title == "Play") 
                 {
-                    image(icon.play, button.x - 20, button.y - 20, (button.width) - 20, (button.height) - 20);
+                    ellipse(button.x, button.y, button.width / scale.x, button.height / scale.y);
+
+                    image(icon.play, button.x - 20, button.y - 20, (button.width / scale.x) - 20, (button.height / scale.y) - 20);
                 }
                 else
                 {
+                    ellipse(button.x, button.y, button.width, button.height);
+
+                fill(button.fontColor);
                     textSize(button.fontSize);
                     
                     text(button.title, button.x,  button.y + 7);    

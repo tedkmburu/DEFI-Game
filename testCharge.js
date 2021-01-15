@@ -72,14 +72,17 @@ function checkCollision(shapeOne, shapeTwo)
 
 class TestCharge
 {
-    constructor(position, charge)
+    constructor(startingPosition, position, charge)
     {
-        this.position = createVector(position.x, position.y);
+        this.startingPosition = p5.Vector.add(startingPosition, levels[track.level].trackOffset);
+
+        this.position = p5.Vector.add(position, levels[track.level].trackOffset);
         this.velocity = createVector(0, 0);
         this.acceleration = createVector(0, 0);
 
         this.opacity = 1;
-        this.moving = true;
+        this.moving = false;
+        this.finished = false;
         this.trail = [];
         this.trajectory = [];
         this.frames = 0;
@@ -154,18 +157,18 @@ class TestCharge
         stroke(0);
         noFill();
         strokeWeight(2); 
-        beginShape();
+        // beginShape();
         for(let i = 0; i <= this.numberOfSides; i++) 
         {
             let px = this.position.x - testChargeRadius * Math.cos(this.a);
             let py = this.position.y - testChargeRadius * Math.sin(this.a);
             if(i === 0) 
             {
-                vertex(px, py);
+                // vertex(px, py);
             }
             else 
             {
-                vertex(px , py);
+                // vertex(px , py);
                 this.sides.push([{x: this.points[i-1].x, y: this.points[i-1].y}, {x: px, y: py}])
             }
             if(px > this.max.x) {this.max.x = px;}
@@ -178,7 +181,7 @@ class TestCharge
         }
         this.points.pop();
         
-        endShape();
+        // endShape();
 
         this.returned =  {p:this.points, n:this.sides, max: this.max, min: this.min}
     }
@@ -217,7 +220,7 @@ class TestCharge
         let testCharge = this;
         let force = netForceAtPoint(testCharge.position);
 
-        if (force.mag() != Infinity && testCharge.moving)
+        if (force.mag() != Infinity && testCharge.moving && gameMode == "Play" && !testCharge.finished)
         {
             // F  = qE
             // ma = qE
@@ -292,7 +295,7 @@ class TestCharge
         let moving = true;
         let collided = false;
 
-        if(collide(testCharges[0].returned, track.returned) && !collided) 
+        if(collide(testCharge.returned, track.returned) && !collided) 
         {
             collided = true;
         }
@@ -307,7 +310,7 @@ class TestCharge
 
         if (checkCollision(shapeOne, shapeTwo)) 
         {
-            finished = true;
+            testCharge.finished = true;
         }
 
         // levels[track.level].shapes.forEach(shape => 
@@ -359,16 +362,20 @@ class TestCharge
     reset()
     {
         let testCharge = this;
-        let defaultPosition = p5.Vector.add(levels[track.level].testChargeStartingPosition, levels[track.level].trackOffset);
-        let startingPosition = createVector(defaultPosition.x, defaultPosition.y)
 
-        testCharge.position = startingPosition;
+        
+        levels[track.level].testChargeStartingPositions.forEach((originalStartingPosition, j) => {
+            testCharges[j] = new TestCharge(originalStartingPosition, originalStartingPosition, testChargeCharge);
+          })
+
+        testCharge.position = testCharge.startingPosition;
         testCharge.velocity = createVector(0, 0);
         testCharge.acceleration = createVector(0, 0);
         testCharge.opacity = 1;
         testCharge.color ="rgba(255,0,0," + testCharge.opacity.toString() + ")";
         testCharge.trail = [];
-        finished = false;
+        testCharge.finished = false;
+        
 
     }
 }

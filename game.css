@@ -8,6 +8,7 @@ body
   overscroll-behavior: none;
   /* touch-action: manipulation; */
   touch-action: none;
+  background-color: black;
 }
 canvas
 {

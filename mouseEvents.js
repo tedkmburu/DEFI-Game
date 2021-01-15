@@ -6,8 +6,9 @@ function mouseClicked()
     let buttonClicked = false;
     let screenFound = false;
 
-    // console.log("{x: " + (mousePosition.x - levels[2].trackOffset.x) + ", y: " + (mousePosition.y - levels[2].trackOffset.y) + "}");
+    consoleLog += "{x: " + Math.round(mousePosition.x - levels[currentLevelGroup].trackOffset.x) + ", y: " + Math.round(mousePosition.y - levels[currentLevelGroup].trackOffset.y) + "}, ";
 
+    console.log(consoleLog);
     screens.forEach(screen =>
     {
         if (screen.visibility == "visible" && !screenFound ) 

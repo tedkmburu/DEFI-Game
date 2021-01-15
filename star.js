@@ -29,7 +29,8 @@ class Star
 
         fill(color);
         noStroke();
-        ellipse(position.x, position.y, starDiameter, starDiameter);
+        //ellipse(position.x, position.y, starDiameter, starDiameter);
+        image(icon.star, position.x - starRadius - 2, position.y - starRadius - 2, starDiameter + 4, starDiameter + 4)
         pop();
     }
   }

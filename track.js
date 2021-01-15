@@ -133,12 +133,15 @@ function createTracks()
 
 function changeTrack(i)
 {
-    let level = levels[i];
+    testCharges = [];
 
+    let level = levels[i];
     track = allTracks[i];
 
-    let testChargeStartingPosition = level.testChargeStartingPosition;
-    testCharges[0] = new TestCharge(p5.Vector.add(testChargeStartingPosition, level.trackOffset), testChargeCharge);
+    level.testChargeStartingPositions.forEach((startingPosition, j) => {
+      testCharges[j] = new TestCharge(startingPosition, startingPosition, testChargeCharge);
+    })
+    
 
     stars = [];
     levels[i].starPositions[currentLevel].forEach(starPosition => 

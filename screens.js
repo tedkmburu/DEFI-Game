@@ -5,6 +5,374 @@ let leaderboardOffset = 0;
 let loadPercent = 0;
 
 
+function getScreen(screenName)
+{
+    let screenIndex = screens.findIndex(x => x.name == screenName);
+    return screens[screenIndex];
+}
+
+function getScreenIndex(screenName)
+{
+    return screens.findIndex(x => x.name == screenName);
+}
+
+function getButton(screenName, buttonTitle)
+{
+    let screenIndex = screens.findIndex(x => x.name == screenName);
+    let buttonIndex = screens[screenIndex].buttons.findIndex(x => x.title == buttonTitle);
+
+    return screens[screenIndex].buttons[buttonIndex];
+}
+
+function getButtonIndex(screenName, buttonTitle)
+{
+    let screenIndex = screens.findIndex(x => x.name == screenName);
+    
+    return screens[screenIndex].buttons.findIndex(x => x.title == buttonTitle);
+}
+
+
+
+
+
+
+function displayLoadingScreen()
+{
+    let screenIndex = screens.findIndex(x => x.name == "Loading Screen");
+    let screen = screens[screenIndex];
+    
+
+    fill(255);
+    rect(0,height - 20, loadPercent, 20)
+    
+    if(loadPercent < width)
+    {
+        //loadPercent += width / 90;
+        loadPercent += width;
+        screen.buttons[0].visibility = "hidden";
+    }
+    else
+    {
+        screen.buttons[0].visibility = "visible";
+    }
+}
+
+
+
+
+
+
+function displayCreditsScreen()
+{
+    noStroke();
+    fill(255);
+    textSize(18);
+    text("Created by: ", width/2, 100);
+
+    let gameCreators = [ "Dr. John Barr",  "Dr. Colleen Countyman", " ", "Sean Blackford", "Amber Elliott", "Ted Mburu", "Eli Robinson", "Mark Volkov", " "];
+    textSize(12);
+    for (let i = gameCreators.length; i >= 0; i--) 
+    {
+        text(gameCreators[i], width/2, 120 + (i * 12));
+    }
+
+
+    textSize(18);
+    text("Special Thanks: ", width/2, 140 + (gameCreators.length * 12));
+
+    let specialThanks = [ "Dr. Nate Presopnik", " ", "Yemi Afolabi", "Liana Rodelli"];
+    textSize(12);
+    for (let i = specialThanks.length; i >= 0; i--) 
+    {
+        text(specialThanks[i], width/2, 160 + (i * 12) + (gameCreators.length * 12)); 
+    }
+}
+
+
+
+
+function toggleLeaderboardSort()
+{
+    let screenIndex = screens.findIndex(x => x.name == "Leaderboard");
+    let screen = screens[screenIndex];
+    let SortButton
+
+    if (leaderboardData.sort == "Score") 
+    {
+        leaderboardData.sort = "Time"
+        SortButton = getButtonIndex("Leaderboard", "Score")
+    }
+    else
+    {
+        leaderboardData.sort = "Score"
+        SortButton = getButtonIndex("Leaderboard", "Time")
+    }
+
+    screen.buttons[SortButton].title = leaderboardData.sort;
+}
+
+
+
+
+
+
+
+function displayLeaderboardScreen()
+{
+    push()
+        noStroke()
+        fill("rgba(255, 255, 255, 0.25)");
+        rect(50 * scale.x, 25 * scale.y, 712 * scale.x, height);
+
+        fill("rgba(0, 0, 0, 0.5)");
+        rect(50 * scale.x, 90 * scale.y, 712 * scale.x, height);
+    
+        textSize(14 * scale.x)
+        fill(255);
+        text("Sort By:", 100 * scale.x, 47 * scale.y);
+        text("Group:", 587 * scale.x, 47 * scale.y);
+        text("Level:", 687 * scale.x, 47 * scale.y);
+
+        let screenIndex = screens.findIndex(x => x.name == "Leaderboard");
+        let screen = screens[screenIndex];
+        let globalButton = getButtonIndex("Leaderboard", "Global")
+        let myClassButton = getButtonIndex("Leaderboard", "My Class")
+
+        if (leaderboardData.section == "Global") 
+        {
+            screen.buttons[globalButton].bgColor = "rgba(0,0,0,0.5)";
+            screen.buttons[myClassButton].bgColor = "rgba(0,0,0,0)";
+        }
+        else
+        {
+            screen.buttons[globalButton].bgColor = "rgba(0,0,0,0)";
+            screen.buttons[myClassButton].bgColor = "rgba(0,0,0,0.5)";
+        }
+        
+        let y = 100 * scale.y;
+        //let leaderboardArray = JSON.parse(currentLeaderboard);
+
+        textSize(16 * scale.x)
+
+        for (let i = 0; i < currentLeaderboard.length; i++) 
+        {
+            //console.log(user);
+            let user = JSON.parse(currentLeaderboard[i]);
+            //console.log(currentLeaderboard[i]);
+            fill("rgba(255, 255, 255, 0.25)")
+            noStroke();
+            rect(75 * scale.x, y + leaderboardOffset, 662 * scale.x, 65 * scale.y);
+
+            fill(255);
+            // rank
+            text((i + 1) + ".", 100 * scale.x, (y + 37.5 * scale.y) + leaderboardOffset);
+
+            // name
+            text(user.id, 232 * scale.x, (y + 37.5  * scale.y) + leaderboardOffset);
+
+            // class
+            text("IC PHYS 101", 406 * scale.x, (y + 37.5 * scale.y) + leaderboardOffset);
+
+            // time
+            text(millisecondsToTimeFormat(user.time), 580 * scale.x, (y + 37.5 * scale.y) + leaderboardOffset); 
+            
+            // score
+            text(user.score, 682 * scale.x, (y + 37.5 * scale.y) + leaderboardOffset);   
+            
+            y += 75 * scale.y;
+        }
+    pop()
+}
+
+
+
+
+
+function displaySettings()
+{
+    userNameInput.style("visibility", "visible");
+    classCodeInput.style("visibility", "visible");
+}
+
+function displayUsernameInput()
+{
+    userNameInput.style("visibility", "visible");
+    classCodeInput.style("visibility", "hidden");
+}
+
+function displayClassCodeInput()
+{
+    userNameInput.style("visibility", "hidden");
+    classCodeInput.style("visibility", "visible");
+}
+
+
+
+
+
+
+
+function displayGroupScreen()
+{
+    let screenIndex = screens.findIndex(x => x.name == "Group Select");
+    let screen = screens[screenIndex];
+
+    let trackPosiions = [];
+    
+    screen.buttons.forEach(button => {
+        if (button.shape == "Group") 
+        {
+            trackPosiions.push(createVector(button.x / 10 + width/3, height / 1.125))
+        }
+    });
+
+    push()
+    trackPosiions.forEach(trackPosition => {
+        stroke("red")
+        strokeWeight(10)
+        point(trackPosition.x, trackPosition.y);
+    })
+    pop()
+
+    //console.log(trackPosiions);
+}
+
+
+
+
+
+
+function tutorial()
+{
+    push();
+        fill(255);
+        stroke(0);
+        textSize(14);
+
+        if(charges.length == 0)
+        {
+            text("Tap inside the circle\n to create a charge", track.offset.x - 80, track.offset.y - 20);
+        }
+        else if(slider.visibility == "visible")
+        {
+            if (charges[0].charge > 0)
+            {
+                text("Press Play \n to test\n your build", width - 50, height - 130);
+            }
+            else
+            {
+                textAlign(LEFT);
+                fill(0);
+                rect(width - 185, height/2, 150, 100);
+                fill(255);
+                text("We call the sign \nand magnitude \nof the charge", width - 165, height/2 + 20);
+                textAlign(CENTER);
+                text("Use the slider to give the charge a positive charge", width/2, height - 30);
+                textSize(24);
+                text("Q.", width - 115, height/2 + 90);
+            }
+        }
+       
+        image(icon.circle, track.offset.x - 100, track.offset.y + 20, chargeDiameter + 20, chargeDiameter + 20);
+        
+    pop();
+}
+
+
+
+
+
+
+function displayLevelScreen()
+{
+    displayTrack();
+    displayFieldLines();
+    displayStars();
+    displayTrash();
+    displayCharges();
+    displaySlider();
+    displayTestCharges();
+
+
+    finished = true;
+    testCharges.forEach(testCharge => {
+        if (!testCharge.finished) 
+        {
+            finished = false    
+        }
+    });
+    
+
+    if (gameMode == "Play") 
+    {
+        if (currentLevelGroup == 0 && currentLevel == 0)
+        {
+            push();
+                fill(255);
+                stroke(0);
+                textSize(14);
+                text("Switch to build \n mode to create \n Electric Field", width - 150, height - 50);
+
+                text("Get the test \n charge to the \n finsh line", track.offset.x + 500, track.offset.y - 60);
+
+            pop();
+        }
+    }
+    else
+    {
+        if (currentLevelGroup == 0 && currentLevel == 0)
+        {
+            tutorial()
+        }
+    }
+
+    if (gameMode == "Play") 
+    {
+        charges.forEach(charge => 
+        {
+            charge.selected = false;
+        });
+    }
+    
+    if(finished)
+    {
+        sendScore(currentLevel, currentLevelGroup,timeElapsed, stars);
+        let allStars = JSON.parse(localStorage.getItem("userStars"))
+        totalStars = 0;
+        allStars.forEach(starGroup =>
+        {
+            starGroup.forEach(starsAdd =>
+            {
+                totalStars += starsAdd;
+            })
+        })
+        navigateTo("Level Complete");
+    }
+    else
+    {
+        timeElapsed += deltaTime;
+    }
+}
+
+
+
+
+
+
+
+
+function displayHomeScreen()
+{
+    image(homeTrack, 50, 50, 721 * scale.x, 333 * scale.y);
+}
+
+
+
+
+
+
+
+
 function displayScreen(screen)
 {
     background("red");
@@ -14,13 +382,9 @@ function displayScreen(screen)
     }
     else
     {
-        image(backgroundImages[currentLevelGroup], 0, 0, width, height);
+        image(backgroundImages[0], 0, 0, width, height);
     }
-    
-    
 
-    
-        
     screen.display();
 
     if (screen.name == "Level Select") 
@@ -37,7 +401,7 @@ function displayScreen(screen)
             fill(0);
             rect(50 * scale.x, 100 * scale.y, width * scaleTrack, height * scaleTrack)
             
-            image(trackImages[currentLevelGroup].build, 10 + (levels[currentLevelGroup].trackOffset.x) /2, 100 + (levels[currentLevelGroup].trackOffset.y) / 2, levels[currentLevelGroup].dimentions.x / 2, levels[currentLevelGroup].dimentions.y / 2);
+            image(trackImages[currentLevelGroup].build, -(10 * scale.x) + (levels[currentLevelGroup].trackOffset.x) /2, 100 + (levels[currentLevelGroup].trackOffset.y) / 2, (levels[currentLevelGroup].dimentions.x / 2) * scale.x, (levels[currentLevelGroup].dimentions.y / 2) * scale.y);
 
             let squareWidth = 70 * scale.x;
             let y = 100 * scale.y;
@@ -74,138 +438,7 @@ function displayScreen(screen)
 
         pop()
     }
-    else if (screen.name == "Group Select") 
-    {
-  
 
-    }
-    else if (screen.name == "Level") 
-    {
-        //screen.backgroundColor = (gameMode == "Play") ? 0 : "#37474F";
-        
-        
-        displayTrack();
-        displayFieldLines();
-        displayStars();
-        displayTrash();
-        displayCharges();
-        displaySlider();
-        displayTestCharges();
-        
-
-        if (gameMode == "Play") 
-        {
-            if (currentLevelGroup == 0 && currentLevel == 0)
-            {
-                push();
-                    fill(255);
-                    stroke(0);
-                    textSize(14);
-                    text("Switch to build \n mode to create \n Electric Field", width - 150, height - 50);
-
-                    text("Get the test \n charge to the \n finsh line", track.offset.x + 500, track.offset.y - 60);
-
-                pop();
-            }
-        }
-        else
-        {
-            // screen.buttons[1].onClick = "Play";
-            // screen.buttons[1].title = "Play";
-            if (currentLevelGroup == 0 && currentLevel == 0)
-            {
-                push();
-                    fill(255);
-                    stroke(0);
-                    textSize(14 * scale.x);
-
-                    // track.offset.x             track.offset.y
-                    
-
-                    if(charges.length == 0)
-                    {
-                        text("Tap inside the circle\n to create a charge", track.offset.x - 80, track.offset.y - 20);
-                    }
-                    else if(slider.visibility == "visible")
-                    {
-                        if (charges[0].charge > 0)
-                        {
-                            text("Press Play \n to test\n your build", width - 50, height - 130);
-                        }
-                        else
-                        {
-                            textAlign(LEFT);
-                            fill(0);
-                            rect(width - 185, height/2, 150, 100);
-                            fill(255);
-                            text("We call the sign \nand magnitude \nof the charge", width - 165, height/2 + 20);
-                            textAlign(CENTER);
-                            text("Use the slider to make Q positive", width/2, height - 10);
-                            textSize(24);
-                            text("Q.", width - 115, height/2 + 90);
-                        }
-                    }
-
-                    // noFill();
-                    // stroke(255);
-                    // for (let angle = 0; angle < 360; angle+= 20) 
-                    // {
-                    //     arc(70, 200, chargeDiameter + 10, chargeDiameter + 10, angle, angle + 10);
-                    // }
-                    
-                    image(icon.circle, track.offset.x - 100, track.offset.y + 20, chargeDiameter + 20, chargeDiameter + 20);
-                    
-                pop();
-            }
-        }
-
-        if (gameMode == "Play") 
-        {
-            charges.forEach(charge => 
-            {
-                charge.selected = false;
-            });
-        }
-        
-        if(finished)
-        {
-            sendScore(currentLevel, currentLevelGroup,timeElapsed, stars);
-            let allStars = JSON.parse(localStorage.getItem("userStars"))
-            totalStars = 0;
-            allStars.forEach(starGroup =>
-            {
-                starGroup.forEach(starsAdd =>
-                {
-                    totalStars += starsAdd;
-                })
-            })
-            navigateTo("Level Complete");
-        }
-        else
-        {
-            timeElapsed += deltaTime;
-        }
-    }
-    else if (screen.name == "Loading Screen") 
-    {
-        fill(255);
-        rect(0,height - 20, loadPercent, 20)
-        
-        if(loadPercent < width)
-        {
-            //loadPercent += width / 90;
-            loadPercent += width;
-            screen.buttons[0].visibility = "hidden";
-        }
-        else
-        {
-            screen.buttons[0].visibility = "visible";
-        }
-    }
-    else if (screen.name == "Home") 
-    {
-        image(homeTrack, 50, 50, 721 / scale.x, 333 / scale.y);
-    }
     else if (screen.name == "Level Complete") 
     {
         
@@ -362,31 +595,6 @@ function displayScreen(screen)
         
             
     }
-    else if (screen.name == "Credits") 
-    {
-        noStroke();
-        fill(255);
-        textSize(18);
-        text("Created by: ", width/2, 100);
-
-        let gameCreators = [ "Dr. John Barr",  "Dr. Colleen Countyman", " ", "Sean Blackford", "Amber Elliott", "Ted Mburu", "Eli Robinson", "Mark Volkov", " "];
-        textSize(12);
-        for (let i = gameCreators.length; i >= 0; i--) 
-        {
-            text(gameCreators[i], width/2, 120 + (i * 12));
-        }
-
-
-        textSize(18);
-        text("Special Thanks: ", width/2, 140 + (gameCreators.length * 12));
-
-        let specialThanks = [ "Dr. Nate Presopnik", " ", "Yemi Afolabi", "Liana Rodelli"];
-        textSize(12);
-        for (let i = specialThanks.length; i >= 0; i--) 
-        {
-            text(specialThanks[i], width/2, 160 + (i * 12) + (gameCreators.length * 12)); 
-        }
-    }
     else if (screen.name == "Help") 
     {
         fill(255);
@@ -398,57 +606,7 @@ function displayScreen(screen)
 
         image(icon.circle, 30, 170, chargeDiameter + 20, chargeDiameter + 20);
     }
-    else if (screen.name == "Leaderboard") 
-    {
-        fill("rgba(255, 255, 255, 0.25)");
-        rect(50, 25, width - 100, height);
 
-        fill("rgba(0, 0, 0, 0.5)");
-        rect(50, 90, width - 100, height);
-        push()
-            fill(255);
-            text("Sort By:", 100, 47);
-            text("Group:", width - 225, 47);
-            text("Level:", width - 125, 47);
-            
-            let y = 100;
-            //let leaderboardArray = JSON.parse(currentLeaderboard);
-
-            textSize(16)
-
-            for (let i = 0; i < currentLeaderboard.length; i++) 
-            {
-                //console.log(user);
-                let user = JSON.parse(currentLeaderboard[i]);
-                //console.log(currentLeaderboard[i]);
-                fill("rgba(255, 255, 255, 0.25)")
-                noStroke();
-                rect(75, y + leaderboardOffset, width - 150, 65);
-
-                fill(255);
-                // rank
-                text((i + 1) + ".", 100, y + 37.5 + leaderboardOffset);
-
-                // name
-                text(user.id, width/3.5, y + 37.5 + leaderboardOffset);
-
-                // class
-                text("IC PHYS 101", width /2, y + 37.5 + leaderboardOffset);
-
-                // time
-                text(millisecondsToTimeFormat(user.time), width/1.4 , y + 37.5 + leaderboardOffset); 
-                
-                // score
-                text(user.score, width - 130, y + 37.5 + leaderboardOffset);   
-                
-                y += 75;
-            }
-        pop()
-
-        
-
-        
-    }
     
 
     screen.displayHeader();
@@ -486,33 +644,28 @@ function displayScreen(screen)
 
             screen.buttons[i + 1].x = buttonX;
 
-            image(trackImages[i].play, imageX, imageY, imageWidth, imageHeight)
+            image(trackImages[i].build, imageX, imageY, imageWidth, imageHeight)
         })
     }
     else if (screen.name == "Noise")
     {
         //noLoop();
-        if(testCharges.length == 0)
-        {
-            testCharges = [new TestCharge(createVector(width/2, height/2), 5)]
-        }
+        // if(testCharges.length == 0)
+        // {
+        //     testCharges = [new TestCharge(createVector(width/2, height/2), 5)]
+        // }
         
-        testCharges[0].display();
+        // testCharges[0].display();
 
-        testCharges[0].trail.push(createVector(noise(noiseValues.x) * width, noise(noiseValues.y,noiseValues.y) * height))
-        noiseValues = createVector(noiseValues.x + 0.005, noiseValues.y + 0.005);
-        testCharges[0].position = createVector(noise(noiseValues.x) * width, noise(noiseValues.y,noiseValues.y) * height)
+        // testCharges[0].trail.push(createVector(noise(noiseValues.x) * width, noise(noiseValues.y,noiseValues.y) * height))
+        // noiseValues = createVector(noiseValues.x + 0.005, noiseValues.y + 0.005);
+        // testCharges[0].position = createVector(noise(noiseValues.x) * width, noise(noiseValues.y,noiseValues.y) * height)
     }
 
 
     if (screen.name == "Settings") 
     {
-        if (userNameInput.elt.style.visibility == "hidden")
-        {
-            userNameInput.style("visibility", "visible");
-            classCodeInput.style("visibility", "visible");
-            console.log("sdfg");
-        }
+
         
 
     }
@@ -553,7 +706,7 @@ function navigateTo(screenToShow, backButton)
     });
     currentScreen = screenToShow;
 
-    if (!backButton && screenToShow != "Loading Screen") 
+    if (!backButton && screenToShow != "Loading Screen" && screenToShow != "Level Complete") 
     {
         screenStack.push(screenToShow);
     }
@@ -584,15 +737,17 @@ class Screen
         this.header = props.header;
         this.textBoxes = props.textBoxes;
         this.images = props.images;
+        this.functions = props.functions;
     }
 
     display()
     {
         let screen = this;
 
-        push();
-            noStroke();
-        pop();
+        if (screen.functions != null) 
+        {
+            screen.functions();
+        }
 
     }
 
@@ -650,6 +805,7 @@ function createScreens()
                 new Button({x:  10, y:  10, width: 140, height: 20, title: "Change Username", onClick: function(){ navigateTo("Settings"); }, shape: "Rect", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 16, font: fontRegular})
                 ],
             textBoxes: [],
+            functions: function(){ displayHomeScreen() },
             }), 
 
 
@@ -663,11 +819,11 @@ function createScreens()
             backgroundColor: "#212121", 
             buttons: [
                 new Button({x: 15 , y: 10 , width: 30 , height: 30, title: "<"              , onClick: function(){ navigateBack() }, shape: "Back", bgColor: "white"             , fontColor: "black", fontSize: 14}), 
-                new Button({x: 316, y: 150, width: 180, height: 45, title: "Change Username", onClick: "ChangeUsername"     , shape: "Rect"  , bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}), 
-                new Button({x: 316, y: 200, width: 180, height: 45, title: "Enter Class Code", onClick: "ChangeClassCode", shape: "Rect"  , bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}),
-                new Button({x: 316, y: 300, width: 180, height: 45, title: "Clear All Data"  , onClick: "Clear Data"     , shape: "Rect"  , bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}), 
+                new Button({x: 316, y: 150, width: 180, height: 45, title: "Change Username", onClick: function(){ displayUsernameInput() }     , shape: "Rect"  , bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}), 
+                new Button({x: 316, y: 200, width: 180, height: 45, title: "Enter Class Code", onClick: function(){ displayClassCodeInput() } , shape: "Rect"  , bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}),
+                new Button({x: 316, y: 300, width: 180, height: 45, title: "Reset Game Progress"  , onClick: "Clear Data"     , shape: "Rect"  , bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}), 
                 new Button({x: 316, y: 100, width: 180, height: 45, title: "Colorblind Mode", onClick: "Colorblind Mode", shape: "Rect"  , bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}),
-                new Button({x: 316, y: 250, width: 180, height: 45, title: "Credits", onClick: "Credits", shape: "Rect"  , bgColor: chargeColor.positive, fontColor: "white", fontSize: 14})
+                new Button({x: 316, y: 250, width: 180, height: 45, title: "Credits", onClick: function(){ navigateTo("Credits"); }, shape: "Rect"  , bgColor: chargeColor.positive, fontColor: "white", fontSize: 14})
                 ],
             textBoxes: [],
             }),
@@ -697,6 +853,7 @@ function createScreens()
                 // new TextBox({x: 406, y: 90, id: "title", text: "Yemi Afobali", font: fontRegular, fontSize: 12, color: "white", visibility: "visible"}),
                 // new TextBox({x: 406, y: 90, id: "title", text: "Liana Rodelli", font: fontRegular, fontSize: 12, color: "white", visibility: "visible"}),
             ],
+            functions: function(){ displayCreditsScreen() }
             }),
 
 
@@ -727,13 +884,14 @@ function createScreens()
             backgroundColor: "#212121", 
             buttons: [
                 new Button({x:  15, y: 10, width:  30, height: 30, title: "<", onClick: function(){ navigateBack() }, shape: "Back", bgColor: "white", fontColor: "black", fontSize: 14}), 
-                new Button({x: 130, y: 30, width: 100, height: 25, title: "Score"    , onClick: "Levels", shape: "Rect", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}),
-                new Button({x:  50, y: 60, width: 356, height: 30, title: "Global"    , onClick: "Levels", shape: "Rect", bgColor: "rgba(0,0,0,0.5)", fontColor: "white", fontSize: 14}),
-                new Button({x: 406, y: 60, width: 356, height: 30, title: "My Class"    , onClick: "Levels", shape: "Rect", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 14}),
+                new Button({x: 130, y: 30, width: 100, height: 25, title: "Score"    , onClick: function(){ toggleLeaderboardSort(); }, shape: "Rect", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}),
+                new Button({x:  50, y: 60, width: 356, height: 30, title: "Global"    , onClick: function(){ leaderboardData.section = "Global"; updateLeaderBoard(); }, shape: "Rect", bgColor: "rgba(0,0,0,0.5)", fontColor: "white", fontSize: 14}),
+                new Button({x: 406, y: 60, width: 356, height: 30, title: "My Class"    , onClick: function(){ leaderboardData.section = "My Class"; updateLeaderBoard(); }, shape: "Rect", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 14}),
                 new Button({x: 612, y: 30, width:  40, height: 25, title: "1"    , onClick: "Levels", shape: "Rect", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}),
                 new Button({x: 712, y: 30, width:  40, height: 25, title: "1"    , onClick: "Levels", shape: "Rect", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14})
                 ],
             textBoxes: [],
+            functions: function(){ displayLeaderboardScreen() },
             }),
             
 
@@ -751,6 +909,7 @@ function createScreens()
                 new Button({x: 692, y: 285, width: 100, height: 50, title: "Play >>"    , onClick: function(){ navigateTo("Level"); }, shape: "Rect", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14, visibility: "hidden"})
                 ],
             textBoxes: [],
+            functions: function(){ displayLoadingScreen() },
             }),
 
 
@@ -793,6 +952,8 @@ function createScreens()
             textBoxes: [
                 // new TextBox({x: width/3, y: 90, id: "title", text: "Track Preview", font: fontRegular, fontSize: 24, color: "white", visibility: "visible"}), 
                 ],
+                
+            functions: function(){ displayGroupScreen() },
             }),
 
         new Screen({
@@ -808,10 +969,11 @@ function createScreens()
                 // new Button({x: width - 40, y: height/2 - 80, width: 60, height: 60, title: "Next"        , onClick: function(){ pressNext(); }        , shape: "Circle", bgColor: "white", fontColor: "black", fontSize: 14}), 
                 new Button({x: 772, y: 335, width: 60, height: 60, title: "Build"       , onClick: function(){ toggleGameMode(); }, shape: "Circle", bgColor: "white", fontColor: "black", fontSize: 14}), 
                 new Button({x: 767, y:  10, width: 30, height: 30, title: "Redo"        , onClick: function(){ pressRedo(); }     , shape: "Redo", bgColor: "white", fontColor: "black", fontSize: 14}), 
-                new Button({x: 727, y:  10, width: 30, height: 30, title: "Help"        , onClick: "Help"        , shape: "Help", bgColor: "white", fontColor: "black", fontSize: 14}), 
+                new Button({x: 727, y:  10, width: 30, height: 30, title: "Help"        , onClick: function(){ navigateTo("Help"); }        , shape: "Help", bgColor: "white", fontColor: "black", fontSize: 14}), 
 
                 ],
             textBoxes: [],
+            functions: function(){ displayLevelScreen() },
             }),
 
         new Screen({

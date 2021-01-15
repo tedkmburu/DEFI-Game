@@ -27,11 +27,20 @@ function preload()
         play: loadImage('images/play.png')
     };
 
-    trackImages = [
-        {play: loadImage('images/tracks/track1.png'), build: loadImage('images/tracks/track1build.png')},
-        {play: loadImage('images/tracks/track2.png'), build: loadImage('images/tracks/track2build.png')},
-        {play: loadImage('images/tracks/track3.png'), build: loadImage('images/tracks/track3build.png')},
-        {play: loadImage('images/tracks/track4.png'), build: loadImage('images/tracks/track4build.png')},
+    trackImages = [ 
+        {play: loadImage('images/tracks/track (22).png'), build: loadImage('images/tracks/track (23).png')},
+        {play: loadImage('images/tracks/track (26).png'), build: loadImage('images/tracks/track (1).png')},
+        {play: loadImage('images/tracks/track (24).png'), build: loadImage('images/tracks/track (25).png')},
+        {play: loadImage('images/tracks/track (12).png'), build: loadImage('images/tracks/track (13).png')},
+        {play: loadImage('images/tracks/track (2).png'), build: loadImage('images/tracks/track (4).png')},
+        {play: loadImage('images/tracks/track (8).png'), build: loadImage('images/tracks/track (9).png')},
+        {play: loadImage('images/tracks/track (6).png'), build: loadImage('images/tracks/track (7).png')},
+        {play: loadImage('images/tracks/track (20).png'), build: loadImage('images/tracks/track (21).png')},
+        {play: loadImage('images/tracks/track (14).png'), build: loadImage('images/tracks/track (16).png')},
+        {play: loadImage('images/tracks/track (24).png'), build: loadImage('images/tracks/track (25).png')},
+        {play: loadImage('images/tracks/track (11).png'), build: loadImage('images/tracks/track (19).png')},
+        {play: loadImage('images/tracks/track (10).png'), build: loadImage('images/tracks/track (18).png')},
+        {play: loadImage('images/tracks/track (15).png'), build: loadImage('images/tracks/track (17).png')},
         //{play: loadImage('images/tracks/track5.png'), build: loadImage('images/tracks/track5build.png')},
     ]
 }
@@ -39,11 +48,15 @@ function preload()
 function setup()
 {
     console.log("setup");
-    createCanvas(windowWidth, windowHeight);
+    
+    let scaledHeight = windowWidth * (375 / 812);
+    let scaledWidth = windowWidth;
+    createCanvas(scaledWidth, scaledHeight);
     //textFont(calibri);
     textFont(fontRegular);
-    windowSize = createVector(windowWidth, windowHeight).mag();
-    scale = createVector(width/812, height/375);
+
+    windowSize = createVector(scaledWidth, scaledHeight).mag();
+    scale = createVector(scaledWidth/812, scaledHeight/375);
 
     checkScreenRotation()
 
@@ -118,7 +131,7 @@ function setup()
     slider.changed(sliderChanged);
     slider.visibility = "hidden";
 
-    slider.position(100, height - 40, "fixed");
+    slider.position(100, height - 20, "fixed");
 
     let savedUsername;
     if (localStorage.userName != null)
@@ -141,17 +154,17 @@ function setup()
     }
 
     userNameInput = createInput(savedUsername);
-    userNameInput.size(212 * scale.x, 40 * scale.y);
+    userNameInput.size(180 * scale.x, 45 * scale.y);
     userNameInput.style("zIndex", "999");
-    userNameInput.position(300 * scale.x, 70 * scale.y);
+    userNameInput.position(316 * scale.x, 150 * scale.y);
     userNameInput.addClass("username");
     userNameInput.input(updateUsername);
     userNameInput.style("visibility", "hidden");
 
     classCodeInput = createInput(classCode);
-    classCodeInput.size(212 * scale.x, 40 * scale.y);
+    classCodeInput.size(180 * scale.x, 45 * scale.y);
     classCodeInput.style("zIndex", "999");
-    classCodeInput.position(300 * scale.x, 130 * scale.y);
+    classCodeInput.position(316 * scale.x, 200 * scale.y);
     classCodeInput.addClass("classCode");
     classCodeInput.input(updateClassCode);
     classCodeInput.style("visibility", "hidden");
@@ -171,7 +184,7 @@ function setup()
                 let buttonWidth = 200;
                 let buttonHeight = 200;
 
-                screen.buttons.push(new Button({x: buttonX, y: buttonY, width: buttonWidth, height: buttonHeight, title: "TRACK " + (i + 1), onClick: function(){ currentLevelGroup = i; navigateTo("Level Select");  } , shape: "Group", bgColor: "rgba(0,0,0,0.5)", fontColor: "white", fontSize: 14}))
+                screen.buttons.push(new Button({x: buttonX, y: buttonY, width: buttonWidth, height: buttonHeight, title: "TRACK " + (i + 1), onClick: function(){ currentLevelGroup = i; changeTrack(currentLevelGroup); loadPercent = 0; navigateTo("Loading Screen");  } , shape: "Group", bgColor: "rgba(0,0,0,0.5)", fontColor: "white", fontSize: 14}))
             } 
         }
     })
@@ -203,7 +216,7 @@ function draw()
     {
         if (screen.name == currentScreen) 
         {
-            displayScreen(screen)    
+            displayScreen(screen)
         }
     })
 
@@ -216,23 +229,23 @@ function draw()
 
 function checkScreenRotation()
 {
-    if (window.screen.orientation.type != "landscape-primary" &&  window.screen.orientation.type != "landscape-secondary")
-    {
-        // document.body.setAttribute( "style", "-webkit-transform: rotate(-90deg);");
+    // if (window.screen.orientation.type != "landscape-primary" &&  window.screen.orientation.type != "landscape-secondary")
+    // {
+    //     // document.body.setAttribute( "style", "-webkit-transform: rotate(-90deg);");
 
-        // resizeCanvas(windowHeight, windowWidth);
-        // scale = createVector(height/375, width/812);
-        // windowSize = createVector(width, height).mag(); 
-        push()
-            fill(0);
-            rect(0, 0, width, height);
-        pop()
+    //     // resizeCanvas(windowHeight, windowWidth);
+    //     // scale = createVector(height/375, width/812);
+    //     // windowSize = createVector(width, height).mag(); 
+    //     push()
+    //         fill(0);
+    //         rect(0, 0, width, height);
+    //     pop()
         
-    }
-    else
-    {
-        // document.body.setAttribute( "style", "-webkit-transform: rotate(0deg);");
-    }
+    // }
+    // else
+    // {
+    //     // document.body.setAttribute( "style", "-webkit-transform: rotate(0deg);");
+    // }
     //createScreens();
 }
 
@@ -250,7 +263,7 @@ function mouseClickedLevel(buttonClicked)
     
     
 
-    if (!buttonClicked && gameMode == "Build" && mouseY < height - 60) 
+    if (!buttonClicked && gameMode == "Build" && mouseY < height) 
     {
         
         charges.forEach(charge => {
@@ -292,7 +305,13 @@ function mouseDraggedLevel()
 {
     let mousePosition = createVector(mouseX, mouseY);
 
-    if((mousePosition.y < height - 50 || mousePosition.x < 50) && !finished && gameMode == "Build")
+    let chargePositions = []
+    for (let i = 0; i < charges.length; i++) 
+    {
+        chargePositions.push(p5.Vector.dist(charges[i].position, mousePosition));
+    }
+
+    if((mousePosition.y < height  || mousePosition.x < 50) && Math.min(...chargePositions) < chargeDiameter && !finished && gameMode == "Build")
     {
         let chargeDragged = null;
         charges.forEach(charge =>
@@ -302,6 +321,7 @@ function mouseDraggedLevel()
                 chargeDragged = charge;
             }
         });
+
 
         if (chargeDragged == null)
         {
@@ -406,25 +426,35 @@ function displayTime()
 
 function displayTrash()
 {
-    // let chargeIsBeingDragged = charges.some(charge => charge.dragging);
-    // if(chargeIsBeingDragged)
-    // {
-        push();
-            fill(255)
-            rect(0, height - 50, 50, 50);
-        pop();
-
-        image(icon.delete, 5, height - 45, 40, 40);
     
-        charges.forEach((charge, i) =>
+
+    push();
+        fill(255)
+        noStroke()
+        rect(0, height - 50, 50, 50);
+    pop();
+
+    let chargeIsBeingDragged = charges.some(charge => charge.dragging);
+    let chargeIsSelected = charges.some(charge => charge.selected);
+
+    if(chargeIsBeingDragged && mouseIsPressed)
+    {
+        image(icon.delete, 5 + (Math.random() * 5) - 2.5, height - 45+ (Math.random() * 5) - 2.5, 40, 40);
+    }
+    else
+    {
+        image(icon.delete, 5 , height - 45, 40, 40);
+    }
+    
+
+    charges.forEach((charge, i) =>
+    {
+        if (charge.x < 50 && charge.y > height - 50)
         {
-            if (charge.x < 50 && charge.y > height - 50)
-            {
-                charges.splice(i,1);
-                createFieldLines(); 
-            }
-        })
-    //}
+            charges.splice(i,1);
+            createFieldLines(); 
+        }
+    })
     
 }
 
@@ -437,10 +467,15 @@ function millisecondsToTimeFormat(millis)
 
 function windowResized()
 {
-    resizeCanvas(windowWidth, windowHeight);
-//   levelSelectTileSize = window.innerWidth / 2.5;
-    scale = createVector(width/812, height/375);
-    windowSize = createVector(width, height).mag(); 
+    let scaledHeight = windowWidth * (375 / 812);
+    let scaledWidth = windowWidth;
+    createCanvas(scaledWidth, scaledHeight);
+    //textFont(calibri);
+    textFont(fontRegular);
+
+    windowSize = createVector(scaledWidth, scaledHeight).mag();
+    scale = createVector(scaledWidth/812, scaledHeight/375);
+
     createScreens();
 
     

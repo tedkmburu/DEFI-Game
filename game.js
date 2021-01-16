@@ -12,7 +12,7 @@ function preload()
 
     backgroundImages = [loadImage('images/background1.png'), loadImage('images/background2.jpg'), loadImage('images/background3.jpg'), loadImage('images/background4.jpg')];
     homeTrack = loadImage('images/homeTrack.png');
-    blueprint = loadImage('images/blueprint.png');
+    blueprint = loadImage('images/blueprint2.png');
 
     icon = {
         redo: loadImage('images/redo.png'), 

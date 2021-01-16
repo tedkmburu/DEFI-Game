@@ -141,12 +141,12 @@ class TestCharge
                 {
                     fill(`rgba(0,0,0,${fillColorAplha})`)
                     fillColorAplha = fillColorAplha / 2;
-                    ellipse(dot.x, dot.y, 3, 3);
+                    ellipse(dot.x, dot.y, 4, 4);
                 });
             }
 
 
-            stroke("rgba(0,0,0,0.5)");
+            stroke("rgba(0,0,0,1)");
             fill(testCharge.color);
             ellipse(testCharge.position.x, testCharge.position.y, testChargeDiameter, testChargeDiameter);
         pop();
@@ -154,9 +154,9 @@ class TestCharge
 
 
 
-        stroke(0);
-        noFill();
-        strokeWeight(2); 
+        //stroke(0);
+        //noFill();
+        //strokeWeight(2); 
         // beginShape();
         for(let i = 0; i <= this.numberOfSides; i++) 
         {
@@ -305,13 +305,17 @@ class TestCharge
            moving = false
         }
 
-        let shapeOne = {shape: "Circle", position: testCharge.position, radius: (testChargeRadius)};
-        let shapeTwo = {shape: "Rect", position: createVector(track.finishLine.x, track.finishLine.y), width: track.finishLine.width, height: track.finishLine.height};
+        track.finishLines.forEach(finishLine => {
+            let shapeOne = {shape: "Circle", position: testCharge.position, radius: (testChargeRadius)};
+            let shapeTwo = {shape: "Rect", position: createVector(finishLine.x, finishLine.y), width: finishLine.width, height: finishLine.height};
+    
+            if (checkCollision(shapeOne, shapeTwo)) 
+            {
+                testCharge.finished = true;
+            }
+        })
 
-        if (checkCollision(shapeOne, shapeTwo)) 
-        {
-            testCharge.finished = true;
-        }
+        
 
         // levels[track.level].shapes.forEach(shape => 
         // {

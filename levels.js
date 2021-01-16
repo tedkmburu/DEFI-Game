@@ -23,7 +23,7 @@ function createLevels()
       {x: 2, y: 98},
       {x: 2, y: 2},
     ],
-    finishLine: {x: 480, y:  2, width:  58, height: 96},
+    finishLines: [{x: 480, y:  2, width:  58, height: 96}],
     },
 
 
@@ -53,7 +53,7 @@ function createLevels()
         [createVector(123, 53), createVector(99, 134), createVector(58, 194)],
         [createVector(142, 74.5), createVector(161, 128.5), createVector(137, 191.5)],
       ],
-      finishLine: {x: 0, y:  150, width:  50, height: 100},
+      finishLines: [{x: 0, y:  150, width:  50, height: 100}],
       points: [
         {x: 5, y: 0},
         {x: 66, y: 0},
@@ -95,7 +95,7 @@ function createLevels()
           [createVector(175, 75), createVector(325, 20), createVector(465, 100)],
           [createVector(435, 25), createVector(475, 50), createVector(500, 85)],
         ],
-      finishLine: {x: 425, y:  200, width:  100, height: 50},
+        finishLines: [{x: 425, y:  200, width:  100, height: 50}],
       points: [
         {x: 2, y: 2},
         {x: 400, y: 2},
@@ -134,7 +134,7 @@ function createLevels()
           [createVector(175, 75), createVector(325, 20), createVector(465, 100)],
           [createVector(435, 25), createVector(475, 50), createVector(500, 85)],
         ],
-      finishLine: {x: 2, y:  145, width:  50, height: 100},
+        finishLines: [{x: 2, y:  145, width:  50, height: 100}],
       points: [
         {x: 343, y: 0}, 
         {x: 426, y: 2}, 
@@ -196,14 +196,14 @@ function createLevels()
         {x: 3, y: 93},
         {x: 6, y: 4}
       ],
-      finishLine: {x: 0, y:  140, width:  50, height: 100},
+      finishLines: [{x: 0, y:  140, width:  50, height: 100}],
     },
 
 
 
 
 
-    {name: "TRACK 1",
+    {name: "TRACK 6",
     locked: false,
     testChargeStartingPositions: [createVector(50, 50)], 
     starPositions: [
@@ -228,7 +228,7 @@ function createLevels()
       {x: -1, y: 91}, 
       {x: 93, y: 0},
     ],
-    finishLine: {x: 480, y:  2, width:  58, height: 96},
+    finishLines: [{x: 480, y:  2, width:  58, height: 96}],
     },
 
 
@@ -242,7 +242,7 @@ function createLevels()
 
 
 
-    {name: "TRACK 1",
+    {name: "TRACK 7",
     locked: false,
     testChargeStartingPositions: [createVector(50, 50)], 
     starPositions: [
@@ -272,7 +272,7 @@ function createLevels()
       {x: 3, y: 90}, 
       {x: 0, y: 1}
     ],
-    finishLine: {x: 490, y:  90, width:  45, height: 96},
+    finishLines: [{x: 490, y:  90, width:  45, height: 96}],
     },
 
 
@@ -283,9 +283,9 @@ function createLevels()
 
 
 
-    {name: "TRACK 1",
+    {name: "TRACK 8",
     locked: false,
-    testChargeStartingPositions: [createVector(50, 50)], 
+    testChargeStartingPositions: [createVector(240, 50), createVector(490, 50)], 
     starPositions: [
       // {x: , y: },{x: , y: },{x: , y: },
         [createVector(200, 50), createVector(300, 50), createVector(400, 50)],
@@ -306,7 +306,7 @@ function createLevels()
       {x: 464, y: 95}, 
       {x: 462, y: 1}, 
     ],
-    finishLine: {x: 0, y:  2, width:  58, height: 96},
+    finishLines: [{x: 0, y:  2, width:  58, height: 96}, {x: 680, y:  2, width:  58, height: 96}],
     },
     
 
@@ -317,9 +317,9 @@ function createLevels()
 
 
 
-    {name: "TRACK 1",
+    {name: "TRACK 9",
     locked: false,
-    testChargeStartingPositions: [createVector(50, 50)], 
+    testChargeStartingPositions: [createVector(360, 40), createVector(40, 120)], 
     starPositions: [
       // {x: , y: },{x: , y: },{x: , y: },
         [createVector(200, 50), createVector(300, 50), createVector(400, 50)],
@@ -340,7 +340,7 @@ function createLevels()
       {x: -1, y: 103}, 
       {x: 80, y: 102}, 
     ],
-    finishLine: {x: 480, y:  2, width:  58, height: 96},
+    finishLines: [{x: 490, y:  0, width:  50, height: 85}, {x: 0, y:  260, width:  85, height: 40}],
     },
     
 
@@ -379,7 +379,7 @@ function createLevels()
       {x: 2, y: 100},
       {x: 2, y: 2}
     ],
-    finishLine: {x: 480, y:  2, width:  58, height: 96},
+    finishLines: [{x: 480, y:  2, width:  58, height: 96}],
     },
 
 
@@ -389,7 +389,7 @@ function createLevels()
 
 
 
-    {name: "TRACK 1",
+    {name: "TRACK 11",
     locked: false,
     testChargeStartingPositions: [createVector(50, 50)], 
     starPositions: [
@@ -407,7 +407,7 @@ function createLevels()
       {x: 2, y: 98},
       {x: 2, y: 2},
     ],
-    finishLine: {x: 480, y:  2, width:  58, height: 96},
+    finishLines: [{x: 480, y:  2, width:  58, height: 96}],
     },
 
 
@@ -417,7 +417,7 @@ function createLevels()
 
 
 
-    {name: "TRACK 1",
+    {name: "TRACK 12",
     locked: false,
     testChargeStartingPositions: [createVector(50, 50)], 
     starPositions: [
@@ -435,7 +435,7 @@ function createLevels()
       {x: 2, y: 98},
       {x: 2, y: 2},
     ],
-    finishLine: {x: 480, y:  2, width:  58, height: 96},
+    finishLines: [{x: 480, y:  2, width:  58, height: 96}],
     },
 
 
@@ -445,7 +445,7 @@ function createLevels()
 
 
 
-    {name: "TRACK 1",
+    {name: "TRACK 13",
     locked: false,
     testChargeStartingPositions: [createVector(50, 50)], 
     starPositions: [
@@ -463,7 +463,7 @@ function createLevels()
       {x: 2, y: 98},
       {x: 2, y: 2},
     ],
-    finishLine: {x: 480, y:  2, width:  58, height: 96},
+    finishLines: [{x: 480, y:  2, width:  58, height: 96}],
     },
   ]
 

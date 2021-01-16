@@ -49,9 +49,13 @@ class Track
     this.max = {x: 0, y: 0};
     this.min = {x: Infinity, y: Infinity};
 
-    this.finishLine = levels[level].finishLine;
-    this.finishLine.x += this.offset.x;
-    this.finishLine.y += this.offset.y;
+    this.finishLines = levels[level].finishLines;
+
+    this.finishLines.forEach(finishLine => {
+      finishLine.x += this.offset.x;
+      finishLine.y += this.offset.y;
+    });
+    
 
     
     for(let i = 1; i < this.points.length; i++) 
@@ -99,8 +103,12 @@ class Track
         }
       endShape();
 
-      let fl = this.finishLine;
-      rect(fl.x, fl.y, fl.width, fl.height)
+      this.finishLines.forEach(finishLine => {
+        let fl = finishLine;
+        rect(fl.x, fl.y, fl.width, fl.height)
+      })
+
+      
     pop()
   }
     

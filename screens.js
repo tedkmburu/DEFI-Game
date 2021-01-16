@@ -462,9 +462,9 @@ function displayScreen(screen)
 
         
         let starsStored = JSON.parse(localStorage.userStars);
-        if(starsStored[currentLevelGroup][currentLevel] < numberOfStarsCollected)
+        if(starsStored[currentLevelGroup] < numberOfStarsCollected)
         {
-            starsStored[currentLevelGroup][currentLevel] = numberOfStarsCollected;
+            starsStored[currentLevelGroup] = numberOfStarsCollected;
             localStorage.setItem('userStars', JSON.stringify(starsStored));
             // let levelHighScores = JSON.parse(localStorage.getItem("highScores"))[currentLevelGroup];
             // let starsCollected = JSON.parse(localStorage.getItem("starsCollected"))[currentLevelGroup];
@@ -508,9 +508,9 @@ function displayScreen(screen)
 
 
         let timesStored = JSON.parse(localStorage.userTimes);
-        if(timesStored[currentLevelGroup][currentLevel] > levelTime || timesStored[currentLevelGroup][currentLevel] == 0)
+        if(timesStored[currentLevelGroup] > levelTime || timesStored[currentLevelGroup] == 0)
         {
-            timesStored[currentLevelGroup][currentLevel] = Math.round(levelTime);
+            timesStored[currentLevelGroup] = Math.round(levelTime);
             localStorage.setItem('userTimes', JSON.stringify(timesStored));
         }
         

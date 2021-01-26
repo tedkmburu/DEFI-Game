@@ -6,9 +6,12 @@ function mouseClicked()
     let buttonClicked = false;
     let screenFound = false;
 
-    consoleLog += "{x: " + Math.round(mousePosition.x - levels[currentLevelGroup].trackOffset.x) + ", y: " + Math.round(mousePosition.y - levels[currentLevelGroup].trackOffset.y) + "}, ";
 
-    console.log(consoleLog);
+    // console.log(mouseTapped);
+
+    consoleLog = "{x: " + Math.round(mousePosition.x - levels[currentLevelGroup].trackOffset.x) + ", y: " + Math.round(mousePosition.y - levels[currentLevelGroup].trackOffset.y) + "}, ";
+
+    //console.log(consoleLog);
     screens.forEach(screen =>
     {
         if (screen.visibility == "visible" && !screenFound ) 
@@ -16,7 +19,7 @@ function mouseClicked()
             screenFound = true;
             
             screen.buttons.forEach(button => {
-                if(button.visibility != "hidden")
+                if(button.visibility != "hidden" && mouseTapped)
                 {
                     if (button.shape == "Circle") 
                     {
@@ -75,14 +78,40 @@ function mouseClicked()
     
 }
 
+
+function mouseMoved() 
+{
+    mouseTapped = false;
+}
+
+function mousePressed() 
+{
+    mouseTapped = true;
+}
+
+function mouseWheel(event) 
+{
+    // print(event.delta);
+    if (currentScreen == "Group Select") 
+    {
+        mouseWheelGroupSelect(event.delta)
+    }
+    if (currentScreen == "Leaderboard") 
+    {
+        mouseWheelLeaderboard(event.delta)
+    }
+}
+
+
 function mouseDragged()
 {
-    let screenFound = false;
+
+    
+    mouseTapped = false;
     screens.forEach(screen =>
     {
-        if (screen.visibility == "visible" && !screenFound) 
+        if (screen.visibility == "visible") 
         {
-            screenFound = true;
             if (screen.name == "Level")
             {
                 mouseDraggedLevel();
@@ -100,7 +129,34 @@ function mouseDragged()
 
 }
 
+function mouseReleased() 
+{
+    screens.forEach(screen =>
+    {
+        if (screen.visibility == "visible") 
+        {
 
+            if (screen.name == "Level")
+            {
+                mouseReleasedLevel();
+            }
+        }
+    });
+}
+
+function mouseWheelGroupSelect(delta)
+{
+    let newOffset = groupSelectOffset - (delta * 4);
+    let newOffsetConstrained = constrain(newOffset, -((levels.length - 2.5) * (300 * scale.x)) * scale.x, 0);
+    groupSelectOffset = newOffsetConstrained;
+}
+
+function mouseWheelLeaderboard(delta)
+{
+    let newOffset = leaderboardOffset - delta;
+    let newOffsetConstrained = constrain(newOffset, -(10 * 48) * scale.y, 0);
+    leaderboardOffset = newOffsetConstrained;
+}
 
 function mouseDraggedGroupSelect()
 {
@@ -112,11 +168,17 @@ function mouseDraggedGroupSelect()
 function mouseDraggedLeaderboard()
 {
     let newOffset = leaderboardOffset - ((pmouseY - mouseY) / 1);
-    let newOffsetConstrained = constrain(newOffset, -(10 * 48), 0);
+    let newOffsetConstrained = constrain(newOffset, -(10 * 48) * scale.y, 0);
     leaderboardOffset = newOffsetConstrained;
 }
 
-
+function mouseReleasedLevel()
+{
+    charges.forEach(charge => {
+        charge.selected = false;
+        charge.dragging = false; 
+    })
+}
 
 
 function mouseClickedLevelSelect()

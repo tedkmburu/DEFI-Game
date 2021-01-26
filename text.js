@@ -10,6 +10,7 @@ class TextBox
         this.font = props.font;
         this.fontSize = props.fontSize * scale.x;
         this.color = props.color;
+        this.align = props.align || CENTER;
     }
 
     display()
@@ -22,7 +23,7 @@ class TextBox
                 fill(textBox.color)
                 textSize(textBox.fontSize)
                 textFont(textBox.font)
-                textAlign(CENTER);
+                textAlign(textBox.align);
                 text(textBox.text, textBox.x,  textBox.y);   
 
             pop() 

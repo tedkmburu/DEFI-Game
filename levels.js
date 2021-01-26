@@ -10,11 +10,11 @@ function createLevels()
     testChargeStartingPositions: [createVector(50, 50)], 
     starPositions: [
       // {x: , y: },{x: , y: },{x: , y: },
-        [createVector(200, 50), createVector(300, 50), createVector(400, 50)],
-        [createVector(200, 50), createVector(300, 50), createVector(450, 75)],
+        // [createVector(200, 50), createVector(300, 50), createVector(400, 50)],
+        // [createVector(200, 50), createVector(300, 50), createVector(450, 75)],
         [createVector(150, 40), createVector(300, 10), createVector(450, 50)],
-        [createVector(150, 75), createVector(300, 30), createVector(450, 75)],
-        [createVector(60, 30), createVector(250, 80), createVector(450, 20)]
+        // [createVector(150, 75), createVector(300, 30), createVector(450, 75)],
+        // [createVector(60, 30), createVector(250, 80), createVector(450, 20)]
       ],
     points: [
       {x: 2, y: 2},
@@ -47,9 +47,9 @@ function createLevels()
       locked: true,
       testChargeStartingPositions: [createVector(35, 50)], 
       starPositions: [
-        [createVector(70, 65), createVector(90, 135), createVector(54, 175)],
-        [createVector(70, 65), createVector(100, 140), createVector(60, 225)],
-        [createVector(83, 101), createVector(89, 130), createVector(73, 157)],
+        // [createVector(70, 65), createVector(90, 135), createVector(54, 175)],
+        // [createVector(70, 65), createVector(100, 140), createVector(60, 225)],
+        // [createVector(83, 101), createVector(89, 130), createVector(73, 157)],
         [createVector(123, 53), createVector(99, 134), createVector(58, 194)],
         [createVector(142, 74.5), createVector(161, 128.5), createVector(137, 191.5)],
       ],
@@ -126,13 +126,13 @@ function createLevels()
 
     {name: "TRACK 4",
       locked: true,
-      testChargeStartingPositions: [createVector(50, 50)],
+      testChargeStartingPositions: [createVector(388, 50)],
       starPositions: [
-          [createVector(175, 50), createVector(425, 90), createVector(475, 180)],
-          [createVector(400, 75), createVector(425, 90), createVector(445, 110)],
-          [createVector(100, 50), createVector(455, 50), createVector(480, 180)],
-          [createVector(175, 75), createVector(325, 20), createVector(465, 100)],
-          [createVector(435, 25), createVector(475, 50), createVector(500, 85)],
+          [createVector(466, 118), createVector(368, 199), createVector(156, 200)],
+          // [createVector(400, 75), createVector(425, 90), createVector(445, 110)],
+          // [createVector(100, 50), createVector(455, 50), createVector(480, 180)],
+          // [createVector(175, 75), createVector(325, 20), createVector(465, 100)],
+          // [createVector(435, 25), createVector(475, 50), createVector(500, 85)],
         ],
         finishLines: [{x: 2, y:  145, width:  50, height: 100}],
       points: [
@@ -169,7 +169,7 @@ function createLevels()
 
       {name: "TRACK 5",
       locked: false,
-      testChargeStartingPositions: createVector(125, 50), 
+      testChargeStartingPositions: [createVector(125, 50)], 
       starPositions: [
         [createVector(250, 55), createVector(350, 56), createVector(450, 125)],
         [createVector(450, 125), createVector(250, 200), createVector(334, 200)],
@@ -205,14 +205,14 @@ function createLevels()
 
     {name: "TRACK 6",
     locked: false,
-    testChargeStartingPositions: [createVector(50, 50)], 
+    testChargeStartingPositions: [createVector(75, 75)], 
     starPositions: [
       // {x: , y: },{x: , y: },{x: , y: },
-        [createVector(200, 50), createVector(300, 50), createVector(400, 50)],
-        [createVector(200, 50), createVector(300, 50), createVector(450, 75)],
-        [createVector(150, 40), createVector(300, 10), createVector(450, 50)],
-        [createVector(150, 75), createVector(300, 30), createVector(450, 75)],
-        [createVector(60, 30), createVector(250, 80), createVector(450, 20)]
+        [createVector(125, 145), createVector(250, 250), createVector(440, 140)],
+        // [createVector(200, 50), createVector(300, 50), createVector(450, 75)],
+        // [createVector(150, 40), createVector(300, 10), createVector(450, 50)],
+        // [createVector(150, 75), createVector(300, 30), createVector(450, 75)],
+        // [createVector(60, 30), createVector(250, 80), createVector(450, 20)]
       ],
     points: [
       {x: 95, y: 0}, 
@@ -247,11 +247,11 @@ function createLevels()
     testChargeStartingPositions: [createVector(50, 50)], 
     starPositions: [
       // {x: , y: },{x: , y: },{x: , y: },
-        [createVector(200, 50), createVector(300, 50), createVector(400, 50)],
-        [createVector(200, 50), createVector(300, 50), createVector(450, 75)],
-        [createVector(150, 40), createVector(300, 10), createVector(450, 50)],
-        [createVector(150, 75), createVector(300, 30), createVector(450, 75)],
-        [createVector(60, 30), createVector(250, 80), createVector(450, 20)]
+        [createVector(200, 50), createVector(279, 120), createVector(420, 150)],
+        // [createVector(200, 50), createVector(300, 50), createVector(450, 75)],
+        // [createVector(150, 40), createVector(300, 10), createVector(450, 50)],
+        // [createVector(150, 75), createVector(300, 30), createVector(450, 75)],
+        // [createVector(60, 30), createVector(250, 80), createVector(450, 20)]
       ],
     points: [
       {x: 0, y: 2}, 
@@ -288,11 +288,11 @@ function createLevels()
     testChargeStartingPositions: [createVector(240, 50), createVector(490, 50)], 
     starPositions: [
       // {x: , y: },{x: , y: },{x: , y: },
-        [createVector(200, 50), createVector(300, 50), createVector(400, 50)],
-        [createVector(200, 50), createVector(300, 50), createVector(450, 75)],
-        [createVector(150, 40), createVector(300, 10), createVector(450, 50)],
-        [createVector(150, 75), createVector(300, 30), createVector(450, 75)],
-        [createVector(60, 30), createVector(250, 80), createVector(450, 20)]
+        [createVector(580, 21), createVector(660, 50), createVector(70, 50)],
+        // [createVector(200, 50), createVector(300, 50), createVector(450, 75)],
+        // [createVector(150, 40), createVector(300, 10), createVector(450, 50)],
+        // [createVector(150, 75), createVector(300, 30), createVector(450, 75)],
+        // [createVector(60, 30), createVector(250, 80), createVector(450, 20)]
       ],
     points: [
       {x: 0, y: 4}, 
@@ -322,11 +322,11 @@ function createLevels()
     testChargeStartingPositions: [createVector(360, 40), createVector(40, 120)], 
     starPositions: [
       // {x: , y: },{x: , y: },{x: , y: },
-        [createVector(200, 50), createVector(300, 50), createVector(400, 50)],
-        [createVector(200, 50), createVector(300, 50), createVector(450, 75)],
-        [createVector(150, 40), createVector(300, 10), createVector(450, 50)],
-        [createVector(150, 75), createVector(300, 30), createVector(450, 75)],
-        [createVector(60, 30), createVector(250, 80), createVector(450, 20)]
+        [createVector(417, 13), createVector(480, 70), createVector(65, 180)],
+        // [createVector(200, 50), createVector(300, 50), createVector(450, 75)],
+        // [createVector(150, 40), createVector(300, 10), createVector(450, 50)],
+        // [createVector(150, 75), createVector(300, 30), createVector(450, 75)],
+        // [createVector(60, 30), createVector(250, 80), createVector(450, 20)]
       ],
     points: [
       {x: 336, y: 2}, 
@@ -401,10 +401,8 @@ function createLevels()
         [createVector(60, 30), createVector(250, 80), createVector(450, 20)]
       ],
     points: [
-      {x: 2, y: 2},
-      {x: 538, y: 2},
-      {x: 538, y: 98},
-      {x: 2, y: 98},
+      {x: 638, y: 270},
+
       {x: 2, y: 2},
     ],
     finishLines: [{x: 480, y:  2, width:  58, height: 96}],
@@ -447,23 +445,41 @@ function createLevels()
 
     {name: "TRACK 13",
     locked: false,
-    testChargeStartingPositions: [createVector(50, 50)], 
+    testChargeStartingPositions: [createVector(120, 170)], 
     starPositions: [
       // {x: , y: },{x: , y: },{x: , y: },
-        [createVector(200, 50), createVector(300, 50), createVector(400, 50)],
-        [createVector(200, 50), createVector(300, 50), createVector(450, 75)],
-        [createVector(150, 40), createVector(300, 10), createVector(450, 50)],
-        [createVector(150, 75), createVector(300, 30), createVector(450, 75)],
-        [createVector(60, 30), createVector(250, 80), createVector(450, 20)]
+        [createVector(167, 92), createVector(95, 27), createVector(27, 98)],
+        // [createVector(200, 50), createVector(300, 50), createVector(450, 75)],
+        // [createVector(150, 40), createVector(300, 10), createVector(450, 50)],
+        // [createVector(150, 75), createVector(300, 30), createVector(450, 75)],
+        // [createVector(60, 30), createVector(250, 80), createVector(450, 20)]
       ],
     points: [
-      {x: 2, y: 2},
-      {x: 538, y: 2},
-      {x: 538, y: 98},
-      {x: 2, y: 98},
-      {x: 2, y: 2},
+      {x: 102, y: 198}, 
+      {x: 151, y: 183}, 
+      {x: 181, y: 150}, 
+      {x: 197, y: 101}, 
+      {x: 177, y: 38}, 
+      {x: 137, y: 9}, 
+      {x: 79, y: 3}, 
+      {x: 31, y: 28}, 
+      {x: 8, y: 61}, 
+      {x: 1, y: 114}, 
+      {x: 18, y: 153}, 
+      {x: 48, y: 181}, 
+      {x: 90, y: 197}, 
+      {x: 90, y: 143}, 
+      {x: 60, y: 122}, 
+      {x: 56, y: 88}, 
+      {x: 79, y: 60}, 
+      {x: 117, y: 59}, 
+      {x: 138, y: 78}, 
+      {x: 142, y: 109}, 
+      {x: 129, y: 132}, 
+      {x: 103, y: 144}, 
+      {x: 102, y: 195},
     ],
-    finishLines: [{x: 480, y:  2, width:  58, height: 96}],
+    finishLines: [{x: 62, y:  120, width:  30, height: 96}],
     },
   ]
 

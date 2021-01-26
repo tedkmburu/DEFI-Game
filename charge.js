@@ -75,12 +75,6 @@ class Charge
   {
     let charge = this;
     
-    // if (charge.selected)
-    // {
-    //   // charge.slider.position(charge.x - 75, charge.y + (chargeDiameter/2) + 10, "fixed");
-    //   // charge.slider.position(75, height - 40, "fixed");
-    //   // charge.charge = slider.value();
-    // }
     push();
       strokeWeight(2);
       if (charge.selected)
@@ -91,7 +85,6 @@ class Charge
       else
       {
         noStroke();
-        //slider.style("visibility", "hidden");
       }
 
       if (charge.charge > 0){ fill(chargeColor.positive); }

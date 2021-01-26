@@ -41,10 +41,10 @@ function toggleGameMode()
 
 function pressNext()
 {
-    if (currentLevel < levels[currentLevelGroup].starPositions.length - 1) 
+    if (currentLevelGroup < levels.length - 1) 
     {
-        currentLevel++;
-        changeTrack(track.level);
+        currentLevelGroup++;
+        changeTrack(currentLevelGroup);
 
         removeAllCharges();
 
@@ -75,6 +75,14 @@ function pressRedo()
     navigateTo("Level");
 }
 
+
+
+
+function resetGame()
+{
+    clearStorage();
+    getUserData(); 
+}
 
 
 

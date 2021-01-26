@@ -1,10 +1,6 @@
 'use strict';
 
-// let calibri; 
-// function preload() 
-// {
-//     calibri = loadFont('fonts/calibri.ttf');
-// }
+// The preload function is used to load in all the fonts and images. I assign each one to a global variable so I can use it anywhere in the code. Because they are all loaded in the beginning, the user never waits for images to load. After the preload function is complete, the setup() function starts
 function preload() 
 {
     spaceFont = loadFont('fonts/Anurati.otf');
@@ -41,86 +37,59 @@ function preload()
         {play: loadImage('images/tracks/track (11).png'), build: loadImage('images/tracks/track (19).png')},
         {play: loadImage('images/tracks/track (10).png'), build: loadImage('images/tracks/track (18).png')},
         {play: loadImage('images/tracks/track (15).png'), build: loadImage('images/tracks/track (17).png')},
-        //{play: loadImage('images/tracks/track5.png'), build: loadImage('images/tracks/track5build.png')},
     ]
 }
 
-function setup()
+
+function setup()    // This function only runs once when the page first loads. 
 {
     console.log("setup");
     
-    let scaledHeight = windowWidth * (375 / 812);
+    let scaledHeight = windowWidth * (375 / 812);  // 375 / 812 is the aspect ratio of an iphone X. All of the sizes and positions of things are modeled aroung that
     let scaledWidth = windowWidth;
-    createCanvas(scaledWidth, scaledHeight);
+    createCanvas(scaledWidth, scaledHeight);  // here I create a canvas with the dimentions that fit on the screen
     //textFont(calibri);
     textFont(fontRegular);
 
     windowSize = createVector(scaledWidth, scaledHeight).mag();
-    scale = createVector(scaledWidth/812, scaledHeight/375);
+    scale = createVector(scaledWidth/812, scaledHeight/375);    // this scale is used to scale the size of things in the game up or down depending on the size of the screen
 
     checkScreenRotation()
 
     angleMode(DEGREES);
     textAlign(CENTER);
     frameRate(60);
-    createLevels();
-    getUserData();
-    
+    createLevels();     // this function is in the levels.js file. It creates all the levels and stores them in the levels variable
+    getUserData();      // this function checks if its a new device. If so, it give it a new ID and saves a score and time of 0 on all the levels to the device. If it's not a new device, it counts all the stars the user has collected and puts that into the totalStars variable so it can be displayed on the "Level Select" screen
 
-    // if(localStorage.getItem("highScores") == null)
-    // {
-    //     let highScores = [];
-    //     let starsCollected = [];
-    //     let fastestTime = []
-    //     levels.forEach(level => 
-    //     {
-    //         let levelScores = [];
-    //         let levelStars = [];
-    //         let levelTimes = [];
-    //         for (let i = 0; i < level.starPositions.length; i++) 
-    //         {
-    //             levelScores.push(0);   
-    //             levelStars.push(0);   
-    //             levelTimes.push(0);   
-    //         }
-    //         highScores.push(levelScores);   
-    //         starsCollected.push(levelStars);   
-    //         fastestTime.push(levelTimes); 
-    //     })
+
+
+    if(getItem("userScores") != null)       // this unlocks levels that need to be unlocked and assigns the user's highscore, best time and number of stars colleceted in each level. 
+    {
+        let highScores = JSON.parse(getItem("userScores"));
+        let starsCollected = JSON.parse(getItem("userStars"));
+        let fastestTime = JSON.parse(getItem("userTimes"));
         
-    //     localStorage.setItem("highScores", JSON.stringify(highScores));
-    //     localStorage.setItem("starsCollected", JSON.stringify(starsCollected));
-    //     localStorage.setItem("fastestTime", JSON.stringify(fastestTime));    
-    // }
-    // else
-    // {
-    //     let highScores = JSON.parse(localStorage.getItem("highScores"));
-    //     let starsCollected = JSON.parse(localStorage.getItem("starsCollected"));
-    //     let fastestTime = JSON.parse(localStorage.getItem("fastestTime"));
-        
-    //     for (let i = 0; i < levels.length - 1; i++) 
-    //     {
-    //         levels[i].fastestTime = highScores[i];
-    //         levels[i].starsCollected = starsCollected[i];
-    //         levels[i].highScore = fastestTime[i];
-    //         if (levels[i].fastestTime != 0)
-    //         {
-    //             let nextLevel = i + 1;
-    //             levels[nextLevel].locked = false;
-    //         }
-    //     }
-    // }
+        for (let i = 0; i < levels.length - 1; i++) 
+        {
+            levels[i].fastestTime = highScores[i];
+            levels[i].starsCollected = starsCollected[i];
+            levels[i].highScore = fastestTime[i];
+            if (levels[i].fastestTime != 0)
+            {
+                let nextLevel = i + 1;
+                levels[nextLevel].locked = false;       // this unlocks the next level if you have a time saved for a previous level
+            }
+        }
+    }
 
-    // levels.forEach((level, i) => 
-    // {
-    //     levelTemplates.push(new LevelTemplate(i * levelSelectTileSize, i, level.fastestTime, level.highScore, level.starsCollected, level.locked));
-    // });
 
-    createScreens();
-    createTracks();
+
+    createScreens();    // this creates the screen objects into the screens array
+    createTracks();     // this creates the track objects into the tracks array
 
     
-
+    // creates the slider that's used to change a charges magnitude. The slider is always hidden except for when the user has selected a charge
     slider = createSlider(-5, 5, 0, 1);
     slider.size(width - 200);
     slider.value(0);
@@ -133,27 +102,8 @@ function setup()
 
     slider.position(100, height - 20, "fixed");
 
-    let savedUsername;
-    if (localStorage.userName != null)
-    {
-        savedUsername = localStorage.userName;
-    }
-    else
-    {
-        savedUsername = "Enter Name Here"
-    }
-
-    let classCode;
-    if (localStorage.classCode != null)
-    {
-        classCode = localStorage.classCode;
-    }
-    else
-    {
-        classCode = "Enter Class Code"
-    }
-
-    userNameInput = createInput(savedUsername);
+    // creates the input box for a users username in the Settings screen. The input box is always hidden except for when the user has clicks the button to change it in the settings screen
+    userNameInput = createInput(getItem("userName"));
     userNameInput.size(180 * scale.x, 45 * scale.y);
     userNameInput.style("zIndex", "999");
     userNameInput.position(316 * scale.x, 150 * scale.y);
@@ -161,7 +111,8 @@ function setup()
     userNameInput.input(updateUsername);
     userNameInput.style("visibility", "hidden");
 
-    classCodeInput = createInput(classCode);
+    // creates the input box for a users class code in the Settings screen. The input box is always hidden except for when the user has clicks the button to change it in the settings screen
+    classCodeInput = createInput(getItem("classCode"));
     classCodeInput.size(180 * scale.x, 45 * scale.y);
     classCodeInput.style("zIndex", "999");
     classCodeInput.position(316 * scale.x, 200 * scale.y);
@@ -170,9 +121,10 @@ function setup()
     classCodeInput.style("visibility", "hidden");
 
 
-    
+    // this connects to the database and gets the data needed to fill up the leaderboard
     updateLeaderBoard();
 
+    // this finds the screen called "Group Select" and adds a button to it for each level. Each button will navigate the user to that level when it's clicked. The button objects are added to that screens buttons properties
     screens.forEach(screen =>
     {
         if (screen.name == "Group Select") 
@@ -184,33 +136,26 @@ function setup()
                 let buttonWidth = 200;
                 let buttonHeight = 200;
 
-                screen.buttons.push(new Button({x: buttonX, y: buttonY, width: buttonWidth, height: buttonHeight, title: "TRACK " + (i + 1), onClick: function(){ currentLevelGroup = i; changeTrack(currentLevelGroup); loadPercent = 0; navigateTo("Loading Screen");  } , shape: "Group", bgColor: "rgba(0,0,0,0.5)", fontColor: "white", fontSize: 14}))
+                //  the buttons propery for the screen is having buttons added to it
+                screen.buttons.push( 
+                    new Button({x: buttonX, y: buttonY, width: buttonWidth, height: buttonHeight, title: "TRACK " + (i + 1), onClick: function(){ currentLevelGroup = i; changeTrack(currentLevelGroup); loadPercent = 0; navigateTo("Loading Screen");  } , shape: "Group", bgColor: "rgba(0,0,0,0.5)", fontColor: "white", fontSize: 14})
+                    )
             } 
         }
     })
 
         
     
-
-    navigateTo(currentScreen);
+    
+    navigateTo(currentScreen); // this navigates to the first screen the users will see when he game is first opened. The screen the user first sees can be set in the variables.js file
 
     console.log("setup complete");
 
 }
 
-function updateUsername()
-{
-    localStorage.userName = userNameInput.value()
-}
 
-function updateClassCode()
+function draw() // this function runs every frame. It's used to show the screen that is currently visible. the screen then has functions to show all the things that are supposed to be visible when the user is looking at that screen 
 {
-    localStorage.classCode = classCodeInput.value()
-}
-
-function draw()
-{
-    // translate(-(width/2),-(height/2));
 
     screens.forEach(screen =>
     {
@@ -221,9 +166,22 @@ function draw()
     })
 
     checkScreenRotation()
-
-    // console.log("draw");
 }
+
+
+
+
+function updateUsername()
+{
+    storeItem("userName") = userNameInput.value()
+}
+
+function updateClassCode()
+{
+    storeItem("classCode") = classCodeInput.value()
+}
+
+
 
 
 
@@ -263,7 +221,7 @@ function mouseClickedLevel(buttonClicked)
     
     
 
-    if (!buttonClicked && gameMode == "Build" && mouseY < height) 
+    if (!buttonClicked && gameMode == "Build" && mouseY < height - 20 && mouseTapped) 
     {
         
         charges.forEach(charge => {
@@ -271,7 +229,7 @@ function mouseClickedLevel(buttonClicked)
             charge.dragging = false;
     
             let distance = mousePosition.dist(charge.position);
-            if (distance < chargeDiameter)
+            if (distance < chargeRadius)
             {
                 notTouchingACharge = false;
                 selectedCharge = charge;
@@ -303,7 +261,10 @@ function mouseClickedLevel(buttonClicked)
 
 function mouseDraggedLevel()
 {
+    let mousePosition2 = createVector(pmouseX, pmouseY);
     let mousePosition = createVector(mouseX, mouseY);
+
+    // console.log(Math.round(p5.Vector.dist(mousePosition, mousePosition2)));
 
     let chargePositions = []
     for (let i = 0; i < charges.length; i++) 
@@ -339,8 +300,8 @@ function mouseDraggedLevel()
             if (chargeDragged != null && chargeDragged.dragging)
             {
 
-                chargeDragged.x = constrain(mouseX,0,width);
-                chargeDragged.y = constrain(mouseY,70,height);
+                chargeDragged.x = constrain(mouseX, 0, width);
+                chargeDragged.y = constrain(mouseY, 70, height);
                 chargeDragged.position = createVector(mouseX, mouseY);
                 chargeDragged.dragging = true;
                 createFieldLines(); 
@@ -377,9 +338,9 @@ function netForceAtPoint(position)
         //F = KQ / (r^2)
         let kq = charge.charge * k;
         let r = p5.Vector.dist(position, chargePosition);
-        if (r < 10)
+        if (r < 5)
         {
-            r = 10;
+            r = 5;
         }
         let rSquared = Math.pow(r,2);
 
@@ -501,21 +462,10 @@ function openFullscreen()
 }
 
 
-function makeid(length) 
-{
-    var result           = '';
-    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    var charactersLength = characters.length;
-    for ( var i = 0; i < length; i++ ) {
-       result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-    return result;
- }
 
 
 function getUserData()
 {
-    //console.log(localStorage);
     if(localStorage.length == 0)
     {
         let userScores = [];
@@ -524,47 +474,32 @@ function getUserData()
 
         levels.forEach(level =>
         {
-            let tempArray = [];
-
-            level.starPositions.forEach(starPosition =>
-            {
-                tempArray.push(0);
-            })
-
-            userScores.push(tempArray);
-            userStars.push(tempArray);
-            userTimes.push(tempArray);
+            userScores.push(0);
+            userStars.push(0);
+            userTimes.push(0);
         })
 
-        
-        localStorage.setItem('userScores', JSON.stringify(userScores));
-        localStorage.setItem('userStars', JSON.stringify(userStars));
-        localStorage.setItem('userTimes', JSON.stringify(userTimes));
-        
-        var d = new Date();
-        var n = d.getTime();
+        storeItem('userScores', JSON.stringify(userScores));
+        storeItem('userStars', JSON.stringify(userStars));
+        storeItem('userTimes', JSON.stringify(userTimes));
 
-        let randomID = makeid(10) + month() + day() + year() + n;
-        localStorage.setItem('userId', randomID);
-        localStorage.setItem('userName', "Enter Name Here");
+        storeItem('userId', newDevice());
+        console.log("userId: ",getItem('userId'));
+        storeItem('userName', "Enter Name Here");
+        storeItem('classCode', "Enter Class Code Here");
+
+        totalStars = 0;
     }
     else
     {
-        // totalStars
-
-        // JSON.parse()
-        
-        
-        let stars = JSON.parse(localStorage.getItem("userStars"))
+        let stars = JSON.parse(getItem("userStars"))
+ 
         totalStars = 0;
-        stars.forEach(starGroup =>
+
+        stars.forEach(stars =>
         {
-            starGroup.forEach(stars =>
-            {
-                totalStars += stars;
-            })
+            totalStars += stars;
         })
-        //console.log(totalStars);
     }
 }
 
@@ -710,8 +645,6 @@ function tryFetchData()
 
 function newDevice()
 {
-
-
     fetch('http://ic-research.eastus.cloudapp.azure.com:8080/class/', {
         method: 'POST',
         headers: {
@@ -722,11 +655,9 @@ function newDevice()
     }).then((res) => {
         return res.json();
     }).then((json) => {
-        localStorage.userId = json.InsertedID;
-        //console.log(json)
+        storeItem("userId", json.InsertedID);
+        console.log(json)
     })
-
-
 }
 
 
@@ -761,3 +692,6 @@ function newDevice()
 
 
 // unlock hard mode at the end
+
+
+

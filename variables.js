@@ -4,13 +4,15 @@ let fontRegular;
 let backgroundImages;
 let homeTrack;
 let blueprint;
-
+let icon;
 let trackImages;
+
 let userNameInput;
 let classCodeInput;
 
 let dataSent;
 let consoleLog = "";
+let mouseTapped;
 
 let currentLeaderboard;
 
@@ -41,7 +43,7 @@ let scale;
 
 let colorBlindMode = false;
 
-let icon;
+
 
 let screens = [];
 let screenStack = ["Home"];
@@ -61,10 +63,9 @@ const starRadius = 7;
 const starDiameter = starRadius * 2;
 const buttonRadius = 30;
 
-const buttonDimentions = {x: buttonRadius * 6, y: buttonRadius * 1.5};
 const fieldLinesPerCoulomb = 4;
 
-
+let displayScore = 0;
  
  
 function getColors()

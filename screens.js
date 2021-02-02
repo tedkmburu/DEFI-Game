@@ -1,6 +1,6 @@
 'use strict';
 
-let groupSelectOffset = 0;
+let levelSelectOffset = 0;
 let leaderboardOffset = 0;
 let loadPercent = 0;
 
@@ -57,7 +57,7 @@ function displayLoadingScreen()  // this function is called every frame while on
 
         fill(0);
 
-        let level = levels[currentLevelGroup];
+        let level = levels[currentLevel];
 
 
         // this is the black rectangle behing the track preview
@@ -72,17 +72,18 @@ function displayLoadingScreen()  // this function is called every frame while on
         let imageY = (height / 2) - (level.dimentions.y / 2) ;
         let imageWidth = (level.dimentions.x);
         let imageHeight = (level.dimentions.y);
-        image(trackImages[currentLevelGroup].play, imageX, imageY, imageWidth, imageHeight);
+        image(trackImages[currentLevel].play, imageX, imageY, imageWidth, imageHeight);
 
         // this shows the initial positions on the preview of the tracks test charges
         fill("rgba(211, 47, 47, 1)");
+        noStroke();
         level.testChargeStartingPositions.forEach( startingPosition => {
             ellipse(startingPosition.x + imageX, startingPosition.y + imageY, testChargeDiameter, testChargeDiameter);
         })
 
 
         // this shows the positions on the preview of each star on the track
-        level.starPositions[0].forEach( starPosition => {
+        level.starPositions.forEach(starPosition => {
             image(icon.star, starPosition.x - starRadius - 2 + imageX, starPosition.y - starRadius - 2 + imageY, starDiameter + 4, starDiameter + 4)
             // ellipse(starPosition.x + imageX, starPosition.y + imageY, starDiameter, starDiameter);
         })
@@ -95,7 +96,7 @@ function displayLoadingScreen()  // this function is called every frame while on
 
 
 
-function displayCreditsScreen()// this function is called every frame while on the "Credits" screen. It's called in the Screen object on screens.
+function displayCreditsScreen() // this function is called every frame while on the "Credits" screen. It's called in the Screen object on screens.
 {
 
 }
@@ -141,27 +142,27 @@ function displayLeaderboardScreen()     // this function is called every frame w
     
         textSize(14 * scale.x)
         fill(255);
-        text("Sort By:", 100 * scale.x, 47 * scale.y);
-        text("Group:", 587 * scale.x, 47 * scale.y);
+        //text("Sort By:", 100 * scale.x, 47 * scale.y);
+        //text("Group:", 587 * scale.x, 47 * scale.y);
         text("Level:", 687 * scale.x, 47 * scale.y);
 
-        let screenIndex = screens.findIndex(x => x.name == "Leaderboard");
-        let screen = screens[screenIndex];
-        let globalButton = getButtonIndex("Leaderboard", "Global")
-        let myClassButton = getButtonIndex("Leaderboard", "My Class")
+        // let screenIndex = screens.findIndex(x => x.name == "Leaderboard");
+        // let screen = screens[screenIndex];
+        // let globalButton = getButtonIndex("Leaderboard", "Global")
+        // let myClassButton = getButtonIndex("Leaderboard", "My Class")
 
-        if (leaderboardData.section == "Global") 
-        {
-            screen.buttons[globalButton].bgColor = "rgba(0,0,0,0.5)";
-            screen.buttons[myClassButton].bgColor = "rgba(0,0,0,0)";
-        }
-        else
-        {
-            screen.buttons[globalButton].bgColor = "rgba(0,0,0,0)";
-            screen.buttons[myClassButton].bgColor = "rgba(0,0,0,0.5)";
-        }
+        // if (leaderboardData.section == "Global") 
+        // {
+        //     screen.buttons[globalButton].bgColor = "rgba(0,0,0,0.5)";
+        //     screen.buttons[myClassButton].bgColor = "rgba(0,0,0,0)";
+        // }
+        // else
+        // {
+        //     screen.buttons[globalButton].bgColor = "rgba(0,0,0,0)";
+        //     screen.buttons[myClassButton].bgColor = "rgba(0,0,0,0.5)";
+        // }
         
-        let y = 100 * scale.y;
+        let y = 70 * scale.y;
         //let leaderboardArray = JSON.parse(currentLeaderboard);
 
         textSize(16 * scale.x)
@@ -224,9 +225,9 @@ function displayClassCodeInput()
 
 
 
-function displayGroupScreen()
+function displayLevelSelectScreen()
 {
-    let screenIndex = screens.findIndex(x => x.name == "Group Select");
+    let screenIndex = screens.findIndex(x => x.name == "Level Select");
     let screen = screens[screenIndex];
 
     let trackPositions = [];
@@ -244,50 +245,54 @@ function displayGroupScreen()
     });
 
     push()
-    trackPositions.forEach((trackPosition, a) => {
-        fill(255);
-        textSize(10 * scale.x);
-        //text(a + 1, trackPosition.x  / 10 + width/3, trackPosition.y + (230 * scale.x));
-
-        
-        if (levelsBestTime[a] > 0) 
-        {
-            
-            
-            let x = trackPosition.x + (190 * scale.x);
-            let y = trackPosition.y - (16 * scale.y);
-            let time = "Best Time: " + millisecondsToTimeFormat(levelsBestTime[a])
-            let score = "High Score: " + levelsHighScore[a];
-
-            // displays the grey rectangle behind score and stars
-            fill("rgba(0,0,0,0.5)")
-            noStroke()
-            rect(x - (190 * scale.x), y - (15 * scale.y), 200 * scale.x, 31 * scale.y)
-            fill(255)
-            rect(x - (190 * scale.x), y + (15 * scale.y), 200 * scale.x, 1 * scale.y)
-
-            // displays the users best time for said tracks
-            fill(255)
-            textAlign(RIGHT)
-            text(time, x, y);
-            text(score, x, y + (11 * scale.x));
-
-        }
-        for (let i = 0; i < levelsStars[a]; i++) 
-        {
-            // puts up a star for each star the user has collected in each track
-            let imageX = trackPosition.x + (i * 25 * scale.x) + (10 * scale.x);
-            let imageY = trackPosition.y - (25 * scale.y);
-            let imageWidth = 20 * scale.x;
-            let imageHeight = 20 * scale.x;
-            image(icon.star, imageX, imageY, imageWidth, imageHeight);
+        trackPositions.forEach((trackPosition, a) => {
+            fill(255);
+            textSize(10 * scale.x);
+            //text(a + 1, trackPosition.x  / 10 + width/3, trackPosition.y + (230 * scale.x));
 
             
-        }
-    })
+            if (levelsBestTime[a] > 0) 
+            {
+                
+                
+                let x = trackPosition.x + (190 * scale.x);
+                let y = trackPosition.y - (16 * scale.y);
+                let time = "Best Time: " + millisecondsToTimeFormat(levelsBestTime[a])
+                let score = "High Score: " + levelsHighScore[a];
 
-    fill(255)
-    rect(-1 * groupSelectOffset / (4.255 * scale.x), height  - 20, 100, 100)
+                // displays the grey rectangle behind score and stars
+                fill("rgba(0,0,0,0.5)")
+                noStroke()
+                rect(x - (190 * scale.x), y - (15 * scale.y), 200 * scale.x, 31 * scale.y)
+                fill(255)
+                rect(x - (190 * scale.x), y + (15 * scale.y), 200 * scale.x, 1 * scale.y)
+
+                // displays the users best time for said tracks
+                fill(255)
+                textAlign(RIGHT)
+                text(time, x, y);
+                text(score, x, y + (11 * scale.x));
+
+            }
+            for (let i = 0; i < levelsStars[a]; i++) 
+            {
+                // puts up a star for each star the user has collected in each track
+                let imageX = trackPosition.x + (i * 25 * scale.x) + (10 * scale.x);
+                let imageY = trackPosition.y - (25 * scale.y);
+                let imageWidth = 20 * scale.x;
+                let imageHeight = 20 * scale.x;
+                image(icon.star, imageX, imageY, imageWidth, imageHeight);
+
+                
+            }
+        })
+
+        noStroke();
+        fill("rgba(0,0,0,0.5)")
+        rect(0, height  - 20, width, 100)
+
+        fill(255)
+        rect(-1 * levelSelectOffset / (4.255 * scale.x), height  - 20, 100, 100)
 
     pop()
 }
@@ -299,38 +304,41 @@ function displayGroupScreen()
 
 function tutorial()
 {
-    push();
-        fill(255);
-        stroke(0);
-        textSize(14);
+    // push();
+    //     fill(255);
+    //     stroke(0);
+    //     textSize(14);
 
-        if(charges.length == 0)
-        {
-            text("Tap inside the circle\n to create a charge", track.offset.x - 80, track.offset.y - 20);
-        }
-        else if(slider.visibility == "visible")
-        {
-            if (charges[0].charge > 0)
-            {
-                text("Press Play \n to test\n your build", width - 50, height - 130);
-            }
-            else
-            {
-                textAlign(LEFT);
-                fill(0);
-                rect(width - 185, height/2, 150, 100);
-                fill(255);
-                text("We call the sign \nand magnitude \nof the charge", width - 165, height/2 + 20);
-                textAlign(CENTER);
-                text("Use the slider to give the charge a positive charge", width/2, height - 30);
-                textSize(24);
-                text("Q.", width - 115, height/2 + 90);
-            }
-        }
+    //     if(charges.length == 0)
+    //     {
+    //         text("Tap inside the circle\n to create a charge", track.offset.x - 80, track.offset.y - 20);
+    //     }
+    //     else if(slider.visibility == "visible")
+    //     {
+    //         if (charges[0].charge > 0)
+    //         {
+    //             text("Press Play \n to test\n your build", width - 50, height - 130);
+    //         }
+    //         else
+    //         {
+    //             textAlign(LEFT);
+    //             fill(0);
+    //             rect(width - 185, height/2, 150, 100);
+    //             fill(255);
+    //             text("We call the sign \nand magnitude \nof the charge", width - 165, height/2 + 20);
+    //             textAlign(CENTER);
+    //             text("Use the slider to give the charge a positive charge", width/2, height - 30);
+    //             textSize(24);
+    //             text("Q.", width - 115, height/2 + 90);
+    //         }
+    //     }
        
-        image(icon.circle, track.offset.x - 100, track.offset.y + 20, chargeDiameter + 20, chargeDiameter + 20);
+    //     image(icon.circle, track.offset.x - 100, track.offset.y + 20, chargeDiameter + 20, chargeDiameter + 20);
         
-    pop();
+    // pop();
+
+    let scaledHeight = windowWidth * (375 / 812);
+    image(helpScreen, 0, 0, width, scaledHeight);
 }
 
 
@@ -361,24 +369,24 @@ function displayLevelScreen()
 
     if (gameMode == "Play") 
     {
-        if (currentLevelGroup == 0 && currentLevel == 0)
-        {
-            push();
-                fill(255);
-                stroke(0);
-                textSize(14);
-                text("Switch to build \n mode to create \n Electric Field", width - 150, height - 50);
+        // if (currentLevel == 0 && currentLevel == 0)
+        // {
+        //     push();
+        //         fill(255);
+        //         stroke(0);
+        //         textSize(14);
+        //         text("Switch to build \n mode to create \n Electric Field", width - 150, height - 50);
 
-                text("Get the test \n charge to the \n finsh line", track.offset.x + 500, track.offset.y - 60);
+        //         text("Get the test \n charge to the \n finsh line", track.offset.x + 500, track.offset.y - 60);
 
-            pop();
-        }
+        //     pop();
+        // }
     }
     else
     {
-        if (currentLevelGroup == 0 && currentLevel == 0)
+        if (currentLevel == 0 && currentLevel == 0)
         {
-            tutorial()
+            //tutorial()
         }
     }
 
@@ -392,7 +400,7 @@ function displayLevelScreen()
     
     if(finished)
     {
-        sendScore(currentLevel, currentLevelGroup,timeElapsed, stars);
+        //sendScore(currentLevel, currentLevel,timeElapsed, stars);
         let allStars = JSON.parse(getItem("userStars"))
         totalStars = 0;
 
@@ -416,9 +424,153 @@ function displayLevelScreen()
 
 
 
+
+function displayLevelCompleteScreen()
+{
+    let levelTime = timeElapsed;
+    let numberOfStarsCollected = 0;
+    stars.forEach(star =>
+    {
+        if(star.collected)
+        {
+            numberOfStarsCollected++;
+        }
+    });
+
+    let score = 10000;
+    
+    score = constrain(score - levelTime / 100, 100, 10000);
+
+    if (numberOfStarsCollected > 0) 
+    {
+        score *= numberOfStarsCollected
+    }
+    score = Math.round(score);
+
+    
+    let starsStored = JSON.parse(getItem("userStars"));
+    if(starsStored[currentLevel] < numberOfStarsCollected)
+    {
+        starsStored[currentLevel] = numberOfStarsCollected;
+        storeItem('userStars', JSON.stringify(starsStored));
+    }
+
+    let timesStored = JSON.parse(getItem("userTimes"));
+    if(timesStored[currentLevel] > levelTime || timesStored[currentLevel] == 0)
+    {
+        timesStored[currentLevel] = Math.round(levelTime);
+        console.log(timesStored[currentLevel]);
+        storeItem('userTimes', JSON.stringify(timesStored));
+    }
+
+    let scoresStored = JSON.parse(getItem("userScores"));
+    if(scoresStored[currentLevel] < score)
+    {
+        scoresStored[currentLevel] = score;
+        storeItem('userScores', JSON.stringify(scoresStored));
+    }
+
+    if (!dataSent) 
+    {
+        sendScore({level: 1, group: currentLevel, time: Math.round(timeElapsed), stars: numberOfStarsCollected, score: score, userId: getItem("userId")})
+    }
+    
+
+    let nextLevel = track.level + 1;
+    if (nextLevel < levels.length) 
+    {
+        levels[nextLevel].locked = false;
+    }
+    
+
+    fill(0)
+    noStroke()
+    rect(50 * scale.x, 50 * scale.y, 270 * scale.x, 250 * scale.y);
+
+    fill(chargeColor.negative);
+    noStroke();
+    rect(115 * scale.x, 160 * scale.y, 150 * scale.x, 35 * scale.y);
+    rect(115 * scale.x, 240 * scale.y, 150 * scale.x, 35 * scale.y);
+
+    noStroke();
+    fill(255);
+    textSize(30 * scale.x);
+    text("Personal Best", 190 * scale.x, 90 * scale.y);
+    stroke(255);
+    line(100 * scale.x, 100 * scale.y, 280 * scale.x, 100 * scale.y);
+    
+
+    noStroke();
+    fill(255);
+    textSize(16 * scale.x);
+    text("Highest Score:", 190 * scale.x, 145 * scale.y);
+    text("Fastest Time:" , 190 * scale.x, 235 * scale.y);
+
+    textSize(20 * scale.x);
+    text(score                              , 190 * scale.x, 185 * scale.y);
+    text(millisecondsToTimeFormat(levelTime), 190 * scale.x, 265 * scale.y);
+
+
+
+
+
+    
+    
+    fill(chargeColor.negative);
+    noStroke();
+    rect(440 * scale.x, 232 * scale.y, 150 * scale.x, 35 * scale.y);
+    rect(610 * scale.x, 232 * scale.y, 150 * scale.x, 35 * scale.y);
+    
+    noStroke();
+    fill(255);
+    textSize(20 * scale.x);
+    //text("Level " + (track.level + 1), width/2, height/2 - 150);
+    //text("Level 1", width/2, height/2 - 150);
+
+    //let positiveFeedback = ["Excellent!", "Incredible!", "Great Job!", ]
+
+    text("Excellent!", 612 * scale.x, 40 * scale.y);
+
+    text("Score:", 687 * scale.x, 222 * scale.y);
+    text("Time:" , 510 * scale.x, 222 * scale.y);
+
+    text(score                              , 687 * scale.x, 257 * scale.y);
+    text(millisecondsToTimeFormat(levelTime), 510 * scale.x, 257 * scale.y);
+    
+    
+    let starsIcons = [false, false, false];
+    for (let i = 0; i < numberOfStarsCollected; i++) 
+    {
+        starsIcons[i]  = true;
+    }
+
+    starsIcons.forEach( (star, i) => 
+    {
+        if (star == true) 
+        {
+            image(icon.star, (462 * scale.x) + (i * (100 * scale.x)), 90 * scale.y, 90 * scale.x, 90 * scale.y);
+        }
+        else
+        {
+            image(icon.starEmpty, (462 * scale.x) + (i * (100 * scale.x)), 90 * scale.y, 90 * scale.x, 90 * scale.y);
+        }
+    });
+    
+    dataSent = true;
+}
+
+
+
+
+
+
+
+
+
+
 function displayHomeScreen()
 {
-    image(homeTrack, 50, 50, 721 * scale.x, 333 * scale.y);
+    image(homeTrack, 25 * scale.x, 25 * scale.y, 721 * scale.x, 333 * scale.y);
 }
 
 
@@ -442,224 +594,40 @@ function displayScreen(screen)
 
     screen.display();
 
-    if (screen.name == "Level Select") 
+    if (screen.name == "Help") 
     {
-        // levelTemplates.forEach(level => 
-        // {
-        //     level.display();
-        // });
-        let scaleTrack = 0.5;
-        //let offset = p5.Vector.mult(levels[currentLevelGroup].trackOffset, scale);
-
-        push()
+        // fill(255);
+        // text("Tap inside the circle\n to place a charge", 80, 100);
+        
+        // text("Press Play \n to test\n your build", width - 50, height - 130);
             
-            fill(0);
-            rect(50 * scale.x, 100 * scale.y, width * scaleTrack, height * scaleTrack)
-            
-            image(trackImages[currentLevelGroup].build, -(10 * scale.x) + (levels[currentLevelGroup].trackOffset.x) /2, 100 + (levels[currentLevelGroup].trackOffset.y) / 2, (levels[currentLevelGroup].dimentions.x / 2) * scale.x, (levels[currentLevelGroup].dimentions.y / 2) * scale.y);
+        // text("Use the slider to give the charge a positive charge", width/2, height - 50);
 
-            let squareWidth = 70 * scale.x;
-            let y = 100 * scale.y;
-            let x = (width * scaleTrack);
-            for (let i = 0; i < 5; i++) 
-            {
-                x += ((squareWidth + (squareWidth/4)));
-                if (x > width - squareWidth) 
-                {
-                    x -= (i * (squareWidth + (squareWidth/4)));
-                    y += (squareWidth/4 + squareWidth);
-                }
-                fill(0);
-                rect(x, y, squareWidth, squareWidth);
-                fill(255);
-                textSize(24 * scale.x)
-                text(i + 1, x + squareWidth/2, y + squareWidth/2 + 15)
-
-                let levelsStars = JSON.parse(getItem("userStars"))[currentLevelGroup][i];
-
-                for (let stars = 0; stars < levelsStars; stars++)
-                {
-                    image(icon.star, squareWidth/2 + x + (-1 * ((15 * scale.x) * stars) + (10 * scale.x)) , y + (5 * scale.y), squareWidth/5, squareWidth/5);
-                }
-                
-            }
-
-
-
-            rect(0, 325 * scale.y, width, 50 * scale.y);
-
-
-
-
-        pop()
-    }
-
-    else if (screen.name == "Level Complete") 
-    {
-        
-        let levelTime = timeElapsed;
-        let numberOfStarsCollected = 0;
-        stars.forEach(star =>
-        {
-            if(star.collected)
-            {
-                numberOfStarsCollected++;
-            }
-        });
-
-        let score = 10000;
-        score = constrain(score - levelTime / 100, 100, 10000);
-        if (numberOfStarsCollected > 0) 
-        {
-            score *= numberOfStarsCollected
-        }
-        score = Math.round(score);
-
-        
-        let starsStored = JSON.parse(getItem("userStars"));
-        if(starsStored[currentLevelGroup] < numberOfStarsCollected)
-        {
-            starsStored[currentLevelGroup] = numberOfStarsCollected;
-            storeItem('userStars', JSON.stringify(starsStored));
-        }
-
-
-
-        let timesStored = JSON.parse(getItem("userTimes"));
-        if(timesStored[currentLevelGroup] > levelTime || timesStored[currentLevelGroup] == 0)
-        {
-            timesStored[currentLevelGroup] = Math.round(levelTime);
-            console.log(timesStored[currentLevelGroup]);
-            storeItem('userTimes', JSON.stringify(timesStored));
-        }
-        
-
-        //let nextLevel = track.level + 1;
-        //levels[nextLevel].locked = false;
-        //levelTemplates[nextLevel] = new LevelTemplate(nextLevel * levelSelectTileSize, nextLevel, 0, 0, 0, false);
-
-
-        fill(0)
-        noStroke()
-        rect(50 * scale.x,50 * scale.y, 270 * scale.x, 250 * scale.y);
-
-        fill(chargeColor.negative);
-        noStroke();
-        rect(115 * scale.x, 160 * scale.y, 150 * scale.x, 35 * scale.y);
-        rect(115 * scale.x, 240 * scale.y, 150 * scale.x, 35 * scale.y);
-
-        noStroke();
-        fill(255);
-        textSize(30 * scale.x);
-        text("Personal Best", 190 * scale.x, 90 * scale.y);
-        stroke(255);
-        line(100 * scale.x, 100 * scale.y, 280 * scale.x, 100 * scale.y);
-        
-
-        noStroke();
-        fill(255);
-        textSize(16 * scale.x);
-        text("Highest Score:", 190 * scale.x, 145 * scale.y);
-        text("Fastest Time:" , 190 * scale.x, 235 * scale.y);
-
-        textSize(20 * scale.x);
-        text(score                              , 190 * scale.x, 185 * scale.y);
-        text(millisecondsToTimeFormat(levelTime), 190 * scale.x, 265 * scale.y);
-
-
-
-
-
-        
-        
-        fill(chargeColor.negative);
-        noStroke();
-        rect(440 * scale.x, 232 * scale.y, 150 * scale.x, 35 * scale.y);
-        rect(610 * scale.x, 232 * scale.y, 150 * scale.x, 35 * scale.y);
-        
-        noStroke();
-        fill(255);
-        textSize(20 * scale.x);
-        //text("Level " + (track.level + 1), width/2, height/2 - 150);
-        //text("Level 1", width/2, height/2 - 150);
-
-        //let positiveFeedback = ["Excellent!", "Incredible!", "Great Job!", ]
-
-        text("Excellent!", 612 * scale.x, 40 * scale.y);
-
-        text("Score:", 687 * scale.x, 222 * scale.y);
-        text("Time:" , 510 * scale.x, 222 * scale.y);
-
-        text(score                              , 687 * scale.x, 257 * scale.y);
-        text(millisecondsToTimeFormat(levelTime), 510 * scale.x, 257 * scale.y);
-        
-        
-        let starsIcons = [false, false, false];
-        for (let i = 0; i < numberOfStarsCollected; i++) 
-        {
-            starsIcons[i]  = true;
-        }
-
-        starsIcons.forEach( (star, i) => 
-        {
-            if (star == true) 
-            {
-                image(icon.star, (462 * scale.x) + (i * (100 * scale.x)), 90 * scale.y, 90 * scale.x, 90 * scale.y);
-            }
-            else
-            {
-                image(icon.starEmpty, (462 * scale.x) + (i * (100 * scale.x)), 90 * scale.y, 90 * scale.x, 90 * scale.y);
-            }
-        });
-        
-            
-    }
-    else if (screen.name == "Help") 
-    {
-        fill(255);
-        text("Tap inside the circle\n to place a charge", 80, 100);
-        
-        text("Press Play \n to test\n your build", width - 50, height - 130);
-            
-        text("Use the slider to give the charge a positive charge", width/2, height - 50);
-
-        image(icon.circle, 30, 170, chargeDiameter + 20, chargeDiameter + 20);
+        // image(icon.circle, 30, 170, chargeDiameter + 20, chargeDiameter + 20);
+        tutorial()
     }
 
     
 
     screen.displayHeader();
 
-    if (screen.name == "Level Select") 
-    {
-        let levelGroupStars = 0;
-        JSON.parse(getItem("userStars"))[currentLevelGroup].forEach(number => {
-            levelGroupStars += number
-        })
-
-        image(icon.star, width - 50, 10, 30, 30);
-        textSize(24);
-        fill(255);
-        noStroke();
-        text(levelGroupStars + "/" + (levels[currentLevelGroup].starPositions.length * 3), width - 80, 35); 
-    }
-    else if(screen.name == "Level")
+    if(screen.name == "Level")
     {
         displayTime();
     }
-    else if (screen.name == "Group Select")
+    else if (screen.name == "Level Select")
     {
         image(icon.star, width - 50, 10, 30, 30);
 
         levels.forEach((level,i) => {
 
-            let buttonX = ((200 * scale.x * (i * 1.5 * scale.x) ) + (100 * scale.x) + groupSelectOffset) / scale.x;
+            let buttonX = ((200 * scale.x * (i * 1.5 * scale.x) ) + (100 * scale.x) + levelSelectOffset) / scale.x;
 
-            let imageScale = Math.sqrt( 50 / levels[i].dimentions.x );
-            let imageX = buttonX - (((levels[i].dimentions.x * imageScale) * scale.x) - (200* scale.x)) / 2;
-            let imageY = screen.buttons[i + 1].y - (((levels[i].dimentions.y * imageScale) * scale.y) - (200* scale.y)) / 2;
-            let imageWidth = (levels[i].dimentions.x * imageScale) * scale.x;
-            let imageHeight = (levels[i].dimentions.y * imageScale) * scale.y;
+            let imageScale = Math.sqrt( 50 / level.dimentions.x );
+            let imageX = buttonX - (((level.dimentions.x * imageScale) * scale.x) - (200* scale.x)) / 2;
+            let imageY = screen.buttons[i + 1].y - (((level.dimentions.y * imageScale) * scale.y) - (200* scale.y)) / 2;
+            let imageWidth = (level.dimentions.x * imageScale) * scale.x;
+            let imageHeight = (level.dimentions.y * imageScale) * scale.y;
 
             screen.buttons[i + 1].x = buttonX;
 
@@ -674,7 +642,7 @@ function displayScreen(screen)
         classCodeInput.style("visibility", "hidden");
     }
         
-    displayFrameRate();
+    //displayFrameRate();
 }
 
 
@@ -692,11 +660,19 @@ function navigateTo(screenToShow, backButton)
     {
         let screenIndex = screens.findIndex(x => x.name == "Loading Screen");
         let screen = screens[screenIndex];
-        screen.title = "Track " + (currentLevelGroup + 1)
+        screen.title = "Track " + (currentLevel + 1)
         console.log(screen.title);
     }
 
     slider.style("visibility", "hidden");
+
+    let allStars = JSON.parse(getItem("userStars"))
+    totalStars = 0;
+
+    allStars.forEach(starsAdd =>
+    {
+        totalStars += starsAdd;
+    })
     
 
     screens.forEach(screen => {
@@ -809,11 +785,11 @@ function createScreens()
             visibility: "hidden", 
             backgroundColor: "rgba(0,0,0,0)", 
             buttons: [
-                new Button({x: 662, y: 75, width: 100, height: 40, title: "PLAY" , onClick: function(){ navigateTo("Group Select"); }, shape: "Home", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 24, font: spaceFont}), 
-                new Button({x: 512, y: 150, width: 250, height: 40, title: "LEADERBOARD", onClick: function(){ navigateTo("Leaderboard"); }, shape: "Home", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 24, font: spaceFont}), 
+                new Button({x: 662, y: 75, width: 100, height: 40, title: "PLAY" , onClick: function(){ navigateTo("Level Select"); }, shape: "Home", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 24, font: spaceFont}), 
+                new Button({x: 512, y: 150, width: 250, height: 40, title: "LEADERBOARD", onClick: function(){ navigateTo("Coming Soon"); }, shape: "Home", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 24, font: spaceFont}), 
                 new Button({x: 612, y: 225, width: 150, height: 40, title: "SETTINGS", onClick: function(){ navigateTo("Settings"); }, shape: "Home", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 24, font: spaceFont}), 
                 new Button({x: 662, y: 300, width: 100, height: 40, title: "HELP"    , onClick: function(){ navigateTo("Help"); }, shape: "Home", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 24, font: spaceFont}),
-                new Button({x:  10, y:  10, width: 140, height: 20, title: "Change Username", onClick: function(){ navigateTo("Settings"); }, shape: "Rect", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 16, font: fontRegular})
+                //new Button({x:  10, y:  10, width: 140, height: 20, title: "Change Username", onClick: function(){ navigateTo("Settings"); }, shape: "Rect", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 16, font: fontRegular})
                 ],
             textBoxes: [],
             functions: function(){ displayHomeScreen() },
@@ -895,11 +871,11 @@ function createScreens()
             backgroundColor: "#212121", 
             buttons: [
                 new Button({x:  15, y: 10, width:  30, height: 30, title: "<", onClick: function(){ navigateBack() }, shape: "Back", bgColor: "white", fontColor: "black", fontSize: 14}), 
-                new Button({x: 130, y: 30, width: 100, height: 25, title: "Score"    , onClick: function(){ toggleLeaderboardSort(); }, shape: "Rect", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}),
-                new Button({x:  50, y: 60, width: 356, height: 30, title: "Global"    , onClick: function(){ leaderboardData.section = "Global"; updateLeaderBoard(); }, shape: "Rect", bgColor: "rgba(0,0,0,0.5)", fontColor: "white", fontSize: 14}),
-                new Button({x: 406, y: 60, width: 356, height: 30, title: "My Class"    , onClick: function(){ leaderboardData.section = "My Class"; updateLeaderBoard(); }, shape: "Rect", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 14}),
-                new Button({x: 612, y: 30, width:  40, height: 25, title: "1"    , onClick: "Levels", shape: "Rect", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}),
-                new Button({x: 712, y: 30, width:  40, height: 25, title: "1"    , onClick: "Levels", shape: "Rect", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14})
+                //new Button({x: 130, y: 30, width: 100, height: 25, title: "Score"    , onClick: function(){ toggleLeaderboardSort(); }, shape: "Rect", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}),
+                //new Button({x:  50, y: 60, width: 356, height: 30, title: "Global"    , onClick: function(){ leaderboardData.section = "Global"; updateLeaderBoard(); }, shape: "Rect", bgColor: "rgba(0,0,0,0.5)", fontColor: "white", fontSize: 14}),
+                //new Button({x: 406, y: 60, width: 356, height: 30, title: "My Class"    , onClick: function(){ leaderboardData.section = "My Class"; updateLeaderBoard(); }, shape: "Rect", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 14}),
+                //new Button({x: 612, y: 30, width:  40, height: 25, title: "1"    , onClick: "Levels", shape: "Rect", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}),
+                new Button({x: 712, y: 30, width:  40, height: 25, title: leaderboardData.level , onClick: function(){ increaseLeaderboardLevel() }, shape: "Rect", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14})
                 ],
             textBoxes: [],
             functions: function(){ displayLeaderboardScreen() },
@@ -921,41 +897,20 @@ function createScreens()
                 new Button({x: 692, y: 285, width: 100, height: 50, title: "Start"    , onClick: function(){ console.log("asdf"); navigateTo("Level");  }, shape: "Rect", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14, visibility: "hidden"})
                 ],
             textBoxes: [
-                new TextBox({x: 501, y: 100, id: "hint1", text: "1. Collect all the stars", font: fontRegular, fontSize: 24, color: "white", visibility: "visible", align: LEFT}), 
-                new TextBox({x: 501, y: 150, id: "hint2", text: "2. Finish as fast as possible", font: fontRegular, fontSize: 24, color: "white", visibility: "visible", align: LEFT}), 
-                new TextBox({x: 501, y: 200, id: "hint3", text: "3. Stay inside the track", font: fontRegular, fontSize: 24, color: "white", visibility: "visible", align: LEFT}),
+                new TextBox({x: 501, y: 110, id: "title", text: "Objectives: ", font: fontRegular, fontSize: 20, color: "white", visibility: "visible", align: LEFT}), 
+                new TextBox({x: 501, y: 150, id: "hint1", text: "1. Collect all the stars  [0/3]", font: fontRegular, fontSize: 20, color: "white", visibility: "visible", align: LEFT}), 
+                new TextBox({x: 501, y: 180, id: "hint2", text: "2. Finish as fast as possible", font: fontRegular, fontSize: 20, color: "white", visibility: "visible", align: LEFT}), 
+                new TextBox({x: 501, y: 210, id: "hint3", text: "3. Stay inside the track", font: fontRegular, fontSize: 20, color: "white", visibility: "visible", align: LEFT}),
                 ],
             functions: function(){ displayLoadingScreen() },
             }),
 
 
+
+
+
         new Screen({
             name: "Level Select",
-            header: true,
-            title: "Level Select",
-            titlePosition: createVector(406, 35), 
-            titleFontSize: 24,
-            visibility: "hidden", 
-            backgroundColor: "#212121", 
-            buttons: [
-                new Button({x:  15, y:  10, width: 30, height: 30, title: "<", onClick: function(){ navigateBack() }, shape: "Back", bgColor: "white", fontColor: "black", fontSize: 14}), 
-                new Button({x: 742, y: 335, width: 60, height: 30, title: "Why?", onClick: function(){ navigateTo("Help"); }, shape: "Rect", bgColor: "grey", fontColor: "black", fontSize: 14}), 
-                ],
-                
-            textBoxes: [
-                new TextBox({x: 270.666, y:  90, id: "title", text: "Track Preview", font: fontRegular, fontSize: 24, color: "white", visibility: "visible"}), 
-                new TextBox({x: 609    , y:  90, id: "title2", text: "Pick a Level", font: fontRegular, fontSize: 24, color: "white", visibility: "visible"}), 
-                new TextBox({x: 406    , y: 355, id: "hint", text: "Hint: Test Charges don't always follow field lines", font: fontRegular, fontSize: 14, color: "black", visibility: "visible"}), 
-                ],
-            // images: [
-            //     new Button({x: 15, y: 10, width: 30, height: 30, title: "<", onClick: "Group Select", shape: "Back", bgColor: "white", fontColor: "black", fontSize: 14}), 
-            //     new Button({x: width - 70, y: height - 40, width: 60, height: 30, title: "Why?", onClick: "Help", shape: "Rect", bgColor: "grey", fontColor: "black", fontSize: 14}), 
-            //     ],
-            }),
-
-
-        new Screen({
-            name: "Group Select",
             header: true,
             title: totalStars + "/45",
             titlePosition: createVector(732, 35), 
@@ -969,7 +924,7 @@ function createScreens()
                 // new TextBox({x: width/3, y: 90, id: "title", text: "Track Preview", font: fontRegular, fontSize: 24, color: "white", visibility: "visible"}), 
                 ],
                 
-            functions: function(){ displayGroupScreen() },
+            functions: function(){ displayLevelSelectScreen() },
             }),
 
         new Screen({
@@ -981,11 +936,12 @@ function createScreens()
             visibility: "hidden", 
             backgroundColor: "black", 
             buttons: [
-                new Button({x:  15, y:  10, width: 30, height: 30, title: "<", onClick: function(){ navigateTo("Group Select"); }, shape: "Back", bgColor: "white", fontColor: "black", fontSize: 14}), 
+                new Button({x:  15, y:  10, width: 30, height: 30, title: "<", onClick: function(){ navigateTo("Level Select"); }, shape: "Back", bgColor: "white", fontColor: "black", fontSize: 14}), 
                 // new Button({x: width - 40, y: height/2 - 80, width: 60, height: 60, title: "Next"        , onClick: function(){ pressNext(); }        , shape: "Circle", bgColor: "white", fontColor: "black", fontSize: 14}), 
-                new Button({x: 772, y: 335, width: 60, height: 60, title: "Build"       , onClick: function(){ toggleGameMode(); }, shape: "Circle", bgColor: "white", fontColor: "black", fontSize: 14}), 
+                new Button({x: 772, y: 335, width: 60, height: 60, title: "Play"       , onClick: function(){ toggleGameMode(); }, shape: "Circle", bgColor: "white", fontColor: "black", fontSize: 14}), 
                 new Button({x: 767, y:  10, width: 30, height: 30, title: "Redo"        , onClick: function(){ pressRedo(); }     , shape: "Redo", bgColor: "white", fontColor: "black", fontSize: 14}), 
                 new Button({x: 727, y:  10, width: 30, height: 30, title: "Help"        , onClick: function(){ navigateTo("Help"); }        , shape: "Help", bgColor: "white", fontColor: "black", fontSize: 14}), 
+                new Button({x: 0, y:  350, width: 25, height: 25, title: "Delete", onClick: function(){ deleteSelectedCharge(); console.log("delete"); }        , shape: "Rect", bgColor: "rgba(0,0,0,0)", fontColor: "black", fontSize: 0}), 
 
                 ],
             textBoxes: [],
@@ -1001,12 +957,13 @@ function createScreens()
             backgroundColor: "#212121", 
             buttons: [
                 new Button({x: 480, y: 300, width: 60, height: 40, title: "Replay", onClick: function(){ pressRedo(); }        , shape: "Oval", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}), 
-                new Button({x: 600, y: 300, width: 60, height: 40, title: "Menu", onClick: function(){ navigateTo("Group Select"); }, shape: "Oval", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}), 
+                new Button({x: 600, y: 300, width: 60, height: 40, title: "Menu", onClick: function(){ navigateTo("Level Select"); }, shape: "Oval", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}), 
                 new Button({x: 720, y: 300, width: 60, height: 40, title: "Next", onClick: function(){ pressNext(); }        , shape: "Oval", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}),
-                new Button({x: 140, y: 300 + 10, width: 100, height: 40, title: "Leaderboard", onClick: function(){ navigateTo("Leaderboard"); } , shape: "Rect", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}), 
+                new Button({x: 140, y: 300 + 10, width: 100, height: 40, title: "Leaderboard", onClick: function(){ navigateTo("Coming Soon"); } , shape: "Rect", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}), 
                 
                 ],
             textBoxes: [],
+            functions: function(){ displayLevelCompleteScreen() },
             }),
 
         new Screen({
@@ -1020,6 +977,24 @@ function createScreens()
 
                 ],
             textBoxes: [],
+            }),
+
+
+        new Screen({
+            name: "Coming Soon",
+            title: "",
+            titlePosition: createVector(406, 50), 
+            titleFontSize: 24,
+            visibility: "hidden", 
+            backgroundColor: "#212121", 
+            buttons: [
+                new Button({x:  15, y:  10, width: 30, height: 30, title: "<", onClick: function(){ navigateBack(); }, shape: "Back", bgColor: "white", fontColor: "black", fontSize: 14}), 
+                
+                ],
+            textBoxes: [
+                new TextBox({x: 250, y: 187.5, id: "hint1", text: "Coming Soon!", font: fontRegular, fontSize: 48, color: "white", visibility: "visible", align: LEFT}), 
+                
+            ],
             }),
     ]
 }
@@ -1045,7 +1020,7 @@ function createScreens()
 //         {
 //             screen.buttons[1].onClick = "Play";
 //             screen.buttons[1].title = "Play";
-//             if (currentLevelGroup == 0 && currentLevel == 0)
+//             if (currentLevel == 0 && currentLevel == 0)
 //             {
 //                 push();
 //                     fill(255);

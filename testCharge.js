@@ -9,6 +9,14 @@ function displayTestCharges()
     }
 }
 
+function resetTestCharges()
+{
+    testCharges.forEach(testCharge => 
+    {
+        testCharge.reset();
+    });
+}
+
 function checkCollision(shapeOne, shapeTwo)
 {
     let shapeOnePosition = createVector(shapeOne.position.x, shapeOne.position.y);
@@ -137,12 +145,20 @@ class TestCharge
                 testCharge.calculateTrajectory();
                 
                 let fillColorAplha = 255;
-                testCharge.trajectory.forEach(dot => 
+                for (let i = 0; i < testCharge.trajectory.length; i+=20) 
                 {
+                    //const element = testCharge[i];
+                    let dot = testCharge.trajectory[i];
                     fill(`rgba(0,0,0,${fillColorAplha})`)
-                    fillColorAplha = fillColorAplha / 2;
+                    fillColorAplha = fillColorAplha;
                     ellipse(dot.x, dot.y, 4, 4);
-                });
+                }
+                // testCharge.trajectory.forEach(dot => 
+                // {
+                //     fill(`rgba(0,0,0,${fillColorAplha})`)
+                //     fillColorAplha = fillColorAplha;
+                //     ellipse(dot.x, dot.y, 4, 4);
+                // });
             }
 
 
@@ -196,9 +212,9 @@ class TestCharge
         let trajectoryVel = createVector(0, 0);
         let trajectoryPos = createVector(testCharge.position.x, testCharge.position.y);
         
-        for (let i = 0; i < 20; i++) 
+        for (let i = 0; i < 400; i++) 
         {
-            let force = netForceAtPoint(trajectoryPos).mult(250);
+            let force = netForceAtPoint(trajectoryPos);
             trajectoryAcc = force.mult(testCharge.charge);
             trajectoryVel.add(trajectoryAcc);
             trajectoryPos.add(trajectoryVel);

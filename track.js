@@ -99,13 +99,13 @@ class Track
           let x = this.points[i].x;
           let y = this.points[i].y;
 
-          vertex(x, y);
+          //vertex(x, y);
         }
       endShape();
 
       this.finishLines.forEach(finishLine => {
         let fl = finishLine;
-        rect(fl.x, fl.y, fl.width, fl.height)
+        //rect(fl.x, fl.y, fl.width, fl.height)
       })
 
       
@@ -118,49 +118,50 @@ class Track
 
 function createTracks()
 {
-    for (let i = 0; i < levels.length; i++) 
-    {
-        let level = levels[i];
+  for (let i = 0; i < levels.length; i++) 
+  {
+    let level = levels[i];
 
-        
-        
-        let xValues = level.points.map(function(value) { return value.x; });
-        let yValues = level.points.map(function(value) { return value.y; });
+    
+    
+    let xValues = level.points.map(function(value) { return value.x; });
+    let yValues = level.points.map(function(value) { return value.y; });
 
-        let trackWidth = Math.max(...xValues) - Math.min(...xValues);
-        let trackHeight = Math.max(...yValues) - Math.min(...yValues);
+    let trackWidth = Math.max(...xValues) - Math.min(...xValues);
+    let trackHeight = Math.max(...yValues) - Math.min(...yValues);
 
-        level.dimentions = createVector(trackWidth, trackHeight)
-        level.trackOffset = createVector((width/2) - (trackWidth / 2), (height/2) - (trackHeight / 2))
+    level.dimentions = createVector(trackWidth, trackHeight)
+    level.trackOffset = createVector((width/2) - (trackWidth / 2), (height/2) - (trackHeight / 2))
 
-        allTracks.push(new Track(level.points, i, 1, level.trackOffset));
-    }
+    allTracks.push(new Track(level.points, i, 1, level.trackOffset));
+  }
 
-    track = allTracks[currentLevelGroup];
+  track = allTracks[currentLevel];
 }
 
 function changeTrack(i)
 {
-    testCharges = [];
+  removeAllCharges();
+  
+  
 
-    let level = levels[i];
-    track = allTracks[i];
+  let level = levels[i];
+  track = allTracks[i];
 
-    level.testChargeStartingPositions.forEach((startingPosition, j) => {
-      testCharges[j] = new TestCharge(startingPosition, startingPosition, testChargeCharge);
-    })
-    
+  testCharges = [];
+  level.testChargeStartingPositions.forEach((startingPosition, j) => {
+    testCharges[j] = new TestCharge(startingPosition, startingPosition, testChargeCharge);
+  })
+  
 
-    stars = [];
-    levels[i].starPositions[currentLevel].forEach(starPosition => 
-    {
-        stars.push(new Star( p5.Vector.add(starPosition, level.trackOffset)));
-    });
+  stars = [];
+  levels[i].starPositions.forEach(starPosition => 
+  {
+      stars.push(new Star( p5.Vector.add(starPosition, level.trackOffset)));
+  });
 
-    gameMode = "Build";
-    timeElapsed = 0;
-
-    //console.log("asdf");
+  gameMode = "Build";
+  timeElapsed = 0;  // sets elapsed time back down to 0. This is the time seen at the top of the "Level" screen
 }
 
 function displayTrack()

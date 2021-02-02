@@ -7,6 +7,8 @@ let blueprint;
 let icon;
 let trackImages;
 
+let helpScreen;
+
 let userNameInput;
 let classCodeInput;
 
@@ -31,8 +33,7 @@ let finished = false;
 let timeElapsed = 0;
 let currentFrameRate = 60;
 let currentLevel = 0;
-let currentLevelGroup = 0;
-let noPositiveCharges = false;
+let noPositiveCharges = true;
 let score = 100;
 let totalStars = 0;
 let allTracks = [];
@@ -40,6 +41,7 @@ let allTracks = [];
 let slider;
 let windowSize;
 let scale;
+let onScrollBar = false;
 
 let colorBlindMode = false;
 
@@ -47,7 +49,7 @@ let colorBlindMode = false;
 
 let screens = [];
 let screenStack = ["Home"];
-let currentScreen = "Group Select";
+let currentScreen = "Home";
 
 let leaderboardData = {sort: "Score", group: 1, level: 1, section: "Global"};
 

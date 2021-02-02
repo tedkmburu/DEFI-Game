@@ -10,6 +10,8 @@ function preload()
     homeTrack = loadImage('images/homeTrack.png');
     blueprint = loadImage('images/blueprint2.png');
 
+    helpScreen = loadImage('images/helpScreen.png');
+
     icon = {
         redo: loadImage('images/redo.png'), 
         star: loadImage('images/star.png'), 
@@ -28,6 +30,7 @@ function preload()
         {play: loadImage('images/tracks/track (26).png'), build: loadImage('images/tracks/track (1).png')},
         {play: loadImage('images/tracks/track (24).png'), build: loadImage('images/tracks/track (25).png')},
         {play: loadImage('images/tracks/track (12).png'), build: loadImage('images/tracks/track (13).png')},
+        {play: loadImage('images/tracks/track (28).png'), build: loadImage('images/tracks/track (27).png')},
         {play: loadImage('images/tracks/track (2).png'), build: loadImage('images/tracks/track (4).png')},
         {play: loadImage('images/tracks/track (8).png'), build: loadImage('images/tracks/track (9).png')},
         {play: loadImage('images/tracks/track (6).png'), build: loadImage('images/tracks/track (7).png')},
@@ -89,9 +92,9 @@ function setup()    // This function only runs once when the page first loads.
     createTracks();     // this creates the track objects into the tracks array
 
     
-    // creates the slider that's used to change a charges magnitude. The slider is always hidden except for when the user has selected a charge
+    // creates the slider that's used to change a charges magnitude. The slider is always hidden except for when the user has selected a charge. The slider is stored in the global variable "slider" and can be referenced anywhere using that varable.
     slider = createSlider(-5, 5, 0, 1);
-    slider.size(width - 200);
+    slider.size(200);
     slider.value(0);
     slider.style("zIndex", "999");
     slider.style("visibility", "hidden");
@@ -100,9 +103,9 @@ function setup()    // This function only runs once when the page first loads.
     slider.changed(sliderChanged);
     slider.visibility = "hidden";
 
-    slider.position(100, height - 20, "fixed");
+    slider.position((width/2) - 100, height - 20, "fixed");
 
-    // creates the input box for a users username in the Settings screen. The input box is always hidden except for when the user has clicks the button to change it in the settings screen
+    // creates the input box for a user's username in the Settings screen. The input box is always hidden except for when the user has clicks the button to change it in the settings screen. The input box is stored in the global variable "userNameInput" and can be referenced anywhere using that varable.
     userNameInput = createInput(getItem("userName"));
     userNameInput.size(180 * scale.x, 45 * scale.y);
     userNameInput.style("zIndex", "999");
@@ -111,7 +114,7 @@ function setup()    // This function only runs once when the page first loads.
     userNameInput.input(updateUsername);
     userNameInput.style("visibility", "hidden");
 
-    // creates the input box for a users class code in the Settings screen. The input box is always hidden except for when the user has clicks the button to change it in the settings screen
+    // creates the input box for a users class code in the Settings screen. The input box is always hidden except for when the user has clicks the button to change it in the settings screen. The input box is stored in the global variable "classCodeInput" and can be referenced anywhere using that varable.
     classCodeInput = createInput(getItem("classCode"));
     classCodeInput.size(180 * scale.x, 45 * scale.y);
     classCodeInput.style("zIndex", "999");
@@ -124,25 +127,35 @@ function setup()    // This function only runs once when the page first loads.
     // this connects to the database and gets the data needed to fill up the leaderboard
     updateLeaderBoard();
 
-    // this finds the screen called "Group Select" and adds a button to it for each level. Each button will navigate the user to that level when it's clicked. The button objects are added to that screens buttons properties
-    screens.forEach(screen =>
+    // this finds the screen called "Level Select" and adds a button to it for each level. Each button will navigate the user to that level when it's clicked. The button objects are added to that screens buttons properties
+    let screenIndex = screens.findIndex(x => x.name == "Level Select");
+    let screen = screens[screenIndex]
+ 
+    for (let i = 0; i < levels.length; i++) 
     {
-        if (screen.name == "Group Select") 
-        {
-            for (let i = 0; i < levels.length; i++) 
-            {
-                let buttonX = ((200 * scale.x * (i * 1.5  * scale.x) ) + (100 * scale.x) + groupSelectOffset) / scale.x;
-                let buttonY = height/3 / scale.y;
-                let buttonWidth = 200;
-                let buttonHeight = 200;
+        let buttonX = ((200 * scale.x * (i * 1.5  * scale.x) ) + (100 * scale.x) + levelSelectOffset) / scale.x;
+        let buttonY = height/3 / scale.y;
+        let buttonWidth = 200;
+        let buttonHeight = 200;
 
-                //  the buttons propery for the screen is having buttons added to it
-                screen.buttons.push( 
-                    new Button({x: buttonX, y: buttonY, width: buttonWidth, height: buttonHeight, title: "TRACK " + (i + 1), onClick: function(){ currentLevelGroup = i; changeTrack(currentLevelGroup); loadPercent = 0; navigateTo("Loading Screen");  } , shape: "Group", bgColor: "rgba(0,0,0,0.5)", fontColor: "white", fontSize: 14})
-                    )
-            } 
-        }
-    })
+        //  the buttons propery for the screen is having buttons added to it
+        screen.buttons.push( 
+            new Button(
+                {
+                    x: buttonX, 
+                    y: buttonY, 
+                    width: buttonWidth, 
+                    height: buttonHeight, 
+                    title: "TRACK " + (i + 1), 
+                    onClick: function(){ currentLevel = i; changeTrack(currentLevel); loadPercent = 0; navigateTo("Loading Screen");  }, 
+                    shape: "Level", 
+                    bgColor: "rgba(0,0,0,0.5)", 
+                    fontColor: "white", 
+                    fontSize: 14})
+            )
+    } 
+        
+
 
         
     
@@ -173,12 +186,12 @@ function draw() // this function runs every frame. It's used to show the screen 
 
 function updateUsername()
 {
-    storeItem("userName") = userNameInput.value()
+    //storeItem("userName") = userNameInput.value()
 }
 
 function updateClassCode()
 {
-    storeItem("classCode") = classCodeInput.value()
+    //storeItem("classCode") = classCodeInput.value()
 }
 
 
@@ -212,6 +225,20 @@ window.addEventListener("orientationchange", function(event)
     console.log("the orientation of the device is now " + event.target.screen.orientation.type);
     checkScreenRotation();
 });
+
+
+function keyPressed() 
+{
+    if (keyCode === 46) // when the "delete" key is pressed on a keyboard
+    {
+        deleteSelectedCharge()
+    }
+    if (keyCode === 32) // when the space bar is hit on a keyboard
+    {
+        toggleGameMode()
+    }
+}
+
 
 function mouseClickedLevel(buttonClicked)
 {
@@ -254,7 +281,7 @@ function mouseClickedLevel(buttonClicked)
     }
     else if(gameMode == "Play")
     {
-        // console.log(p5.Vector.sub(mousePosition, levels[currentLevelGroup].trackOffset));
+        // console.log(p5.Vector.sub(mousePosition, levels[currentLevel].trackOffset));
     }
     
 }
@@ -428,18 +455,10 @@ function millisecondsToTimeFormat(millis)
 
 function windowResized()
 {
-    let scaledHeight = windowWidth * (375 / 812);
-    let scaledWidth = windowWidth;
-    createCanvas(scaledWidth, scaledHeight);
-    //textFont(calibri);
-    textFont(fontRegular);
 
-    windowSize = createVector(scaledWidth, scaledHeight).mag();
-    scale = createVector(scaledWidth/812, scaledHeight/375);
 
-    createScreens();
-
-    
+    setup();    
+    createTracks()
 }
 
 function openFullscreen() 
@@ -547,31 +566,19 @@ function updateLeaderBoard()
 
 }
 
-function sendScore(level, group, timeElapsed, stars)
+function sendScore(data)
 {
-    // let levelTime = timeElapsed;
-    // let numberOfStarsCollected = 0;
-    // stars.forEach(star =>
-    // {
-    //     if(star.collected)
-    //     {
-    //         numberOfStarsCollected++;
-    //     }
-    // });
+     // endScore({level: 1, group: currentLevel, time: Math.round(timeElapsed), stars: numberOfStarsCollected, score: score, userId: getItem("userId")})
 
-    // let score = 10000;
-    // score = constrain(score - levelTime / 100, 100, 10000);
-    // if (numberOfStarsCollected > 0) 
-    // {
-    //     score *= numberOfStarsCollected
-    // }
-    // score = Math.round(score);
+    let dataToSend = {_id: data.userId, level: "1", track: data.group.toString(), stars_collected: data.numberOfStarsCollected, score: data.score, time: data.time};
+
 
     // //{_id: “sdfsdf”, level: “level”, stars_collected: 10, score: 100000, time: 45 }
     // //let data = {_id: localStorage.userId, level: level, group: group, stars_collected: numberOfStarsCollected, score: score, time: timeElapsed };
     // let data = {"_id": localStorage.userId, "level": level, "stars_collected": numberOfStarsCollected, score: score, time: timeElapsed };
-    // let dataJSON = JSON.stringify(data);
-    // console.log(data);
+
+    let dataJSON = JSON.stringify(dataToSend);
+    console.log(dataJSON);
 
 
 
@@ -592,6 +599,18 @@ function sendScore(level, group, timeElapsed, stars)
         
 }
 
+
+function getDate()
+{
+    let today = new Date();
+    let dd = today.getDate();
+
+    let mm = today.getMonth()+1; 
+    let yyyy = today.getFullYear();
+
+    today = mm+'-'+dd+'-'+yyyy;
+    return today;
+}
 
 function tryFetchData()
 {

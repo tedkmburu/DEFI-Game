@@ -1,60 +1,51 @@
-'use strict';
-
-
-
-function toggleGameMode()
+function toggleGameMode()   // This function is called whenever the play/buid button is called. It's also called when the user hits the space bar. The function switches between the two gamemodes. 
 {
-    let gameScreen = screens.findIndex(x => x.name == "Level");
-    let toggleButton = screens[gameScreen].buttons.findIndex(x => x.title == "Play" || x.title == "Build");
+    let screenIndex = screens.findIndex(x => x.name == "Level"); // This gets the index of the "Level" screen in the screens array 
+    let toggleButton = screens[screenIndex].buttons.findIndex(x => x.title == "Play" || x.title == "Build"); // This finds the button in the "Level" screen that has the title "Play" or "Build". 
+
+    stars.forEach(star => {star.collected = false}) // This sets each star to an uncollected state so it reappears if it has already been collected
 
     if (gameMode == "Build") 
     {
-        gameMode = "Play";
+        gameMode = "Play"; // switches game mode
         
-        screens[gameScreen].buttons[toggleButton].title = "Play";
+        screens[screenIndex].buttons[toggleButton].title = "Build";  // changes the button title which changes its appearance
         
-        createFieldLines(); 
-        stars = [];
-        levels[currentLevelGroup].starPositions[currentLevel].forEach(starPosition => 
-        {
-            stars.push(new Star( p5.Vector.add(starPosition, levels[track.level].trackOffset)));
-        });
+        createFieldLines(); // recalculates the field lines
     }
     else
     {
-        gameMode = "Build";
+        gameMode = "Build"; // switches game mode
 
-        screens[gameScreen].buttons[toggleButton].title = "Build";
+        screens[screenIndex].buttons[toggleButton].title = "Play"; // changes the button title which changes its appearance
 
-        testCharges.forEach(testCharge => 
-        {
-            testCharge.reset();
-        });
+        // This puts each of the testcharges in the level in its original position
+        resetTestCharges()
     }
-    console.log(gameMode);
-    
 }
 
 
 
 
 
-function pressNext()
+function pressNext() // this function navigates to the next level. It's called in the "Level Complete" screen when the next button is clicked
 {
-    if (currentLevelGroup < levels.length - 1) 
+    if (currentLevel < levels.length - 1) // This will only work if the user isn't on the last level in the game
     {
-        currentLevelGroup++;
-        changeTrack(currentLevelGroup);
+        currentLevel++; // increases the current level by 1
+        changeTrack(currentLevel); // changes the track thats ready to be displayed
 
-        removeAllCharges();
+        // This puts each of the testcharges in the new level in its original position
+        resetTestCharges()
 
-        testCharges.forEach(testCharge => 
-        {
-            testCharge.reset();
-        });
-
+        // changes the screen to go to the new level
         navigateTo("Level");
     }  
+    else
+    {
+        // the user has completed all the tracks
+        console.log("no more levels");
+    }
 }
 
 
@@ -63,16 +54,10 @@ function pressNext()
 
 function pressRedo()
 {
-    testCharges.forEach(testCharge => 
-    {
-        testCharge.reset();
-    });
-
-    removeAllCharges();
-    console.log(timeElapsed);
-    timeElapsed = 0;
-    changeTrack(track.level);
-    navigateTo("Level");
+    resetTestCharges() // This puts each of the testcharges in the level in its original position
+    removeAllCharges(); // removes all charges that the user places on in the level
+    changeTrack(track.level); // eventhough the changeTrack funciton is called, it doesnt change the track. The integer that's given to the function is the same as the current level so all the function will do is reset the current level. 
+    navigateTo("Level"); // changes the screen to go to the new level
 }
 
 
@@ -80,9 +65,36 @@ function pressRedo()
 
 function resetGame()
 {
-    clearStorage();
-    getUserData(); 
+    clearStorage(); // deletes all of the locally stored data
+    getUserData(); // gets a new device Id from the servera and stores it locally. Also stores the score, time and collected stars to 0 for each level. 
 }
+
+
+
+
+
+function increaseLeaderboardLevel()
+{
+    let screenIndex = screens.findIndex(x => x.name == "Leaderboard");
+    let screen = screens[screenIndex];
+    let levelButton;
+
+    if (levels.length > leaderboardData.level) 
+    {
+        levelButton = getButtonIndex("Leaderboard", leaderboardData.level)
+        leaderboardData.level++;
+        
+    }
+    else
+    {
+        levelButton = getButtonIndex("Leaderboard", levels.length)
+        leaderboardData.level = 1;
+    }
+
+    screen.buttons[levelButton].title = leaderboardData.level;
+}
+
+
 
 
 
@@ -105,21 +117,17 @@ class Button
         this.shape = props.shape;
         this.font = props.font;
         this.visibility = props.visibility;
-        
     }
 
     display()
     {
         let button = this;
-        // if(button.visibility != "hidden")
         
         push();
             fill(button.bgColor);
             noStroke();
             if(button.shape == "Circle")
             {
-                
-
                 if (button.title == "Build")
                 {
                     ellipse(button.x, button.y, button.width / scale.x, button.height / scale.y);
@@ -136,7 +144,7 @@ class Button
                 {
                     ellipse(button.x, button.y, button.width, button.height);
 
-                fill(button.fontColor);
+                    fill(button.fontColor);
                     textSize(button.fontSize);
                     
                     text(button.title, button.x,  button.y + 7);    
@@ -183,7 +191,7 @@ class Button
                 textAlign(CENTER);
                 text(button.title, button.x + (button.width / 2),  button.y + (button.height / 2) + 7);
             }
-            else if (button.shape == "Group")
+            else if (button.shape == "Level")
             {
                 fill(button.bgColor);
                 rect(button.x, button.y, button.width, button.height);
@@ -211,15 +219,15 @@ class Button
     clicked()
     {
         let button = this;
-        try
-        {
+        // try
+        // {
             button.onClick();
-        }
-        catch(e)
-        {
-            console.log(e);
-            console.log(button);
-        }
+        // }
+        // catch(e)
+        // {
+        //     console.log(e);
+        //     console.log(button);
+        // }
 
         
     }

@@ -51,6 +51,18 @@ function removeAllCharges()
   points = [];
 }
 
+function deleteSelectedCharge()
+{
+  charges.forEach((charge, i) => {
+    if (charge.selected) 
+    {
+      console.log(i);
+      removeCharge(i)
+    }
+  })
+  createFieldLines(); 
+}
+
 function sliderChanged()
 {
   createFieldLines(); 

@@ -356,6 +356,7 @@ function displayLevelScreen()
     displayCharges();
     //displaySlider();
     displayTestCharges();
+    displayPortals();
 
 
     finished = true;

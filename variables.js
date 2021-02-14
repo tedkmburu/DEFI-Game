@@ -67,6 +67,8 @@ const testChargeRadius = testChargeDiameter / 2;
 const starRadius = 7;
 const starDiameter = starRadius * 2;
 const buttonRadius = 30;
+const portalRadius = 10;
+const postalDiameter = portalRadius * 2;
 
 const fieldLinesPerCoulomb = 4;
 

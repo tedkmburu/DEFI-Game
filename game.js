@@ -41,6 +41,7 @@ function preload()
         {play: loadImage('images/tracks/track (6).png'), build: loadImage('images/tracks/track (7).png')},
         {play: loadImage('images/tracks/track (20).png'), build: loadImage('images/tracks/track (21).png')},
         {play: loadImage('images/tracks/track (14).png'), build: loadImage('images/tracks/track (16).png')},
+        {play: loadImage('images/tracks/track (29).png'), build: loadImage('images/tracks/track (30).png')},
         {play: loadImage('images/tracks/track (24).png'), build: loadImage('images/tracks/track (25).png')},
         {play: loadImage('images/tracks/track (11).png'), build: loadImage('images/tracks/track (19).png')},
         {play: loadImage('images/tracks/track (10).png'), build: loadImage('images/tracks/track (18).png')},

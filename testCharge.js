@@ -279,12 +279,25 @@ class TestCharge
         {
             let starPosition = star.position;
 
-            let shapeOne = {shape: "Circle", position: testCharge.position, radius: (testChargeDiameter/2)};
+            let shapeOne = {shape: "Circle", position: testCharge.position, radius: testChargeRadius};
             let shapeTwo = {shape: "Circle", position: starPosition, radius: starRadius};
 
             if (checkCollision(shapeOne, shapeTwo)) 
             {
                 star.collected = true;
+            }
+        });
+
+        levels[currentLevel].portals.forEach(portal => 
+        {
+            let starPosition = portal.in;
+
+            let shapeOne = {shape: "Circle", position: testCharge.position, radius: testChargeRadius};
+            let shapeTwo = {shape: "Circle", position: starPosition, radius: portalRadius};
+
+            if (checkCollision(shapeOne, shapeTwo)) 
+            {
+                testCharge.position = createVector(portal.out.x, portal.out.y)
             }
         });
 

@@ -134,10 +134,21 @@ function createTracks()
     level.trackOffset = createVector((width/2) - (trackWidth / 2), (height/2) - (trackHeight / 2))
 
     allTracks.push(new Track(level.points, i, 1, level.trackOffset));
+
+    level.portals.forEach(portal => {
+      portal.in.add(levels[currentLevel].trackOffset);
+      portal.out.add(levels[currentLevel].trackOffset);
+    })
+    
   }
 
   track = allTracks[currentLevel];
 }
+
+
+
+
+
 
 function changeTrack(i)
 {

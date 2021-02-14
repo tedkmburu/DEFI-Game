@@ -239,11 +239,12 @@ function displayLevelSelectScreen()
     
     // gets the positions of each button that navigates to a track
     screen.buttons.forEach(button => {
-        if (button.shape == "Group") 
+        if (button.shape == "Level") 
         {
             trackPositions.push(createVector(button.x, button.y))
         }
     });
+
 
     push()
         trackPositions.forEach((trackPosition, a) => {
@@ -251,7 +252,7 @@ function displayLevelSelectScreen()
             textSize(10 * scale.x);
             //text(a + 1, trackPosition.x  / 10 + width/3, trackPosition.y + (230 * scale.x));
 
-            
+            console.log(levelsBestTime[a]);
             if (levelsBestTime[a] > 0) // if the user has completed the level, this will be true
             {
                 let x = trackPosition.x + (190 * scale.x);
@@ -272,20 +273,22 @@ function displayLevelSelectScreen()
                 text(time, x, y);
                 text(score, x, y + (11 * scale.x));
 
+                for (let i = 0; i < levelsStars[a]; i++) 
+                {
+                    // puts up a star for each star the user has collected in each track
+                    let imageX = trackPosition.x + (i * 25 * scale.x) + (10 * scale.x);
+                    let imageY = trackPosition.y - (25 * scale.y);
+                    let imageWidth = 20 * scale.x;
+                    let imageHeight = 20 * scale.x;
+                    image(icon.star, imageX, imageY, imageWidth, imageHeight);
+
+                    
+                }
+
             }
 
 
-            for (let i = 0; i < levelsStars[a]; i++) 
-            {
-                // puts up a star for each star the user has collected in each track
-                let imageX = trackPosition.x + (i * 25 * scale.x) + (10 * scale.x);
-                let imageY = trackPosition.y - (25 * scale.y);
-                let imageWidth = 20 * scale.x;
-                let imageHeight = 20 * scale.x;
-                image(icon.star, imageX, imageY, imageWidth, imageHeight);
-
-                
-            }
+            
         })
 
         noStroke();
@@ -403,6 +406,7 @@ function displayLevelScreen()
     if(finished)
     {
         //sendScore(currentLevel, currentLevel,timeElapsed, stars);
+        
         let allStars = JSON.parse(getItem("userStars"))
         totalStars = 0;
 
@@ -410,7 +414,8 @@ function displayLevelScreen()
             {
                 totalStars += starsAdd;
             })
-        
+            
+        sounds.victory.play();
         navigateTo("Level Complete");
     }
     else

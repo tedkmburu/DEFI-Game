@@ -282,9 +282,10 @@ class TestCharge
             let shapeOne = {shape: "Circle", position: testCharge.position, radius: testChargeRadius};
             let shapeTwo = {shape: "Circle", position: starPosition, radius: starRadius};
 
-            if (checkCollision(shapeOne, shapeTwo)) 
+            if (checkCollision(shapeOne, shapeTwo) && star.collected == false) 
             {
                 star.collected = true;
+                sounds.collect.play();
             }
         });
 

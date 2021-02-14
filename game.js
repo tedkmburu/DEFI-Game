@@ -51,7 +51,9 @@ function preload()
     soundFormats('mp3');
     sounds = {
         click: loadSound('sounds/click (1).wav'),
-        lose: loadSound('sounds/lose.wav'),
+        lose: loadSound('sounds/hit.mp3'),
+        collect: loadSound('sounds/collect.wav'),
+        victory: loadSound('sounds/victory.wav'),
         };
 }
 

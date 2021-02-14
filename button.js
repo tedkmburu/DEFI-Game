@@ -22,6 +22,8 @@ function toggleGameMode()   // This function is called whenever the play/buid bu
         // This puts each of the testcharges in the level in its original position
         resetTestCharges()
     }
+
+    hitEdge = false;
 }
 
 
@@ -221,6 +223,7 @@ class Button
         let button = this;
         // try
         // {
+            sounds.click.play();
             button.onClick();
         // }
         // catch(e)

@@ -4,7 +4,11 @@ function displayTestCharges()
     for (var i = 0; i < testCharges.length; i++)
     {
         testCharges[i].display();
-        testCharges[i].move();
+        if (gameMode == "Play") 
+        {
+            testCharges[i].move();
+        }
+        
         
     }
 }
@@ -307,6 +311,7 @@ class TestCharge
 
     checkCollisions()
     {
+        //console.log("asdf");
         let testCharge = this;
         let moving = true;
         let collided = false;
@@ -314,11 +319,17 @@ class TestCharge
         if(collide(testCharge.returned, track.returned) && !collided) 
         {
             collided = true;
+            if (hitEdge == false) 
+            {
+                sounds.lose.play();   
+                console.log("sound"); 
+            }
+            hitEdge = true;
         }
 
         if(collided) 
         {
-           moving = false
+           moving = false;
         }
 
         track.finishLines.forEach(finishLine => {

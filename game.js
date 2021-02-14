@@ -6,7 +6,12 @@ function preload()
     spaceFont = loadFont('fonts/Anurati.otf');
     fontRegular = loadFont('fonts/Helvetica.ttf');
 
-    backgroundImages = [loadImage('images/background1.png'), loadImage('images/background2.jpg'), loadImage('images/background3.jpg'), loadImage('images/background4.jpg')];
+    backgroundImages = [
+        loadImage('images/background1.png'),
+        //  loadImage('images/background2.jpg'),
+        //   loadImage('images/background3.jpg'),
+        //    loadImage('images/background4.jpg')
+        ];
     homeTrack = loadImage('images/homeTrack.png');
     blueprint = loadImage('images/blueprint2.png');
 
@@ -41,6 +46,12 @@ function preload()
         {play: loadImage('images/tracks/track (10).png'), build: loadImage('images/tracks/track (18).png')},
         {play: loadImage('images/tracks/track (15).png'), build: loadImage('images/tracks/track (17).png')},
     ]
+
+    soundFormats('mp3');
+    sounds = {
+        click: loadSound('sounds/click (1).wav'),
+        lose: loadSound('sounds/lose.wav'),
+        };
 }
 
 
@@ -50,7 +61,7 @@ function setup()    // This function only runs once when the page first loads.
     
     let scaledHeight = windowWidth * (375 / 812);  // 375 / 812 is the aspect ratio of an iphone X. All of the sizes and positions of things are modeled aroung that
     let scaledWidth = windowWidth;
-    createCanvas(scaledWidth, scaledHeight);  // here I create a canvas with the dimentions that fit on the screen
+    createCanvas(windowWidth, windowHeight);  // here I create a canvas with the dimentions that fit on the screen
     //textFont(calibri);
     textFont(fontRegular);
 
@@ -89,21 +100,22 @@ function setup()    // This function only runs once when the page first loads.
 
 
     createScreens();    // this creates the screen objects into the screens array
+    createPopups();    // this creates the Popup objects into the popups array
     createTracks();     // this creates the track objects into the tracks array
 
     
     // creates the slider that's used to change a charges magnitude. The slider is always hidden except for when the user has selected a charge. The slider is stored in the global variable "slider" and can be referenced anywhere using that varable.
-    slider = createSlider(-5, 5, 0, 1);
-    slider.size(200);
-    slider.value(0);
-    slider.style("zIndex", "999");
-    slider.style("visibility", "hidden");
-    slider.addClass("slider");
-    slider.input(sliderChanged);
-    slider.changed(sliderChanged);
-    slider.visibility = "hidden";
+    // slider = createSlider(-5, 5, 0, 1);
+    // slider.size(200);
+    // slider.value(0);
+    // slider.style("zIndex", "999");
+    // slider.style("visibility", "hidden");
+    // slider.addClass("slider");
+    // slider.input(sliderChanged);
+    // slider.changed(sliderChanged);
+    // slider.visibility = "hidden";
 
-    slider.position((width/2) - 100, height - 20, "fixed");
+    // slider.position((width/2) - 100, height - 20, "fixed");
 
     // creates the input box for a user's username in the Settings screen. The input box is always hidden except for when the user has clicks the button to change it in the settings screen. The input box is stored in the global variable "userNameInput" and can be referenced anywhere using that varable.
     userNameInput = createInput(getItem("userName"));
@@ -162,8 +174,11 @@ function setup()    // This function only runs once when the page first loads.
     
     navigateTo(currentScreen); // this navigates to the first screen the users will see when he game is first opened. The screen the user first sees can be set in the variables.js file
 
+    let loadingDiv = document.getElementById("loadingScreen");
+    loadingDiv.remove();
     console.log("setup complete");
 
+    //popups[0].visibility = "visible"
 }
 
 
@@ -242,112 +257,152 @@ function keyPressed()
 
 function mouseClickedLevel(buttonClicked)
 {
-    let notTouchingACharge = true;
-    let selectedCharge = null;
-    let mousePosition = createVector(mouseX, mouseY);
+    // let notTouchingACharge = true;
+    // let selectedCharge = null;
+    // let mousePosition = createVector(mouseX, mouseY);
     
     
 
-    if (!buttonClicked && gameMode == "Build" && mouseY < height - 20 && mouseTapped) 
-    {
+    // if (!buttonClicked && gameMode == "Build" && mouseY < height - 20 && mouseTapped) 
+    // {
         
-        charges.forEach(charge => {
-            charge.selected = false;
-            charge.dragging = false;
+    //     charges.forEach(charge => {
+    //         charge.selected = false;
+    //         charge.dragging = false;
     
-            let distance = mousePosition.dist(charge.position);
-            if (distance < chargeRadius)
-            {
-                notTouchingACharge = false;
-                selectedCharge = charge;
-            }
-        });
+    //         let distance = mousePosition.dist(charge.position);
+    //         if (distance < chargeRadius)
+    //         {
+    //             notTouchingACharge = false;
+    //             selectedCharge = charge;
+    //         }
+    //     });
         
         
-        if (notTouchingACharge && selectedCharge == null && !finished)
-        {
-            if (mouseY > 50 && mouseY < height - 60) 
-            {
-                createCharge(mousePosition);
-            }
-          
-          slider.value(0);
-        }
-        else
-        {
-            slider.value(selectedCharge.charge);
-            selectedCharge.selected = true;
-        }
-    }
-    else if(gameMode == "Play")
-    {
-        // console.log(p5.Vector.sub(mousePosition, levels[currentLevel].trackOffset));
-    }
+    //     if (notTouchingACharge && selectedCharge == null && !finished)
+    //     {
+    //         if (mouseY > 50 && mouseY < height - 60) 
+    //         {
+    //             createCharge(mousePosition, 0);
+    //         }
+
+    //     }
+    //     else
+    //     {
+    //         slider.value(selectedCharge.charge);
+    //         selectedCharge.selected = true;
+    //     }
+    // }
+    // else if(gameMode == "Play")
+    // {
+    //     // console.log(p5.Vector.sub(mousePosition, levels[currentLevel].trackOffset));
+    // }
     
 }
 
 function mouseDraggedLevel()
 {
-    let mousePosition2 = createVector(pmouseX, pmouseY);
-    let mousePosition = createVector(mouseX, mouseY);
-
-    // console.log(Math.round(p5.Vector.dist(mousePosition, mousePosition2)));
-
-    let chargePositions = []
-    for (let i = 0; i < charges.length; i++) 
+    if (gameMode == "Build") 
     {
-        chargePositions.push(p5.Vector.dist(charges[i].position, mousePosition));
-    }
+        let mousePosition = createVector(mouseX, mouseY);
+        let draggingCharge = null;
 
-    if((mousePosition.y < height  || mousePosition.x < 50) && Math.min(...chargePositions) < chargeDiameter && !finished && gameMode == "Build")
-    {
-        let chargeDragged = null;
-        charges.forEach(charge =>
-        {
-            if (charge.selected)
+        charges.forEach((charge, i) => {
+            if (charge.dragging)
             {
-                chargeDragged = charge;
+                draggingCharge = i;
             }
-        });
+        })
 
 
-        if (chargeDragged == null)
+        if (draggingCharge == null)
         {
-            
-            for (let i = charges.length - 1; i >= 0; i--)
-            {
-                charges[i].dragging = false;
-                let distance = mousePosition.dist(charges[i].position);
-                if (distance < chargeDiameter && chargeDragged == null)
+            charges.forEach(charge => {
+                let distance = mousePosition.dist(charge.position);
+                if (distance < chargeRadius)
                 {
-                    chargeDragged = charges[i];
-                    chargeDragged.dragging = true;
+                    draggingCharge = charge;
+                    charge.dragging = true;
                 }
-            }
-            if (chargeDragged != null && chargeDragged.dragging)
-            {
-
-                chargeDragged.x = constrain(mouseX, 0, width);
-                chargeDragged.y = constrain(mouseY, 70, height);
-                chargeDragged.position = createVector(mouseX, mouseY);
-                chargeDragged.dragging = true;
-                createFieldLines(); 
-            }
+            })
         }
         else
         {
-            for (let i = charges.length - 1; i >= 0; i--)
-            {
-                charges[i].selected = false;
-            }
+            charges.forEach(charge => {
+                charge.dragging = false;
+                charge.selected = false;
+            });
 
-            chargeDragged.x = constrain(mouseX,0,width);
-            chargeDragged.y = constrain(mouseY,70,height);
-            chargeDragged.position = createVector(mouseX, mouseY);
-            chargeDragged.dragging = true;
-            createFieldLines(); 
-        }   
+            draggingCharge = charges[draggingCharge];
+            draggingCharge.dragging = true;
+            draggingCharge.x = constrain(mouseX,0,width);
+            draggingCharge.y = constrain(mouseY,0,height);
+            draggingCharge.position = createVector(mouseX, mouseY);
+
+            createFieldLines();
+        }
     }
+    
+
+
+
+    // console.log(Math.round(p5.Vector.dist(mousePosition, mousePosition2)));
+
+    // let chargePositions = []
+    // for (let i = 0; i < charges.length; i++) 
+    // {
+    //     chargePositions.push(p5.Vector.dist(charges[i].position, mousePosition));
+    // }
+
+    // if((mousePosition.y < height  || mousePosition.x < 50) && Math.min(...chargePositions) < chargeDiameter && !finished && gameMode == "Build")
+    // {
+    //     let chargeDragged = null;
+    //     charges.forEach(charge =>
+    //     {
+    //         if (charge.selected)
+    //         {
+    //             chargeDragged = charge;
+    //         }
+    //     });
+
+
+    //     if (chargeDragged == null)
+    //     {
+            
+    //         for (let i = charges.length - 1; i >= 0; i--)
+    //         {
+    //             charges[i].dragging = false;
+    //             let distance = mousePosition.dist(charges[i].position);
+    //             if (distance < chargeDiameter && chargeDragged == null)
+    //             {
+    //                 chargeDragged = charges[i];
+    //                 chargeDragged.dragging = true;
+    //             }
+    //         }
+    //         if (chargeDragged != null && chargeDragged.dragging)
+    //         {
+
+    //             chargeDragged.x = constrain(mouseX, 0, width);
+    //             chargeDragged.y = constrain(mouseY, 70, height);
+    //             chargeDragged.position = createVector(mouseX, mouseY);
+    //             chargeDragged.dragging = true;
+    //             createFieldLines(); 
+    //         }
+    //     }
+    //     else
+    //     {
+    //         for (let i = charges.length - 1; i >= 0; i--)
+    //         {
+    //             charges[i].selected = false;
+    //         }
+
+    //         chargeDragged.x = constrain(mouseX,0,width);
+    //         chargeDragged.y = constrain(mouseY,70,height);
+    //         chargeDragged.position = createVector(mouseX, mouseY);
+    //         chargeDragged.dragging = true;
+    //         createFieldLines(); 
+    //     }   
+    // }
     
     
 }

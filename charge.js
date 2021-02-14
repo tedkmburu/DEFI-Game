@@ -7,18 +7,17 @@ function createCharge(position, charge)
 
 function displaySlider() 
 {
-  let aChargeIsSelected = charges.some(charge => charge.selected);
-  if (aChargeIsSelected) 
-  {
-    slider.style("visibility", "visible");
-    slider.visibility = "visible";
-  }
-  else
-  {
-    slider.style("visibility", "hidden");  
-    slider.visibility = "hidden";
-    
-  }
+  // let aChargeIsSelected = charges.some(charge => charge.selected);
+  // if (aChargeIsSelected) 
+  // {
+  //   slider.style("visibility", "visible");
+  //   slider.visibility = "visible";
+  // }
+  // else
+  // {
+  //   slider.style("visibility", "hidden");  
+  //   slider.visibility = "hidden";
+  // }
   
 }
 
@@ -33,9 +32,13 @@ function displayCharges()
 function removeCharge(i)
 {
   charges[i].selected = false;
-  slider.style("visibility", "hidden");
+  charges[i].slider.style("visibility", "hidden");
+  charges[i].slider.remove();
+  // slider.style("visibility", "hidden");
 
   charges.splice(i,1);
+
+  createFieldLines();
 }
 
 function removeAllCharges()
@@ -56,16 +59,15 @@ function deleteSelectedCharge()
   charges.forEach((charge, i) => {
     if (charge.selected) 
     {
-      console.log(i);
       removeCharge(i)
     }
   })
-  createFieldLines(); 
 }
 
 function sliderChanged()
 {
   createFieldLines(); 
+  console.log("slider");
 }
 
 class Charge
@@ -79,6 +81,12 @@ class Charge
     this.selected = true;
     this.dragging = false;
 
+
+    this.slider = createSlider(-5, 5, charge, 1);
+    this.slider.style("zIndex", "999");
+    this.slider.style("visibility", "hidden");
+    this.slider.addClass("slider");
+    this.slider.mouseMoved(sliderChanged);
     
   }
 
@@ -92,11 +100,24 @@ class Charge
       if (charge.selected)
       {
         stroke(255);
-        charge.charge = slider.value();
+        
+        charge.charge = charge.slider.value();
+        charge.slider.position(charge.x - 75, charge.y + (chargeDiameter / 2) + 10, "fixed");
+
+        if (charge.dragging) 
+        {
+          charge.slider.style("visibility", "hidden");
+        }
+        else
+        {
+          charge.slider.style("visibility", "visible");
+        }
+        
       }
       else
       {
         noStroke();
+        charge.slider.style("visibility", "hidden");
       }
 
       if (charge.charge > 0){ fill(chargeColor.positive); }

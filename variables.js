@@ -5,6 +5,7 @@ let backgroundImages;
 let homeTrack;
 let blueprint;
 let icon;
+let sounds;
 let trackImages;
 
 let helpScreen;
@@ -18,6 +19,7 @@ let mouseTapped;
 
 let currentLeaderboard;
 
+let hitEdge = false;
 let gameMode = "Build";
 let charges = [];
 let testCharges = [];
@@ -38,18 +40,19 @@ let score = 100;
 let totalStars = 0;
 let allTracks = [];
 
-let slider;
+// let slider;
 let windowSize;
 let scale;
 let onScrollBar = false;
 
 let colorBlindMode = false;
 
-
+let popups = []
+let popupVisibile = false;
 
 let screens = [];
 let screenStack = ["Home"];
-let currentScreen = "Home";
+let currentScreen = "Level Select";
 
 let leaderboardData = {sort: "Score", group: 1, level: 1, section: "Global"};
 

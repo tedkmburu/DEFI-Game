@@ -99,7 +99,7 @@ class Track
           let x = this.points[i].x;
           let y = this.points[i].y;
 
-          //vertex(x, y);
+          vertex(x, y);
         }
       endShape();
 

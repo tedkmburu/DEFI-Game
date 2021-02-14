@@ -146,21 +146,21 @@ function displayLeaderboardScreen()     // this function is called every frame w
         //text("Group:", 587 * scale.x, 47 * scale.y);
         text("Level:", 687 * scale.x, 47 * scale.y);
 
-        // let screenIndex = screens.findIndex(x => x.name == "Leaderboard");
-        // let screen = screens[screenIndex];
-        // let globalButton = getButtonIndex("Leaderboard", "Global")
-        // let myClassButton = getButtonIndex("Leaderboard", "My Class")
+        let screenIndex = screens.findIndex(x => x.name == "Leaderboard");
+        let screen = screens[screenIndex];
+        let globalButton = getButtonIndex("Leaderboard", "Global")
+        let myClassButton = getButtonIndex("Leaderboard", "My Class")
 
-        // if (leaderboardData.section == "Global") 
-        // {
-        //     screen.buttons[globalButton].bgColor = "rgba(0,0,0,0.5)";
-        //     screen.buttons[myClassButton].bgColor = "rgba(0,0,0,0)";
-        // }
-        // else
-        // {
-        //     screen.buttons[globalButton].bgColor = "rgba(0,0,0,0)";
-        //     screen.buttons[myClassButton].bgColor = "rgba(0,0,0,0.5)";
-        // }
+        if (leaderboardData.section == "Global") 
+        {
+            screen.buttons[globalButton].bgColor = "rgba(0,0,0,0.5)";
+            screen.buttons[myClassButton].bgColor = "rgba(0,0,0,0)";
+        }
+        else
+        {
+            screen.buttons[globalButton].bgColor = "rgba(0,0,0,0)";
+            screen.buttons[myClassButton].bgColor = "rgba(0,0,0,0.5)";
+        }
         
         let y = 70 * scale.y;
         //let leaderboardArray = JSON.parse(currentLeaderboard);
@@ -232,6 +232,7 @@ function displayLevelSelectScreen()
 
     let trackPositions = [];
 
+    // this gets the user data stored on the device
     let levelsStars = JSON.parse(getItem("userStars"));
     let levelsBestTime = JSON.parse(getItem("userTimes"));
     let levelsHighScore = JSON.parse(getItem("userScores"));
@@ -251,10 +252,8 @@ function displayLevelSelectScreen()
             //text(a + 1, trackPosition.x  / 10 + width/3, trackPosition.y + (230 * scale.x));
 
             
-            if (levelsBestTime[a] > 0) 
+            if (levelsBestTime[a] > 0) // if the user has completed the level, this will be true
             {
-                
-                
                 let x = trackPosition.x + (190 * scale.x);
                 let y = trackPosition.y - (16 * scale.y);
                 let time = "Best Time: " + millisecondsToTimeFormat(levelsBestTime[a])
@@ -274,6 +273,8 @@ function displayLevelSelectScreen()
                 text(score, x, y + (11 * scale.x));
 
             }
+
+
             for (let i = 0; i < levelsStars[a]; i++) 
             {
                 // puts up a star for each star the user has collected in each track
@@ -353,7 +354,7 @@ function displayLevelScreen()
     displayStars();
     displayTrash();
     displayCharges();
-    displaySlider();
+    //displaySlider();
     displayTestCharges();
 
 
@@ -617,7 +618,7 @@ function displayScreen(screen)
     }
     else if (screen.name == "Level Select")
     {
-        image(icon.star, width - 50, 10, 30, 30);
+        image(icon.star, width - (50 * scale.x), 10 * scale.x, 30 * scale.x, 30 * scale.x);
 
         levels.forEach((level,i) => {
 
@@ -642,7 +643,13 @@ function displayScreen(screen)
         classCodeInput.style("visibility", "hidden");
     }
         
-    //displayFrameRate();
+
+
+    
+
+    displayPopups();
+
+    displayFrameRate();
 }
 
 
@@ -664,7 +671,7 @@ function navigateTo(screenToShow, backButton)
         console.log(screen.title);
     }
 
-    slider.style("visibility", "hidden");
+    //slider.style("visibility", "hidden");
 
     let allStars = JSON.parse(getItem("userStars"))
     totalStars = 0;
@@ -710,7 +717,7 @@ function navigateBack()
     navigateTo(screenToShow, true);
 }
 
-class Screen
+class Screen 
 {
     constructor(props)
     {
@@ -719,7 +726,6 @@ class Screen
         this.titlePosition = createVector(props.titlePosition.x  * scale.x, props.titlePosition.y  * scale.y);
         this.titleFontSize = props.titleFontSize * scale.x;
         this.visibility = props.visibility;
-        this.backgroundColor = props.backgroundColor;
         this.buttons = props.buttons;
         this.header = props.header;
         this.textBoxes = props.textBoxes;
@@ -776,17 +782,34 @@ class Screen
 function createScreens() 
 {
     screens = [
+        // screen object format 
+        // new Screen({
+        //     name: give it a unique name, 
+        //     title: This is text that will appear wherever the title position wants it,
+        //     titlePosition: position for the title, 
+        //     titleFontSize: font size of the title,
+        //     visibility: the visibility of the screen is either "visibile" or "hidden". It's hidden by default, 
+        //     buttons: [
+        //         button objects that will appear on this screen
+        //         ],
+        //     textBoxes: [
+        //          textbox objects that will appear on the screen
+        //     ],
+        //     functions: function(){ function that will run every frame while the screen is visible },
+        //     }), 
+
+
+
+
         new Screen({
             name: "Home",
             title: "",
-            // dynamic electric field interactive
             titlePosition: createVector(200, 100), 
             titleFontSize: 48,
             visibility: "hidden", 
-            backgroundColor: "rgba(0,0,0,0)", 
             buttons: [
                 new Button({x: 662, y: 75, width: 100, height: 40, title: "PLAY" , onClick: function(){ navigateTo("Level Select"); }, shape: "Home", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 24, font: spaceFont}), 
-                new Button({x: 512, y: 150, width: 250, height: 40, title: "LEADERBOARD", onClick: function(){ navigateTo("Coming Soon"); }, shape: "Home", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 24, font: spaceFont}), 
+                new Button({x: 512, y: 150, width: 250, height: 40, title: "LEADERBOARD", onClick: function(){ navigateTo("Leaderboard"); }, shape: "Home", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 24, font: spaceFont}), 
                 new Button({x: 612, y: 225, width: 150, height: 40, title: "SETTINGS", onClick: function(){ navigateTo("Settings"); }, shape: "Home", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 24, font: spaceFont}), 
                 new Button({x: 662, y: 300, width: 100, height: 40, title: "HELP"    , onClick: function(){ navigateTo("Help"); }, shape: "Home", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 24, font: spaceFont}),
                 //new Button({x:  10, y:  10, width: 140, height: 20, title: "Change Username", onClick: function(){ navigateTo("Settings"); }, shape: "Rect", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 16, font: fontRegular})
@@ -803,7 +826,6 @@ function createScreens()
             titlePosition: createVector(406, 30), 
             titleFontSize: 24,
             visibility: "hidden", 
-            backgroundColor: "#212121", 
             buttons: [
                 new Button({x: 15 , y: 10 , width: 30 , height: 30, title: "<"              , onClick: function(){ navigateBack() }, shape: "Back", bgColor: "white"             , fontColor: "black", fontSize: 14}), 
                 new Button({x: 316, y: 150, width: 180, height: 45, title: "Change Username", onClick: function(){ displayUsernameInput() }     , shape: "Rect"  , bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}), 
@@ -822,7 +844,6 @@ function createScreens()
             titlePosition: createVector(406, 35), 
             titleFontSize: 24,
             visibility: "hidden", 
-            backgroundColor: "#212121", 
             buttons: [
                 new Button({x: 15, y: 10, width: 30, height: 30, title: "Settings", onClick: function(){ navigateBack() }, shape: "Back", bgColor: "white", fontColor: "black", fontSize: 14}), 
                 ],
@@ -851,7 +872,6 @@ function createScreens()
             titlePosition: createVector(406, 35), 
             titleFontSize: 24,
             visibility: "hidden", 
-            backgroundColor: "#212121", 
             buttons: [
                 new Button({x: 15, y: 10, width: 30, height: 30, title: "<", onClick: function(){ navigateBack() }, shape: "Back", bgColor: "white", fontColor: "black", fontSize: 14}), 
                 ],
@@ -868,13 +888,12 @@ function createScreens()
             titlePosition: createVector(406, 35), 
             titleFontSize: 24,
             visibility: "hidden", 
-            backgroundColor: "#212121", 
             buttons: [
                 new Button({x:  15, y: 10, width:  30, height: 30, title: "<", onClick: function(){ navigateBack() }, shape: "Back", bgColor: "white", fontColor: "black", fontSize: 14}), 
-                //new Button({x: 130, y: 30, width: 100, height: 25, title: "Score"    , onClick: function(){ toggleLeaderboardSort(); }, shape: "Rect", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}),
-                //new Button({x:  50, y: 60, width: 356, height: 30, title: "Global"    , onClick: function(){ leaderboardData.section = "Global"; updateLeaderBoard(); }, shape: "Rect", bgColor: "rgba(0,0,0,0.5)", fontColor: "white", fontSize: 14}),
-                //new Button({x: 406, y: 60, width: 356, height: 30, title: "My Class"    , onClick: function(){ leaderboardData.section = "My Class"; updateLeaderBoard(); }, shape: "Rect", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 14}),
-                //new Button({x: 612, y: 30, width:  40, height: 25, title: "1"    , onClick: "Levels", shape: "Rect", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}),
+                new Button({x: 130, y: 30, width: 100, height: 25, title: "Score"    , onClick: function(){ toggleLeaderboardSort(); }, shape: "Rect", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}),
+                new Button({x:  50, y: 60, width: 356, height: 30, title: "Global"    , onClick: function(){ leaderboardData.section = "Global"; updateLeaderBoard(); }, shape: "Rect", bgColor: "rgba(0,0,0,0.5)", fontColor: "white", fontSize: 14}),
+                new Button({x: 406, y: 60, width: 356, height: 30, title: "My Class"    , onClick: function(){ leaderboardData.section = "My Class"; updateLeaderBoard(); }, shape: "Rect", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 14}),
+                new Button({x: 612, y: 30, width:  40, height: 25, title: "1"    , onClick: "Levels", shape: "Rect", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}),
                 new Button({x: 712, y: 30, width:  40, height: 25, title: leaderboardData.level , onClick: function(){ increaseLeaderboardLevel() }, shape: "Rect", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14})
                 ],
             textBoxes: [],
@@ -891,7 +910,6 @@ function createScreens()
             titlePosition: createVector(406, 35), 
             titleFontSize: 24,
             visibility: "hidden", 
-            backgroundColor: "#212121", 
             buttons: [
                 new Button({x:  15, y: 10, width:  30, height: 30, title: "<", onClick: function(){ navigateBack() }, shape: "Back", bgColor: "white", fontColor: "black", fontSize: 14}), 
                 new Button({x: 692, y: 285, width: 100, height: 50, title: "Start"    , onClick: function(){ console.log("asdf"); navigateTo("Level");  }, shape: "Rect", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14, visibility: "hidden"})
@@ -916,7 +934,6 @@ function createScreens()
             titlePosition: createVector(732, 35), 
             titleFontSize: 24,
             visibility: "hidden", 
-            backgroundColor: "#212121", 
             buttons: [
                 new Button({x: 15, y: 10, width: 30, height: 30, title: "<", onClick: function(){ navigateTo("Home"); }, shape: "Back", bgColor: "white", fontColor: "black", fontSize: 14}), 
                 ],
@@ -934,7 +951,6 @@ function createScreens()
             titlePosition: createVector(406, 50), 
             titleFontSize: 24,
             visibility: "hidden", 
-            backgroundColor: "black", 
             buttons: [
                 new Button({x:  15, y:  10, width: 30, height: 30, title: "<", onClick: function(){ navigateTo("Level Select"); }, shape: "Back", bgColor: "white", fontColor: "black", fontSize: 14}), 
                 // new Button({x: width - 40, y: height/2 - 80, width: 60, height: 60, title: "Next"        , onClick: function(){ pressNext(); }        , shape: "Circle", bgColor: "white", fontColor: "black", fontSize: 14}), 
@@ -954,7 +970,6 @@ function createScreens()
             titlePosition: createVector(406, 50), 
             titleFontSize: 24,
             visibility: "hidden", 
-            backgroundColor: "#212121", 
             buttons: [
                 new Button({x: 480, y: 300, width: 60, height: 40, title: "Replay", onClick: function(){ pressRedo(); }        , shape: "Oval", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}), 
                 new Button({x: 600, y: 300, width: 60, height: 40, title: "Menu", onClick: function(){ navigateTo("Level Select"); }, shape: "Oval", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}), 
@@ -972,7 +987,6 @@ function createScreens()
             titlePosition: createVector(406, 50), 
             titleFontSize: 24,
             visibility: "hidden", 
-            backgroundColor: "#212121", 
             buttons: [
 
                 ],
@@ -986,7 +1000,6 @@ function createScreens()
             titlePosition: createVector(406, 50), 
             titleFontSize: 24,
             visibility: "hidden", 
-            backgroundColor: "#212121", 
             buttons: [
                 new Button({x:  15, y:  10, width: 30, height: 30, title: "<", onClick: function(){ navigateBack(); }, shape: "Back", bgColor: "white", fontColor: "black", fontSize: 14}), 
                 

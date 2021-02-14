@@ -3,8 +3,8 @@
 function mouseClicked()
 {
     let mousePosition = createVector(mouseX, mouseY);
+
     let buttonClicked = false;
-    let screenFound = false;
 
 
     // console.log(mouseTapped);
@@ -13,11 +13,59 @@ function mouseClicked()
     consoleLog += "{x: " + Math.round(mousePosition.x - levels[currentLevel].trackOffset.x) + ", y: " + Math.round(mousePosition.y - levels[currentLevel].trackOffset.y) + "}, ";
 
     //console.log(consoleLog);
+
+    popupVisibile = popups.some(x => x.visibility == "visible");
+
+    if (popupVisibile) 
+    {
+        let popupIndex = popups.findIndex(x => x.visibility == "visible");
+        let currentPopup = popups[popupIndex];
+
+        currentPopup.buttons.forEach(button => {
+            if(button.visibility != "hidden" && mouseTapped)
+            {
+                if (button.shape == "Circle") 
+                {
+                    let distance = mousePosition.dist(button.position);
+                    if (distance < button.width / 2)
+                    {
+                        button.clicked();
+                        buttonClicked = true;
+                    }
+                }
+                else if (button.shape == "Oval") 
+                {
+                    //rect(button.x - (button.width / 1.25), button.y- (button.height / 2), button.width * 1.6, button.height)
+                    if (mousePosition.x > button.x - (button.width / 1.25) &&
+                        mousePosition.y > button.y - (button.height / 2) &&
+                        mousePosition.x < button.x + button.width * 1.6 &&
+                        mousePosition.y < button.y + button.height)
+                    {
+                        button.clicked();
+                        buttonClicked = true;
+                    }
+                }
+                else
+                {
+                    if (mousePosition.x > button.x &&
+                        mousePosition.y > button.y &&
+                        mousePosition.x < button.x + button.width &&
+                        mousePosition.y < button.y + button.height)
+                    {
+                        button.clicked();
+                        buttonClicked = true;
+                    }
+                }
+            }
+            
+            
+        });
+    }
+
     screens.forEach(screen =>
     {
-        if (screen.visibility == "visible" && !screenFound ) 
+        if (screen.visibility == "visible" && !popupVisibile) 
         {
-            screenFound = true;
             
             screen.buttons.forEach(button => {
                 if(button.visibility != "hidden" && mouseTapped)
@@ -89,9 +137,8 @@ function mousePressed()
 {
     mouseTapped = true;
 
-    let scaledHeight = windowWidth * (375 / 812);  // 375 / 812 is the aspect ratio of an iphone X. All of the sizes and positions of things are modeled aroung that
-    let scaledWidth = windowWidth;
-    if (currentScreen == "Level Select" && mouseY > scaledHeight - 20) 
+
+    if (currentScreen == "Level Select" && mouseY > height - 20) 
     {
         onScrollBar = true
     }
@@ -104,11 +151,11 @@ function mousePressed()
 function mouseWheel(event) 
 {
     // print(event.delta);
-    if (currentScreen == "Level Select") 
+    if (currentScreen == "Level Select" && !popupVisibile) 
     {
         mouseWheelGroupSelect(event.delta)
     }
-    if (currentScreen == "Leaderboard") 
+    if (currentScreen == "Leaderboard" && !popupVisibile) 
     {
         mouseWheelLeaderboard(event.delta)
     }
@@ -122,7 +169,7 @@ function mouseDragged()
     mouseTapped = false;
     screens.forEach(screen =>
     {
-        if (screen.visibility == "visible") 
+        if (screen.visibility == "visible" && !popupVisibile) 
         {
             if (screen.name == "Level")
             {
@@ -146,12 +193,13 @@ function mouseReleased()
     onScrollBar = false
     screens.forEach(screen =>
     {
-        if (screen.visibility == "visible") 
+        if (screen.visibility == "visible" && !popupVisibile) 
         {
 
             if (screen.name == "Level")
             {
                 mouseReleasedLevel();
+                
             }
         }
     });
@@ -197,17 +245,58 @@ function mouseDraggedLeaderboard()
 
 function mouseReleasedLevel()
 {
-    if (mouseX < 20 * scale.x && mouseY > height - 40) {
-        deleteSelectedCharge();
-    }
-    else
+    if (mouseButton === "left" && gameMode == "Build")
     {
-        charges.forEach(charge => {
-            charge.selected = false;
-            charge.dragging = false; 
-        })
+        let mousePosition = createVector(mouseX, mouseY);
+        let clickedCharge = false; 
+        let distances = [];
 
+        if (mouseX < 20 * scale.x && mouseY > height - 40) 
+        {
+            deleteSelectedCharge();
+        }
+        else
+        {
+            charges.forEach((charge, i) => {
+                charge.selected = false;
+                charge.dragging = false; 
+
+                let distance = mousePosition.dist(charge.position);
+                distances.push(distance);
+                // if (distance < chargeRadius * 1.5 && clickedCharge == false)
+                // {
+                //     charge.selected = true;
+                //     clickedCharge = true;
+                // }
+            })
+
+            let minDistance = Math.min(...distances);
+            if(minDistance < chargeRadius * 1.5)
+            {
+                let indexOfMinDistance = distances.indexOf(minDistance);
+                charges[indexOfMinDistance].selected = true;
+                clickedCharge = true;
+            }
+
+            let draggingCharge = false;
+
+            charges.forEach((charge, i) => {
+                if (charge.dragging)
+                {
+                    draggingCharge = true;
+                }
+            })
+
+            if (!clickedCharge && !draggingCharge && mouseTapped) 
+            {
+                createCharge(mousePosition, 0);
+            }
+        }
     }
+
+
+
+
     
 }
 

@@ -252,7 +252,6 @@ function displayLevelSelectScreen()
             textSize(10 * scale.x);
             //text(a + 1, trackPosition.x  / 10 + width/3, trackPosition.y + (230 * scale.x));
 
-            console.log(levelsBestTime[a]);
             if (levelsBestTime[a] > 0) // if the user has completed the level, this will be true
             {
                 let x = trackPosition.x + (190 * scale.x);
@@ -414,13 +413,16 @@ function displayLevelScreen()
             {
                 totalStars += starsAdd;
             })
-            
+
         sounds.victory.play();
         navigateTo("Level Complete");
     }
     else
     {
-        timeElapsed += deltaTime;
+        if (!popupVisibile)
+        {
+            timeElapsed += deltaTime;
+        }
     }
 }
 
@@ -662,7 +664,6 @@ function displayScreen(screen)
 
 function navigateTo(screenToShow, backButton)
 {
-    //screenStack.push(screenToShow);
 
     if (screenToShow == "Level") 
     {
@@ -677,7 +678,12 @@ function navigateTo(screenToShow, backButton)
         console.log(screen.title);
     }
 
-    //slider.style("visibility", "hidden");
+    charges.forEach(charge => 
+    {
+        charge.selected = false;
+        charge.slider.style("visibility", "hidden");
+    });
+    charges = []
 
     let allStars = JSON.parse(getItem("userStars"))
     totalStars = 0;
@@ -704,6 +710,8 @@ function navigateTo(screenToShow, backButton)
     {
         screenStack.push(screenToShow);
     }
+
+
    
 }
 
@@ -918,7 +926,7 @@ function createScreens()
             visibility: "hidden", 
             buttons: [
                 new Button({x:  15, y: 10, width:  30, height: 30, title: "<", onClick: function(){ navigateBack() }, shape: "Back", bgColor: "white", fontColor: "black", fontSize: 14}), 
-                new Button({x: 692, y: 285, width: 100, height: 50, title: "Start"    , onClick: function(){ console.log("asdf"); navigateTo("Level");  }, shape: "Rect", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14, visibility: "hidden"})
+                new Button({x: 692, y: 285, width: 100, height: 50, title: "Start"    , onClick: function(){ navigateTo("Level");  }, shape: "Rect", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14, visibility: "hidden"})
                 ],
             textBoxes: [
                 new TextBox({x: 501, y: 110, id: "title", text: "Objectives: ", font: fontRegular, fontSize: 20, color: "white", visibility: "visible", align: LEFT}), 
@@ -962,7 +970,7 @@ function createScreens()
                 // new Button({x: width - 40, y: height/2 - 80, width: 60, height: 60, title: "Next"        , onClick: function(){ pressNext(); }        , shape: "Circle", bgColor: "white", fontColor: "black", fontSize: 14}), 
                 new Button({x: 772, y: 335, width: 60, height: 60, title: "Play"       , onClick: function(){ toggleGameMode(); }, shape: "Circle", bgColor: "white", fontColor: "black", fontSize: 14}), 
                 new Button({x: 767, y:  10, width: 30, height: 30, title: "Redo"        , onClick: function(){ pressRedo(); }     , shape: "Redo", bgColor: "white", fontColor: "black", fontSize: 14}), 
-                new Button({x: 727, y:  10, width: 30, height: 30, title: "Help"        , onClick: function(){ navigateTo("Help"); }        , shape: "Help", bgColor: "white", fontColor: "black", fontSize: 14}), 
+                new Button({x: 727, y:  10, width: 30, height: 30, title: "Help"        , onClick: function(){ showPopUp("Help") }        , shape: "Help", bgColor: "white", fontColor: "black", fontSize: 14}), 
                 new Button({x: 0, y:  350, width: 25, height: 25, title: "Delete", onClick: function(){ deleteSelectedCharge(); console.log("delete"); }        , shape: "Rect", bgColor: "rgba(0,0,0,0)", fontColor: "black", fontSize: 0}), 
 
                 ],

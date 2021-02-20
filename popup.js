@@ -18,7 +18,7 @@ function createPopups()
         }),
 
         new Popup({
-            name: "Help",
+            name: "Help2",
             size: createVector(700,300),
             textBoxes: [
                 new TextBox({x: 501, y: 110, id: "title", text: "Objectives: ", font: fontRegular, fontSize: 20, color: "black", visibility: "visible", align: LEFT}), 
@@ -38,6 +38,13 @@ function createPopups()
     ]
 }
 
+function showPopUp(name)
+{
+    let popupToShow = popups.find(popup => popup.name == name);
+    popupToShow.visibility = "visible"
+
+}
+
 function displayPopups()
 {
     popups.forEach(popUp => {
@@ -55,6 +62,8 @@ function closePopup()
     popup.visibility = "hidden";    
     popupVisibile = false;
     })
+
+    createPopups()
 }
 
 function movePopup(direction)

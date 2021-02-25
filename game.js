@@ -27,34 +27,54 @@ function preload()
         edit: loadImage('images/edit.png'), 
         help: loadImage('images/help.png'), 
         lock: loadImage('images/lock.png'), 
-        play: loadImage('images/play.png')
+        play: loadImage('images/play.png'),
+        portal1: loadImage('images/portal (1).png'), 
+        portal2: loadImage('images/portal (2).png'),
     };
 
     trackImages = [ 
-        {play: loadImage('images/tracks/track (22).png'), build: loadImage('images/tracks/track (23).png')},
-        {play: loadImage('images/tracks/track (26).png'), build: loadImage('images/tracks/track (1).png')},
-        {play: loadImage('images/tracks/track (24).png'), build: loadImage('images/tracks/track (25).png')},
-        {play: loadImage('images/tracks/track (12).png'), build: loadImage('images/tracks/track (13).png')},
-        {play: loadImage('images/tracks/track (28).png'), build: loadImage('images/tracks/track (27).png')},
-        {play: loadImage('images/tracks/track (2).png'), build: loadImage('images/tracks/track (4).png')},
-        {play: loadImage('images/tracks/track (8).png'), build: loadImage('images/tracks/track (9).png')},
-        {play: loadImage('images/tracks/track (6).png'), build: loadImage('images/tracks/track (7).png')},
-        {play: loadImage('images/tracks/track (20).png'), build: loadImage('images/tracks/track (21).png')},
-        {play: loadImage('images/tracks/track (14).png'), build: loadImage('images/tracks/track (16).png')},
-        {play: loadImage('images/tracks/track (29).png'), build: loadImage('images/tracks/track (30).png')},
-        {play: loadImage('images/tracks/track (24).png'), build: loadImage('images/tracks/track (25).png')},
-        {play: loadImage('images/tracks/track (11).png'), build: loadImage('images/tracks/track (19).png')},
-        {play: loadImage('images/tracks/track (10).png'), build: loadImage('images/tracks/track (18).png')},
-        {play: loadImage('images/tracks/track (15).png'), build: loadImage('images/tracks/track (17).png')},
+        {play: loadImage('images/tracks/lv1.png'), build: loadImage('images/tracks/lv1build.png')},
+        {play: loadImage('images/tracks/lv2.png'), build: loadImage('images/tracks/lv2build.png')},
+        {play: loadImage('images/tracks/lv3.png'), build: loadImage('images/tracks/lv3build.png')},
+        {play: loadImage('images/tracks/lv4.png'), build: loadImage('images/tracks/lv4build.png')},
+        {play: loadImage('images/tracks/lv5.png'), build: loadImage('images/tracks/lv5build.png')},
+        {play: loadImage('images/tracks/lv6.png'), build: loadImage('images/tracks/lv6build.png')},
+        {play: loadImage('images/tracks/lv7.png'), build: loadImage('images/tracks/lv7build.png')},
+        {play: loadImage('images/tracks/lv8.png'), build: loadImage('images/tracks/lv8build.png')},
+        {play: loadImage('images/tracks/lv9.png'), build: loadImage('images/tracks/lv9build.png')},
+        {play: loadImage('images/tracks/lv10.png'), build: loadImage('images/tracks/lv10build.png')},
+        {play: loadImage('images/tracks/lv11.png'), build: loadImage('images/tracks/lv11build.png')},
+        {play: loadImage('images/tracks/lv3.png'),  build: loadImage('images/tracks/lv3build.png')},
+        {play: loadImage('images/tracks/lv13.png'), build: loadImage('images/tracks/lv13build.png')},
+        {play: loadImage('images/tracks/lv14.png'), build: loadImage('images/tracks/lv14build.png')},
+        {play: loadImage('images/tracks/lv15.png'), build: loadImage('images/tracks/lv15build.png')},
+
+        // {play: loadImage('images/tracks/track (28).png'), build: loadImage('images/tracks/track (27).png')},
+        // {play: loadImage('images/tracks/track (3).png'), build: loadImage('images/tracks/track (10).png')},
+        // {play: loadImage('images/tracks/track (1).png'), build: loadImage('images/tracks/track (2).png')},
+        // {play: loadImage('images/tracks/track (13).png'), build: loadImage('images/tracks/track (14).png')},
+        // {play: loadImage('images/tracks/track (17).png'), build: loadImage('images/tracks/track (18).png')},
+        // {play: loadImage('images/tracks/track (4).png'), build: loadImage('images/tracks/track (5).png')},
+        // {play: loadImage('images/tracks/track (8).png'), build: loadImage('images/tracks/track (9).png')},
+        // {play: loadImage('images/tracks/track (6).png'), build: loadImage('images/tracks/track (7).png')},
+        // {play: loadImage('images/tracks/track (24).png'), build: loadImage('images/tracks/track (25).png')},
+        // {play: loadImage('images/tracks/track (16).png'), build: loadImage('images/tracks/track (26).png')},
+        // {play: loadImage('images/tracks/track (19).png'), build: loadImage('images/tracks/track (26).png')},
+        // {play: loadImage('images/tracks/track (1).png'), build: loadImage('images/tracks/track (2).png')},
+        // {play: loadImage('images/tracks/track (12).png'), build: loadImage('images/tracks/track (23).png')},
+        // {play: loadImage('images/tracks/track (11).png'), build: loadImage('images/tracks/track (22).png')},
+        // {play: loadImage('images/tracks/track (6).png'), build: loadImage('images/tracks/track (21).png')},
     ]
 
     soundFormats('mp3');
     sounds = {
-        click: loadSound('sounds/click (1).wav'),
+        click: loadSound('sounds/click (1).mp3'),
         lose: loadSound('sounds/hit.mp3'),
-        collect: loadSound('sounds/collect.wav'),
-        victory: loadSound('sounds/victory.wav'),
+        collect: loadSound('sounds/collect.mp3'),
+        victory: loadSound('sounds/victory.mp3'),
         };
+
+    sounds.victory.setVolume(0.2);
 }
 
 
@@ -101,7 +121,7 @@ function setup()    // This function only runs once when the page first loads.
     }
 
 
-
+    createTextClasses();
     createScreens();    // this creates the screen objects into the screens array
     createPopups();    // this creates the Popup objects into the popups array
     createTracks();     // this creates the track objects into the tracks array
@@ -177,11 +197,13 @@ function setup()    // This function only runs once when the page first loads.
     
     navigateTo(currentScreen); // this navigates to the first screen the users will see when he game is first opened. The screen the user first sees can be set in the variables.js file
 
-    let loadingDiv = document.getElementById("loadingScreen");
-    loadingDiv.remove();
+    // let loadingDiv = document.getElementById("loadingScreen");
+    // loadingDiv.remove();
     console.log("setup complete");
 
     //popups[0].visibility = "visible"
+
+    
 }
 
 
@@ -624,6 +646,25 @@ function updateLeaderBoard()
 
 }
 
+// all requests from this device
+function requestTest() 
+{
+    fetch('http://ic-research.eastus.cloudapp.azure.com:8080/device/', {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Basic ' + window.btoa("test:test")
+        },
+    }).then((res) => {
+        return res.json();
+    }).then((json) => {
+        console.log(json)
+    })
+}
+
+
+
 function sendScore(data)
 {
      // endScore({level: 1, group: currentLevel, time: Math.round(timeElapsed), stars: numberOfStarsCollected, score: score, userId: getItem("userId")})
@@ -640,20 +681,22 @@ function sendScore(data)
 
 
 
-    // fetch("http://ic-research.eastus.cloudapp.azure.com:8080/class/", {
-    // method: "post",
-    // headers: {
-    //     'Accept': 'application/json',
-    //     'Content-Type': 'application/json'
-    // },
+    fetch("http://ic-research.eastus.cloudapp.azure.com:8080/device/", {
+    method: "post",
+    headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Basic ' + window.btoa("test:test")
+    },
 
-    // body: dataJSON
+    body: dataJSON
 
-    // }).then( (response) => { 
-    //     console.log(response);
-    // })
 
-    // console.log("data sent");
+    }).then( (response) => { 
+        console.log(response);
+    })
+
+    console.log("data sent");
         
 }
 
@@ -674,7 +717,7 @@ function tryFetchData()
 {
     //https://virtserver.swaggerhub.com/efieldrestful-api-IC/efield/1.0/device/
     //http://ic-research.eastus.cloudapp.azure.com:8080/class/
-    fetch('http://ic-research.eastus.cloudapp.azure.com:8080/class/')
+    fetch('http://ic-research.eastus.cloudapp.azure.com:8080/device/' + localStorage.userId)
         .then(
             function(response) 
             {
@@ -722,7 +765,7 @@ function tryFetchData()
 
 function newDevice()
 {
-    fetch('http://ic-research.eastus.cloudapp.azure.com:8080/class/', {
+    fetch('http://ic-research.eastus.cloudapp.azure.com:8080/device/', {
         method: 'POST',
         headers: {
             'Accept': 'application/json',

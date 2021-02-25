@@ -54,6 +54,13 @@ function removeAllCharges()
   points = [];
 }
 
+function deselectAllCharges()
+{
+  charges.forEach(charge => {
+    charge.selected = false; 
+  })
+}
+
 function deleteSelectedCharge()
 {
   charges.forEach((charge, i) => {

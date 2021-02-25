@@ -4,15 +4,28 @@ function createPopups()
         new Popup({
             name: "Help",
             size: createVector(700,300),
-            numberOfSlides: 3,
+            numberOfSlides: 4,
             textBoxes: [
-                new TextBox({x: 406, y: 80, id: "Help", text: "Help", font: fontRegular, fontSize: 20, color: "black", visibility: "visible", align: LEFT}), 
-                new TextBox({x: 271, y: 110, id: "hint1", text: "The goal of each level is to collect all of the stars \n and get to the finish line as fast as possible. The test \n charge should remain inside the track at all times. \n \n To move the red test charge, you create a configuration \n of charges while in the “Build” mode then hit \n the play button to test your build. \n \n You can edit your charge configuraions at any time \n by going back into the “Build” mode. \n \n Dragging a charge to the trash icon deletes it.", font: fontRegular, fontSize: 14, color: "black", visibility: "visible", align: CENTER}), 
+                new TextBox({x: (812 * 0), y: 80, class: textClass.popUpTitle, text: "Goal"}), 
+                new TextBox({x: 150 + (812 * 0), y: 130, class: textClass.popUpBody, text: "Get the test charge to the finish line by building an electric field.\n\nDo not hit the walls of the track.\n\nCollect as many stars as possible \n\nFinish the level as fast as possible"}), 
+
+                new TextBox({x: (812 * 1), y: 80, class: textClass.popUpTitle, text: "Two Modes"}), 
+                new TextBox({x: 150 + (812 * 1), y: 130, class: textClass.popUpBody, text: " There are two game modes.\n\nIn the “Build” mode you can build an electric field\n\nIn the “Play” mode, your electric field pushes the test charge through."}), 
+
+                new TextBox({x: (812 * 2), y: 80, class: textClass.popUpTitle, text: "Creating an Electric Field"}), 
+                new TextBox({x: 150 + (812 * 2), y: 130, class: textClass.popUpBody, text: "While in the “Build” mode, click anywhere on the screen to place a charge there.\n\nUse the slider to change the slider’s magnitude and sign.\n\nYou can drag charges around.\n\nDrag charges to the bottom right to delete them."}), 
+
+                new TextBox({x: (812 * 3), y: 80, class: textClass.popUpTitle, text: "Electric Fields"}), 
+                new TextBox({x: 150 + (812 * 3), y: 130, class: textClass.popUpBody, text: "Electric fields will only exert a force on test charge in “Play” mode.\n\nAll test charges are positive so they will be pushed away from positive charges and pulled towards negative charges. "}), 
+            ],
+            images: [
+                //image(icon.star, starPosition.x - starRadius - 2 + imageX, starPosition.y - starRadius - 2 + imageY, starDiameter + 4, starDiameter + 4)
+            
             ],
             buttons: [
-                new Button({x: 730 , y: 60 , width: 20 , height: 20, title: "x" , onClick: function(){ closePopup() }, shape: "Rect", bgColor: "black"             , fontColor: "white", fontSize: 14}), 
-                new Button({x: 80 , y: 190 , width: 20 , height: 20, title: "<" , onClick: function(){ movePopup("left") }, shape: "Rect", bgColor: "black"             , fontColor: "white", fontSize: 14}), 
-                new Button({x: 710 , y: 190 , width: 20 , height: 20, title: ">" , onClick: function(){ movePopup("right") }, shape: "Rect", bgColor: "black"             , fontColor: "white", fontSize: 14}), 
+                new Button({x: 730, y: 60 , width: 20, height: 20, title: "x" , onClick: function(){ closePopup()      }, shape: "Rect", bgColor: "black", fontColor: "white", fontSize: 14}), 
+                new Button({x: 80 , y: 190, width: 20, height: 20, title: "<" , onClick: function(){ movePopup("left") }, shape: "Rect", bgColor: "black", fontColor: "white", fontSize: 14}), 
+                new Button({x: 710, y: 190, width: 20, height: 20, title: ">" , onClick: function(){ movePopup("right")}, shape: "Rect", bgColor: "black", fontColor: "white", fontSize: 14}), 
                 
             ]
         }),
@@ -33,15 +46,15 @@ function createPopups()
                 
             ]
         }),
-    
-    
     ]
 }
 
 function showPopUp(name)
 {
+    deselectAllCharges();
     let popupToShow = popups.find(popup => popup.name == name);
-    popupToShow.visibility = "visible"
+    popupToShow.visibility = "visible";
+    popupToShow.currentSlide = 0;
 
 }
 
@@ -74,24 +87,26 @@ function movePopup(direction)
 
     currentPopup.textBoxes.forEach(textBox => {
 
-        if (direction == "left") 
+        if (direction == "left" && currentPopup.currentSlide > 0) 
         {
             textBox.x += width;
         }
-        else
+        else if (direction == "right" && currentPopup.currentSlide < currentPopup.numberOfSlides)
         {
             textBox.x -= width;
         }
     });
 
-    if (direction == "left") 
+    if (direction == "left" && currentPopup.currentSlide > 0) 
     {
         currentPopup.currentSlide--
     }
-    else
+    else if (direction == "right" && currentPopup.currentSlide < currentPopup.numberOfSlides)
     {
         currentPopup.currentSlide++
     }
+
+    console.log(currentPopup.currentSlide);
     //console.log(currentPopup.currentSlide);
     
 }
@@ -108,6 +123,7 @@ class Popup
         this.visibility = props.visibility || "hidden";
 
         this.currentSlide = 0;
+        this.numberOfSlides = props.numberOfSlides;
     }
 
     display() 

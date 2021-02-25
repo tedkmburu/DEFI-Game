@@ -1,4 +1,5 @@
 'use strict';
+let textClass;
 let spaceFont;
 let fontRegular;
 let backgroundImages;
@@ -52,7 +53,7 @@ let popupVisibile = false;
 
 let screens = [];
 let screenStack = ["Home"];
-let currentScreen = "Level Select";
+let currentScreen = "Home";
 
 let leaderboardData = {sort: "Score", group: 1, level: 1, section: "Global"};
 
@@ -68,7 +69,7 @@ const starRadius = 7;
 const starDiameter = starRadius * 2;
 const buttonRadius = 30;
 const portalRadius = 10;
-const postalDiameter = portalRadius * 2;
+const portalDiameter = portalRadius * 2;
 
 const fieldLinesPerCoulomb = 4;
 
@@ -128,5 +129,43 @@ class Icon
         // context.fillText('\f5ae', this.position.x, this.position.y);
     }
 }
+
+function createTextClasses()
+{
+    textClass = {
+        popUpTitle: {
+            font: fontRegular, 
+            fontSize: 24, 
+            visibility: "visible", 
+            align: CENTER, 
+            color: "black",
+            size: createVector(812, 50),
+        }, 
+        popUpBody: {
+            font: fontRegular, 
+            fontSize: 14, 
+            visibility: "visible", 
+            align: LEFT, 
+            color: "black",
+            size: createVector(350, 250),
+        }, 
+        loadingScreen: {
+            font: fontRegular, 
+            fontSize: 20, 
+            visibility: "visible", 
+            align: LEFT, 
+            color: "white",
+        },
+        credits: {
+            font: fontRegular, 
+            fontSize: 12, 
+            visibility: "visible", 
+            align: CENTER, 
+            color: "white",
+        }, 
+                   
+    }
+}
+
 
 // hey @everyone. I'm looking for volunteeers to test out a physics education game that Colleen's research group worked on over the summer. I'f your're interested in testing it out and giving us feedback, please DM me and we can find a time that works for both of us when you'll be able to test the game and I'll get your feedback over Zoom.

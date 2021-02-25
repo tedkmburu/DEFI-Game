@@ -221,16 +221,20 @@ class Button
     clicked()
     {
         let button = this;
-        // try
-        // {
-            sounds.click.play();
-            button.onClick();
-        // }
-        // catch(e)
-        // {
-        //     console.log(e);
-        //     console.log(button);
-        // }
+        if (button.visibility != "hidden") 
+        {
+            // try
+            // {
+                sounds.click.play();
+                button.onClick();
+            // }
+            // catch(e)
+            // {
+            //     console.log(e);
+            //     console.log(button);
+            // }
+        }
+        
 
         
     }

@@ -6,17 +6,12 @@ function preload()
     spaceFont = loadFont('fonts/Anurati.otf');
     fontRegular = loadFont('fonts/Helvetica.ttf');
 
-    backgroundImages = [
-        loadImage('images/background1.png'),
-        //  loadImage('images/background2.jpg'),
-        //   loadImage('images/background3.jpg'),
-        //    loadImage('images/background4.jpg')
-        ];
-    homeTrack = loadImage('images/homeTrack.png');
-    blueprint = loadImage('images/blueprint2.png');
+    
+    backgroundImage = loadImage('images/background1.png'); // this image is the background while in "play" mode
+    homeTrack = loadImage('images/homeTrack.png'); // this is the track that appears on the home screen
+    blueprint = loadImage('images/blueprint2.png'); // this image is the background while in "build" mode
 
-    helpScreen = loadImage('images/helpScreen.png');
-
+    // these are all the icons that the game will use. They are normal images. 
     icon = {
         redo: loadImage('images/redo.png'), 
         star: loadImage('images/star.png'), 
@@ -32,6 +27,7 @@ function preload()
         portal2: loadImage('images/portal (2).png'),
     };
 
+    // these are all the images that the tracks will use split into the "play" and "build" versions of the tracks
     trackImages = [ 
         {play: loadImage('images/tracks/lv1.png'), build: loadImage('images/tracks/lv1build.png')},
         {play: loadImage('images/tracks/lv2.png'), build: loadImage('images/tracks/lv2build.png')},
@@ -67,6 +63,8 @@ function preload()
     ]
 
     soundFormats('mp3');
+
+    // these are all the sounds that the game will use
     sounds = {
         click: loadSound('sounds/click (1).mp3'),
         lose: loadSound('sounds/hit.mp3'),
@@ -226,14 +224,22 @@ function draw() // this function runs every frame. It's used to show the screen 
 
 function updateUsername()
 {
-    //storeItem("userName") = userNameInput.value()
+    storeItem("userName", userNameInput.value());
 }
 
 function updateClassCode()
 {
-    //storeItem("classCode") = classCodeInput.value()
+    storeItem("classCode", classCodeInput.value());
 }
-
+function toggleColorBlindMode()
+{
+    colorBlindMode = !colorBlindMode;
+    storeItem("colorBlindMode", colorBlindMode);
+    
+    console.log("Colorblind Mode: " + colorBlindMode);
+    chargeColor = getColors();
+    textColor = getTextColors();
+}
 
 
 
@@ -582,10 +588,8 @@ function getUserData()
         storeItem('userStars', JSON.stringify(userStars));
         storeItem('userTimes', JSON.stringify(userTimes));
 
-        storeItem('userId', newDevice());
-        console.log("userId: ",getItem('userId'));
-        storeItem('userName', "Enter Name Here");
-        storeItem('classCode', "Enter Class Code Here");
+        newDevice();
+        
 
         totalStars = 0;
     }
@@ -776,8 +780,12 @@ function newDevice()
         return res.json();
     }).then((json) => {
         storeItem("userId", json.InsertedID);
-        console.log(json)
+        console.log("userId: ", getItem('userId'));
+        storeItem('userName', "Enter Name Here");
+        storeItem('classCode', "Enter Class Code Here");
     })
+
+    
 }
 
 

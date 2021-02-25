@@ -145,7 +145,15 @@ class Popup
 
         popup.buttons.forEach(button =>
         {
-            button.display();
+            if ((button.title == ">" && popup.currentSlide < popup.numberOfSlides-1) || (button.title == "<" && popup.currentSlide > 0) || (button.title != "<" && button.title != ">" )) 
+            {
+                button.visibility = "visible";
+                button.display();
+            }
+            else
+            {
+                button.visibility = "hidden";
+            }
         });
     } 
 }

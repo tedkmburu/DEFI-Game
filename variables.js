@@ -1,15 +1,16 @@
 'use strict';
-let textClass;
+
 let spaceFont;
 let fontRegular;
-let backgroundImages;
+
+let backgroundImage;
 let homeTrack;
 let blueprint;
 let icon;
-let sounds;
-let trackImages;
 
-let helpScreen;
+let sounds;
+
+let trackImages;
 
 let userNameInput;
 let classCodeInput;
@@ -18,20 +19,8 @@ let dataSent;
 let consoleLog = "";
 let mouseTapped;
 
-let currentLeaderboard;
-
-let hitEdge = false;
 let gameMode = "Build";
-let charges = [];
-let testCharges = [];
-let stars = [];
-let numberOfStarsCollected = 0;
-let fieldLines = [];
-let fieldLineArrows = [];
-let points = [];
-let track;
-let levels = [];
-let buttons = [];
+let hitEdge = false;
 let finished = false;
 let timeElapsed = 0;
 let currentFrameRate = 60;
@@ -39,14 +28,25 @@ let currentLevel = 0;
 let noPositiveCharges = true;
 let score = 100;
 let totalStars = 0;
-let allTracks = [];
 
-// let slider;
+let charges = [];
+let testCharges = [];
+let stars = [];
+let numberOfStarsCollected = 0;
+let fieldLines = [];
+let fieldLineArrows = [];
+let points = [];
+
+let allTracks = [];
+let track;
+let levels = [];
+let buttons = [];
+
 let windowSize;
 let scale;
 let onScrollBar = false;
 
-let colorBlindMode = false;
+let colorBlindMode = (localStorage.colorBlindMode != null) ? localStorage.colorBlindMode : false;
 
 let popups = []
 let popupVisibile = false;
@@ -55,6 +55,7 @@ let screens = [];
 let screenStack = ["Home"];
 let currentScreen = "Home";
 
+let currentLeaderboard;
 let leaderboardData = {sort: "Score", group: 1, level: 1, section: "Global"};
 
 let noiseValues = {x: 0, y: 0};
@@ -87,6 +88,7 @@ function getColors()
         return {positive: "#D32F2F", negative: "#303F9F", neutral: "#616161"};
     }
 }
+
 function getTextColors()
 {
     if (colorBlindMode) 
@@ -98,6 +100,7 @@ function getTextColors()
         return {positive: 255, negative: 255, neutral: 255};
     }
 }
+
 let chargeColor = getColors();
 let textColor = getTextColors();
 let testChargeColor = "#D32F2F";
@@ -129,6 +132,9 @@ class Icon
         // context.fillText('\f5ae', this.position.x, this.position.y);
     }
 }
+
+
+let textClass;
 
 function createTextClasses()
 {

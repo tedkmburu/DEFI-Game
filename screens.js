@@ -5,18 +5,18 @@ let leaderboardOffset = 0;
 let loadPercent = 0;
 
 
-function getScreen(screenName)  // this function gets the properties of the screen you want from the screens array
+function getScreen(screenName)  // this function returns the properties of the screen you want from the screens array
 {
     let screenIndex = screens.findIndex(x => x.name == screenName);
     return screens[screenIndex];
 }
 
-function getScreenIndex(screenName)  // this function gets the index of the screen you want from the screens array
+function getScreenIndex(screenName)  // this function returns the index of the screen you want from the screens array
 {
     return screens.findIndex(x => x.name == screenName);
 }
 
-function getButton(screenName, buttonTitle) // this function gets the properties of the button you want from the buttons array
+function getButton(screenName, buttonTitle) // this function returns the properties of the button you want from the buttons array
 {
     let screenIndex = screens.findIndex(x => x.name == screenName);
     let buttonIndex = screens[screenIndex].buttons.findIndex(x => x.title == buttonTitle);
@@ -24,7 +24,7 @@ function getButton(screenName, buttonTitle) // this function gets the properties
     return screens[screenIndex].buttons[buttonIndex];
 }
 
-function getButtonIndex(screenName, buttonTitle) // this function gets the index of the button you want from the buttons array
+function getButtonIndex(screenName, buttonTitle) // this function returns the index of the button you want from the buttons array
 {
     let screenIndex = screens.findIndex(x => x.name == screenName);
     
@@ -340,8 +340,8 @@ function tutorial()
         
     // pop();
 
-    let scaledHeight = windowWidth * (375 / 812);
-    image(helpScreen, 0, 0, width, scaledHeight);
+    // let scaledHeight = windowWidth * (375 / 812);
+    // image(helpScreen, 0, 0, width, scaledHeight);
 }
 
 
@@ -598,7 +598,7 @@ function displayScreen(screen)
     }
     else
     {
-        image(backgroundImages[0], 0, 0, width, height);
+        image(backgroundImage, 0, 0, width, height);
     }
 
     screen.display();
@@ -667,7 +667,11 @@ function navigateTo(screenToShow, backButton)
 
     if (screenToShow == "Level") 
     {
-        dataSent = false;    
+        dataSent = false;
+        if(track.level == 0 && JSON.parse(localStorage.userScores)[0] == 0)
+        {
+            showPopUp("Help");
+        }    
     }
     
     if (screenToShow == "Loading Screen") 
@@ -845,7 +849,7 @@ function createScreens()
                 new Button({x: 316, y: 150, width: 180, height: 45, title: "Change Username", onClick: function(){ displayUsernameInput() }     , shape: "Rect"  , bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}), 
                 new Button({x: 316, y: 200, width: 180, height: 45, title: "Enter Class Code", onClick: function(){ displayClassCodeInput() } , shape: "Rect"  , bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}),
                 new Button({x: 316, y: 300, width: 180, height: 45, title: "Reset Game Progress"  , onClick: function(){ resetGame() }, shape: "Rect"  , bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}), 
-                new Button({x: 316, y: 100, width: 180, height: 45, title: "Colorblind Mode", onClick: "Colorblind Mode", shape: "Rect"  , bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}),
+                new Button({x: 316, y: 100, width: 180, height: 45, title: "Colorblind Mode", onClick: function(){ toggleColorBlindMode(); }, shape: "Rect"  , bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}),
                 new Button({x: 316, y: 250, width: 180, height: 45, title: "Credits", onClick: function(){ navigateTo("Credits"); }, shape: "Rect"  , bgColor: chargeColor.positive, fontColor: "white", fontSize: 14})
                 ],
             textBoxes: [],

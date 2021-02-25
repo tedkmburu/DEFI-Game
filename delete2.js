@@ -11,7 +11,7 @@ function preload()
     spaceFont = loadFont('fonts/Anurati.otf');
     fontRegular = loadFont('fonts/Helvetica.ttf');
 
-    backgroundImages = [loadImage('images/background1.png'), loadImage('images/background2.jpg'), loadImage('images/background3.jpg'), loadImage('images/background4.jpg')];
+    backgroundImage = loadImage('images/background1.png');
     homeTrack = loadImage('images/homeTrack.png');
     blueprint = loadImage('images/blueprint.png');
 

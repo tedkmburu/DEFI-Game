@@ -20,18 +20,32 @@ class Star
   {
     let star = this;
     let position = this.position;
+
+    let rotateAngle = timeElapsed / 25;
     
     if (!star.collected)
     {
+        // push()
+        //   noStroke();
+        //   let color = "yellow";
+        //   fill(color)
+        //   ellipse(position.x - starRadius, position.y - starRadius, starDiameter, starDiameter);
+        // pop()
         push();
-        //let color = (gameMode == "Play")
-        let color = "yellow";
+        
 
-        fill(color);
-        noStroke();
+        
+        
         //ellipse(position.x, position.y, starDiameter, starDiameter);
-        image(icon.star, position.x - starRadius - 2, position.y - starRadius - 2, starDiameter + 4, starDiameter + 4)
+
+        translate(position.x - starRadius, position.y - starRadius);
+        rotate(rotateAngle);
+        //image(icon.portal2, -portalDiameter, -portalDiameter, portalDiameter * 2, portalDiameter * 2);
+
+        image(icon.star, -starRadius, -starRadius, starDiameter, starDiameter)
+        
         pop();
+        
     }
   }
   

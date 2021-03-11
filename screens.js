@@ -1,5 +1,3 @@
-'use strict';
-
 let levelSelectOffset = 0;
 let leaderboardOffset = 0;
 let loadPercent = 0;
@@ -106,22 +104,14 @@ function displayCreditsScreen() // this function is called every frame while on 
 
 function toggleLeaderboardSort()  // this function is called every time the button is hit to toggle the sorting of the leaderboard
 {
-    let screenIndex = screens.findIndex(x => x.name == "Leaderboard");
-    let screen = screens[screenIndex];
-    let SortButton;
-
-    if (leaderboardData.sort == "Score") 
+    if (leaderboardData.sort == "score") 
     {
-        leaderboardData.sort = "Time"
-        SortButton = getButtonIndex("Leaderboard", "Score")
+        leaderboardData.sort = "time"
     }
     else
     {
-        leaderboardData.sort = "Score"
-        SortButton = getButtonIndex("Leaderboard", "Time")
+        leaderboardData.sort = "score"
     }
-
-    screen.buttons[SortButton].title = leaderboardData.sort;
 }
 
 
@@ -134,45 +124,43 @@ function displayLeaderboardScreen()     // this function is called every frame w
 {
     push()
         noStroke()
-        fill("rgba(255, 255, 255, 0.25)");
-        rect(50 * scale.x, 25 * scale.y, 712 * scale.x, height);
-
         fill("rgba(0, 0, 0, 0.5)");
-        rect(50 * scale.x, 90 * scale.y, 712 * scale.x, height);
-    
-        textSize(14 * scale.x)
-        fill(255);
-        //text("Sort By:", 100 * scale.x, 47 * scale.y);
-        //text("Group:", 587 * scale.x, 47 * scale.y);
-        text("Level:", 687 * scale.x, 47 * scale.y);
+        rect(50 * scale.x, 0, 712 * scale.x, height);
 
-        let screenIndex = screens.findIndex(x => x.name == "Leaderboard");
-        let screen = screens[screenIndex];
-        let globalButton = getButtonIndex("Leaderboard", "Global")
-        let myClassButton = getButtonIndex("Leaderboard", "My Class")
+        // let screenIndex = screens.findIndex(x => x.name == "Leaderboard");
+        // let screen = screens[screenIndex];
+        // let globalButton = getButtonIndex("Leaderboard", "Global")
+        // let myClassButton = getButtonIndex("Leaderboard", "My Class")
 
-        if (leaderboardData.section == "Global") 
-        {
-            screen.buttons[globalButton].bgColor = "rgba(0,0,0,0.5)";
-            screen.buttons[myClassButton].bgColor = "rgba(0,0,0,0)";
-        }
-        else
-        {
-            screen.buttons[globalButton].bgColor = "rgba(0,0,0,0)";
-            screen.buttons[myClassButton].bgColor = "rgba(0,0,0,0.5)";
-        }
+        // if (leaderboardData.section == "Global") 
+        // {
+        //     screen.buttons[globalButton].bgColor = "rgba(0,0,0,0.5)";
+        //     screen.buttons[myClassButton].bgColor = "rgba(0,0,0,0)";
+        // }
+        // else
+        // {
+        //     screen.buttons[globalButton].bgColor = "rgba(0,0,0,0)";
+        //     screen.buttons[myClassButton].bgColor = "rgba(0,0,0,0.5)";
+        // }
         
         let y = 70 * scale.y;
         //let leaderboardArray = JSON.parse(currentLeaderboard);
 
         textSize(16 * scale.x)
 
+        
         for (let i = 0; i < currentLeaderboard.length; i++) 
         {
             //console.log(user);
-            let user = JSON.parse(currentLeaderboard[i]);
-            //console.log(currentLeaderboard[i]);
-            fill("rgba(255, 255, 255, 0.25)")
+            let stat = currentLeaderboard[i];
+
+            let studentName = stat.student_name;
+            let className = stat.class_name;
+
+            let attempt = stat.top_attempt;
+
+            
+            fill("rgba(255, 255, 255, 0.25)");
             noStroke();
             rect(75 * scale.x, y + leaderboardOffset, 662 * scale.x, 65 * scale.y);
 
@@ -181,18 +169,37 @@ function displayLeaderboardScreen()     // this function is called every frame w
             text((i + 1) + ".", 100 * scale.x, (y + 37.5 * scale.y) + leaderboardOffset);
 
             // name
-            text(user.id, 232 * scale.x, (y + 37.5  * scale.y) + leaderboardOffset);
+            text(studentName, 222 * scale.x, (y + 37.5  * scale.y) + leaderboardOffset);
 
             // class
-            text("IC PHYS 101", 406 * scale.x, (y + 37.5 * scale.y) + leaderboardOffset);
+            text(className, 406 * scale.x, (y + 37.5 * scale.y) + leaderboardOffset);
 
             // time
-            text(millisecondsToTimeFormat(user.time), 580 * scale.x, (y + 37.5 * scale.y) + leaderboardOffset); 
+            text(millisecondsToTimeFormat((attempt.time == null ? "N/A" : attempt.time)), 580 * scale.x, (y + 37.5 * scale.y) + leaderboardOffset); 
             
             // score
-            text(user.score, 682 * scale.x, (y + 37.5 * scale.y) + leaderboardOffset);   
+            text((attempt.score == null ? "N/A" : attempt.score), 682 * scale.x, (y + 37.5 * scale.y) + leaderboardOffset);   
             
             y += 75 * scale.y;
+        }
+
+        noStroke()
+        fill("rgba(0, 0, 0, 0.75)");
+        rect(0, 0, width, 50 * scale.y);
+    
+        textSize(16 * scale.x)
+        fill(255);
+        // let sortByText = (leaderboardData.sort == "time") ? "Time" : "Score"
+        // text("Sorting By: " + sortByText, 160 * scale.x, 33 * scale.y);
+        //text("Group:", 587 * scale.x, 47 * scale.y);
+        text("Level: " + leaderboardData.level, 620 * scale.x, 33 * scale.y);
+
+
+        if (currentLeaderboard.length == 0) 
+        {
+            textSize(16 * scale.x)
+            fill(255);
+            text("No Data to Display", width/2, height/2);
         }
     pop()
 }
@@ -209,14 +216,26 @@ function displayLeaderboardScreen()     // this function is called every frame w
 
 function displayUsernameInput() 
 {
+    userNameInput.position(316 * scale.x, 150 * scale.y);
+    classCodeInput.position(316 * scale.x, 200 * scale.y);
+
     userNameInput.style("visibility", "visible");
+    classCodeInput.style("visibility", "hidden");
+}
+
+function hideInputs()
+{
+    userNameInput.style("visibility", "hidden");
     classCodeInput.style("visibility", "hidden");
 }
 
 function displayClassCodeInput()
 {
-    userNameInput.style("visibility", "hidden");
-    classCodeInput.style("visibility", "visible");
+    // userNameInput.position(316 * scale.x, 150 * scale.y);
+    // classCodeInput.position(316 * scale.x, 200 * scale.y);
+
+    // userNameInput.style("visibility", "hidden");
+    // classCodeInput.style("visibility", "visible");
 }
 
 
@@ -353,9 +372,10 @@ function displayLevelScreen()
 {
     displayTrack();
     displayFieldLines();
-    displayStars();
+    
     displayTrash();
     displayCharges();
+    displayStars();
     //displaySlider();
     displayTestCharges();
     displayPortals();
@@ -414,8 +434,14 @@ function displayLevelScreen()
                 totalStars += starsAdd;
             })
 
-        sounds.victory.play();
-        navigateTo("Level Complete");
+        
+        setTimeout(function(){ navigateTo("Level Complete"); }, 3500);
+        if (playSounds && finishedSoundsPlaying == false) 
+        {
+            sounds.victory.play();
+            finishedSoundsPlaying = true
+        }
+        // console.log("victory");
     }
     else
     {
@@ -456,31 +482,34 @@ function displayLevelCompleteScreen()
     }
     score = Math.round(score);
 
-    
-    let starsStored = JSON.parse(getItem("userStars"));
-    if(starsStored[currentLevel] < numberOfStarsCollected)
-    {
-        starsStored[currentLevel] = numberOfStarsCollected;
-        storeItem('userStars', JSON.stringify(starsStored));
-    }
-
-    let timesStored = JSON.parse(getItem("userTimes"));
-    if(timesStored[currentLevel] > levelTime || timesStored[currentLevel] == 0)
-    {
-        timesStored[currentLevel] = Math.round(levelTime);
-        console.log(timesStored[currentLevel]);
-        storeItem('userTimes', JSON.stringify(timesStored));
-    }
-
-    let scoresStored = JSON.parse(getItem("userScores"));
-    if(scoresStored[currentLevel] < score)
-    {
-        scoresStored[currentLevel] = score;
-        storeItem('userScores', JSON.stringify(scoresStored));
-    }
 
     if (!dataSent) 
     {
+        let starsStored = JSON.parse(getItem("userStars"));
+        if(starsStored[currentLevel] < numberOfStarsCollected)
+        {
+            starsStored[currentLevel] = numberOfStarsCollected;
+            storeItem('userStars', JSON.stringify(starsStored));
+        }
+
+        let timesStored = JSON.parse(getItem("userTimes"));
+        if(timesStored[currentLevel] > levelTime || timesStored[currentLevel] == 0)
+        {
+            timesStored[currentLevel] = Math.round(levelTime);
+            // console.log("New High Score: " + timesStored[currentLevel]);
+            storeItem('userTimes', JSON.stringify(timesStored));
+        }
+
+        let scoresStored = JSON.parse(getItem("userScores"));
+        if(scoresStored[currentLevel] < score)
+        {
+            scoresStored[currentLevel] = score;
+            storeItem('userScores', JSON.stringify(scoresStored));
+        }
+
+
+
+
         sendScore({level: 1, group: currentLevel, time: Math.round(timeElapsed), stars: numberOfStarsCollected, score: score, userId: getItem("userId")})
     }
     
@@ -664,6 +693,8 @@ function displayScreen(screen)
 
 function navigateTo(screenToShow, backButton)
 {
+    sounds.victory.stop();
+    finishedSoundsPlaying = false;
 
     if (screenToShow == "Level") 
     {
@@ -679,8 +710,23 @@ function navigateTo(screenToShow, backButton)
         let screenIndex = screens.findIndex(x => x.name == "Loading Screen");
         let screen = screens[screenIndex];
         screen.title = "Track " + (currentLevel + 1)
-        console.log(screen.title);
+        // console.log(screen.title);
     }
+
+    if (screenToShow == "Leaderboard") 
+    {
+        if (currentScreen == "Level Complete") 
+        {
+            leaderboardData.level = currentLevel + 1;
+        }
+        else
+        {
+            leaderboardData.level = 1;
+        }
+        updateLeaderBoard();
+    }
+
+
 
     charges.forEach(charge => 
     {
@@ -689,14 +735,32 @@ function navigateTo(screenToShow, backButton)
     });
     charges = []
 
+
+
+
+
     let allStars = JSON.parse(getItem("userStars"))
     totalStars = 0;
-
     allStars.forEach(starsAdd =>
     {
         totalStars += starsAdd;
     })
+
+    if (screenToShow == "Level Select") 
+    {
+        getScreen("Level Select").title = totalStars + "/45";
+    }
+
+
+
+
+
+    gameMode = "Build";
+
+    //title: totalStars + "/45",
     
+
+
 
     screens.forEach(screen => {
         if (screen.name != screenToShow) 
@@ -710,7 +774,7 @@ function navigateTo(screenToShow, backButton)
     });
     currentScreen = screenToShow;
 
-    if (!backButton && screenToShow != "Level Complete") 
+    if (!backButton) 
     {
         screenStack.push(screenToShow);
     }
@@ -845,12 +909,22 @@ function createScreens()
             titleFontSize: 24,
             visibility: "hidden", 
             buttons: [
-                new Button({x: 15 , y: 10 , width: 30 , height: 30, title: "<"              , onClick: function(){ navigateBack() }, shape: "Back", bgColor: "white"             , fontColor: "black", fontSize: 14}), 
-                new Button({x: 316, y: 150, width: 180, height: 45, title: "Change Username", onClick: function(){ displayUsernameInput() }     , shape: "Rect"  , bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}), 
-                new Button({x: 316, y: 200, width: 180, height: 45, title: "Enter Class Code", onClick: function(){ displayClassCodeInput() } , shape: "Rect"  , bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}),
-                new Button({x: 316, y: 300, width: 180, height: 45, title: "Reset Game Progress"  , onClick: function(){ resetGame() }, shape: "Rect"  , bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}), 
-                new Button({x: 316, y: 100, width: 180, height: 45, title: "Colorblind Mode", onClick: function(){ toggleColorBlindMode(); }, shape: "Rect"  , bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}),
-                new Button({x: 316, y: 250, width: 180, height: 45, title: "Credits", onClick: function(){ navigateTo("Credits"); }, shape: "Rect"  , bgColor: chargeColor.positive, fontColor: "white", fontSize: 14})
+                new Button({x: 15 , y: 10 , width: 30 , height: 30, title: "<"              , onClick: function(){ navigateBack(); updateLeaderBoard(); }, shape: "Back", bgColor: "white"             , fontColor: "black", fontSize: 14}), 
+
+                new Button({x: 316, y: 100, width: 135, height: 45, title: "Colorblind Mode", onClick: function(){ toggleColorBlindMode(); }, shape: "Rect"  , bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}),
+                new Button({x: 451, y: 100, width: 45 , height: 45, title: (colorBlindMode == true) ? "On": "Off", onClick: function(){ toggleColorBlindMode(); }, shape: "Rect"  , bgColor: "black", fontColor: "white", fontSize: 14}),
+
+                new Button({x: 451, y: 150, width: 45 , height: 45, title: (playSounds == true) ? "On": "Off" , onClick: function(){ togglePlaySounds() }, shape: "Rect", bgColor: "black"             , fontColor: "white", fontSize: 14}), 
+                new Button({x: 316, y: 150, width: 135, height: 45, title: "Sound", onClick: function(){ togglePlaySounds() }, shape: "Rect"  , bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}),
+
+                new Button({x: 316, y: 200, width: 180, height: 45, title: "Change Username", onClick: function(){ showPopUp("username") }     , shape: "Rect"  , bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}), 
+                // new Button({x: 316, y: 200, width: 180, height: 45, title: "Enter Class Code", onClick: function(){ displayClassCodeInput() } , shape: "Rect"  , bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}),
+                new Button({x: 316, y: 250, width: 180, height: 45, title: "Credits", onClick: function(){ navigateTo("Credits"); }, shape: "Rect"  , bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}),
+                new Button({x: 316, y: 300, width: 180, height: 45, title: "Reset Game Progress"  , onClick: function(){ showPopUp("gameProgress") }, shape: "Rect"  , bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}), 
+
+
+
+                
                 ],
             textBoxes: [],
             }),
@@ -909,12 +983,12 @@ function createScreens()
             titleFontSize: 24,
             visibility: "hidden", 
             buttons: [
-                new Button({x:  15, y: 10, width:  30, height: 30, title: "<", onClick: function(){ navigateBack() }, shape: "Back", bgColor: "white", fontColor: "black", fontSize: 14}), 
-                new Button({x: 130, y: 30, width: 100, height: 25, title: "Score"    , onClick: function(){ toggleLeaderboardSort(); }, shape: "Rect", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}),
-                new Button({x:  50, y: 60, width: 356, height: 30, title: "Global"    , onClick: function(){ leaderboardData.section = "Global"; updateLeaderBoard(); }, shape: "Rect", bgColor: "rgba(0,0,0,0.5)", fontColor: "white", fontSize: 14}),
-                new Button({x: 406, y: 60, width: 356, height: 30, title: "My Class"    , onClick: function(){ leaderboardData.section = "My Class"; updateLeaderBoard(); }, shape: "Rect", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 14}),
-                new Button({x: 612, y: 30, width:  40, height: 25, title: "1"    , onClick: "Levels", shape: "Rect", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}),
-                new Button({x: 712, y: 30, width:  40, height: 25, title: leaderboardData.level , onClick: function(){ increaseLeaderboardLevel() }, shape: "Rect", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14})
+                new Button({x:  15, y: 10, width:  30, height: 30, title: "<", onClick: function(){ navigateBack()  }, shape: "Back", bgColor: "white", fontColor: "black", fontSize: 14}), 
+                // new Button({x: 230, y: 15, width: 30, height: 25, title: ">", onClick: function(){ toggleLeaderboardSort(); updateLeaderBoard(); }, shape: "Rect", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}),
+                // new Button({x:  50, y: 60, width: 356, height: 30, title: "Global"    , onClick: function(){ leaderboardData.section = "Global"; updateLeaderBoard(); }, shape: "Rect", bgColor: "rgba(0,0,0,0.5)", fontColor: "white", fontSize: 14}),
+                // new Button({x: 406, y: 60, width: 356, height: 30, title: "My Class"    , onClick: function(){ leaderboardData.section = "My Class"; updateLeaderBoard(); }, shape: "Rect", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 14}),
+                new Button({x: 552, y: 15, width:  30, height: 25, title: "<" , onClick: function(){ decreaseLeaderboardLevel(); updateLeaderBoard(); }, shape: "Rect", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}),
+                new Button({x: 652, y: 15, width:  30, height: 25, title: ">" , onClick: function(){ increaseLeaderboardLevel(); updateLeaderBoard(); }, shape: "Rect", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14})
                 ],
             textBoxes: [],
             functions: function(){ displayLeaderboardScreen() },
@@ -931,7 +1005,7 @@ function createScreens()
             titleFontSize: 24,
             visibility: "hidden", 
             buttons: [
-                new Button({x:  15, y: 10, width:  30, height: 30, title: "<", onClick: function(){ navigateBack() }, shape: "Back", bgColor: "white", fontColor: "black", fontSize: 14}), 
+                new Button({x:  15, y: 10, width:  30, height: 30, title: "<", onClick: function(){ navigateTo("Level Select"); }, shape: "Back", bgColor: "white", fontColor: "black", fontSize: 14}), 
                 new Button({x: 692, y: 285, width: 100, height: 50, title: "Start"    , onClick: function(){ navigateTo("Level");  }, shape: "Rect", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14, visibility: "hidden"})
                 ],
             textBoxes: [
@@ -994,7 +1068,7 @@ function createScreens()
                 new Button({x: 480, y: 300, width: 60, height: 40, title: "Replay", onClick: function(){ pressRedo(); }        , shape: "Oval", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}), 
                 new Button({x: 600, y: 300, width: 60, height: 40, title: "Menu", onClick: function(){ navigateTo("Level Select"); }, shape: "Oval", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}), 
                 new Button({x: 720, y: 300, width: 60, height: 40, title: "Next", onClick: function(){ pressNext(); }        , shape: "Oval", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}),
-                new Button({x: 140, y: 300 + 10, width: 100, height: 40, title: "Leaderboard", onClick: function(){ navigateTo("Coming Soon"); } , shape: "Rect", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}), 
+                new Button({x: 140, y: 300 + 10, width: 100, height: 40, title: "Leaderboard", onClick: function(){ navigateTo("Leaderboard"); } , shape: "Rect", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}), 
                 
                 ],
             textBoxes: [],

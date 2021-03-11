@@ -1,4 +1,3 @@
-// 'use strict';
 
 // function getFieldLinePoints(x, y, baseCharge)
 // {
@@ -216,17 +215,18 @@
 
 
 
-// var points = [];
-// var fieldLines = [];
-// var fieldLineArrows = [];
-// var fieldLinesPerCoulomb = 4;
-// var prevoiusFinalVector, finalVector;
-// var noPositiveCharges = true;
-let prevoiusFinalVector, finalVector;
+// let points = [];
+// let fieldLines = [];
+// let fieldLineArrows = [];
+// let fieldLinesPerCoulomb = 4;
+// let prevoiusFinalVector, finalVector;
+// let noPositiveCharges = true;
+let prevoiusFinalVector = null;
+let finalVector;
 function getFieldLinePoints(x, y, lineOrigin)
 {
   let chargeSize = chargeRadius;
-  var position = createVector(x,y);
+  let position = createVector(x,y);
   forceVector = netForceAtPoint(position);
 
   forceVector.setMag(chargeSize/2);
@@ -248,37 +248,38 @@ function getFieldLinePoints(x, y, lineOrigin)
   //   forceVector.mult(-1);
   // }
 
-  var differenceInVectorAngles = null;
-  var mag;
+  let differenceInVectorAngles = null;
+  let mag;
   if (prevoiusFinalVector != null)
   {
-    var minVectorSize = 3;
-    var maxVectorSize = chargeSize/2;
+    let minVectorSize = 3;
+    let maxVectorSize = chargeSize/2;
 
     //differenceInVectorAngles = Math.abs(degrees(prevoiusFinalVector.angleBetween(forceVector)));
     differenceInVectorAngles = Math.abs(degrees(prevoiusFinalVector.angleBetween(forceVector)));
 
     mag = maxVectorSize * Math.pow(0.97, differenceInVectorAngles);
-    forceVector.setMag(constrain(mag, minVectorSize ,maxVectorSize));
+    mag = constrain(mag, minVectorSize ,maxVectorSize)
+    forceVector.setMag(mag);
   }
 
-  var forceVectorFinalPosition = p5.Vector.add(forceVector, position);
+  let forceVectorFinalPosition = p5.Vector.add(forceVector, position);
 
-  var vectorToChargeDistance = p5.Vector.dist(forceVectorFinalPosition, charges[0].position);
+  let vectorToChargeDistance = p5.Vector.dist(forceVectorFinalPosition, charges[0].position);
 
-  var startingPointIsInsideNegativeCharge = false;
-  for (var i = 0; i < charges.length; i++)
+  let startingPointIsInsideNegativeCharge = false;
+  for (let i = 0; i < charges.length; i++)
   {
 
-    var distanceFromVectorToCharge = p5.Vector.dist(position, charges[i].position);
+    let distanceFromVectorToCharge = p5.Vector.dist(position, charges[i].position);
     //if (distanceFromVectorToCharge < (chargeSize/2) && charges[i].charge != 0 && i != lineOrigin.charge)
-    if (distanceFromVectorToCharge < (chargeSize/2) && charges[i].charge != 0)
+    if (distanceFromVectorToCharge < (chargeSize) && charges[i].charge != 0)
     {
       startingPointIsInsideNegativeCharge = true;
     }
   }
 
-  var windowSize = createVector(width, height).mag();
+  let windowSize = createVector(width, height).mag();
 
   //if (!startingPointIsInsideNegativeCharge && vectorToChargeDistance < windowSize && differenceInVectorAngles >= 1 && differenceInVectorAngles <= 175)
   if (!startingPointIsInsideNegativeCharge && vectorToChargeDistance < windowSize)
@@ -297,18 +298,18 @@ function getFieldLinePoints(x, y, lineOrigin)
   {
     points.unshift(charges[lineOrigin.charge].position);
 
-    var chargeDistances = [];
-    for (var i = 0; i < charges.length; i++)
+    let chargeDistances = [];
+    for (let i = 0; i < charges.length; i++)
     {
       chargeDistances.push(charges[i].position.dist(points[points.length - 1]));
     }
-    var closestChargeDistance = Math.min(...chargeDistances);
+    let closestChargeDistance = Math.min(...chargeDistances);
 
-    for (var i = 0; i < chargeDistances.length; i++)
+    for (let i = 0; i < chargeDistances.length; i++)
     {
       if (chargeDistances[i] == closestChargeDistance && closestChargeDistance < 100)
       {
-        var halfWayPoint = points[points.length - 1].add(charges[i].position).div(2);
+        let halfWayPoint = points[points.length - 1].add(charges[i].position).div(2);
         points.push(halfWayPoint);
 
         halfWayPoint = points[points.length - 1].add(charges[i].position).div(2);
@@ -328,16 +329,16 @@ function getFieldLinePoints(x, y, lineOrigin)
 function createFieldLines()
 {
   fieldLines = [];
-  for (var i = 0; i < charges.length; i++)
+  for (let i = 0; i < charges.length; i++)
   {
     fieldLines[i] = [];
 
-    var radius = 15;
-    var times = Math.abs(charges[i].charge) * fieldLinesPerCoulomb;
-    var origin = charges[i].position;
+    let radius = 15;
+    let times = Math.abs(charges[i].charge) * fieldLinesPerCoulomb;
+    let origin = charges[i].position;
 
     let point = createVector(radius,radius);
-    for (var a = 0; a < times; a++)
+    for (let a = 0; a < times; a++)
     {
       getFieldLinePoints(point.x + origin.x, point.y + origin.y, {charge: i, origin: a});
 
@@ -347,16 +348,16 @@ function createFieldLines()
   }
 
   fieldLineArrows = [];
-  for (var i = 0; i < fieldLines.length; i++)
+  for (let i = 0; i < fieldLines.length; i++)
   {
-    for (var a = 0; a < fieldLines[i].length; a++)
+    for (let a = 0; a < fieldLines[i].length; a++)
     {
       if (fieldLines[i][a] != null)
       {
-        for (var s = 25; s < fieldLines[i][a].fieldLinePoints.length; s+=25)
+        for (let s = 25; s < fieldLines[i][a].fieldLinePoints.length; s+=25)
         {
-          var arrowPosition = fieldLines[i][a].fieldLinePoints[s];
-          var arrowAngle;
+          let arrowPosition = fieldLines[i][a].fieldLinePoints[s];
+          let arrowAngle;
 
           if (charges[i].charge > 0) 
           {
@@ -385,9 +386,9 @@ function createFieldLines()
 function displayFieldLines()
 {
   //onsole.log("asdf");
-  for (var i = 0; i < fieldLines.length; i++)
+  for (let i = 0; i < fieldLines.length; i++)
   {
-    for (var a = 0; a < fieldLines[i].length; a++)
+    for (let a = 0; a < fieldLines[i].length; a++)
     {
       try
       {
@@ -409,7 +410,7 @@ function displayFieldLines()
 
     }
   }
-  for (var i = 0; i < fieldLineArrows.length; i++)
+  for (let i = 0; i < fieldLineArrows.length; i++)
   {
     fieldLineArrows[i].display();
   }
@@ -431,7 +432,7 @@ class FieldLine
         //beginShape(POINTS);
           noFill();
           stroke(255);
-          for (var i = 0; i < this.fieldLinePoints.length; i++)
+          for (let i = 0; i < this.fieldLinePoints.length; i++)
           {
             curveVertex(this.fieldLinePoints[i].x, this.fieldLinePoints[i].y);
           }

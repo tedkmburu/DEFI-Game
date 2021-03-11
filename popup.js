@@ -19,34 +19,92 @@ function createPopups()
                 new TextBox({x: 150 + (812 * 3), y: 130, class: textClass.popUpBody, text: "Electric fields will only exert a force on test charge in “Play” mode.\n\nAll test charges are positive so they will be pushed away from positive charges and pulled towards negative charges. "}), 
             ],
             images: [
-                //image(icon.star, starPosition.x - starRadius - 2 + imageX, starPosition.y - starRadius - 2 + imageY, starDiameter + 4, starDiameter + 4)
-            
+                // popUpImage = {
+                //     portal: loadImage('images/popups/popup (1).png'), 
+                //     multipleTestCharges: loadImage('images/popups/popup (2).png'), 
+                //     gameMode: loadImage('images/popups/popup (3).png'), 
+                //     slider: loadImage('images/popups/popup (4).png'), 
+                //     eField: loadImage('images/popups/popup (5).png'), 
+                // }
+                new MyImage({image: popUpImage.gameMode, x: 450, y: 150, size: createVector(220, (220 * (384/600)))}),
+                new MyImage({image: popUpImage.track, x: 1260, y: 150, size: createVector(230, (230 * (309/600)))}),
+                new MyImage({image: popUpImage.slider, x: 2100, y: 130, size: createVector(160, (160 * (600/537)))}),
+                new MyImage({image: popUpImage.eField, x: 2900, y: 130, size: createVector(200, (200 * (537/600)))}),
             ],
             buttons: [
                 new Button({x: 730, y: 60 , width: 20, height: 20, title: "x" , onClick: function(){ closePopup()      }, shape: "Rect", bgColor: "black", fontColor: "white", fontSize: 14}), 
                 new Button({x: 80 , y: 190, width: 20, height: 20, title: "<" , onClick: function(){ movePopup("left") }, shape: "Rect", bgColor: "black", fontColor: "white", fontSize: 14}), 
                 new Button({x: 710, y: 190, width: 20, height: 20, title: ">" , onClick: function(){ movePopup("right")}, shape: "Rect", bgColor: "black", fontColor: "white", fontSize: 14}), 
-                
-            ]
+            ],
+            // functions: {},
         }),
 
         new Popup({
-            name: "Help2",
+            name: "New User",
+            numberOfSlides: 1,
             size: createVector(700,300),
             textBoxes: [
-                new TextBox({x: 501, y: 110, id: "title", text: "Objectives: ", font: fontRegular, fontSize: 20, color: "black", visibility: "visible", align: LEFT}), 
-                new TextBox({x: 501, y: 150, id: "hint1", text: "1. Collect all the stars  [0/3]", font: fontRegular, fontSize: 20, color: "black", visibility: "visible", align: LEFT}), 
-                new TextBox({x: 501, y: 180, id: "hint2", text: "2. Finish as fast as possible", font: fontRegular, fontSize: 20, color: "black", visibility: "visible", align: LEFT}), 
-                new TextBox({x: 501, y: 210, id: "hint3", text: "3. Stay inside the track", font: fontRegular, fontSize: 20, color: "black", visibility: "visible", align: LEFT}),
+                new TextBox({x: 406, y: 110, id: "title", text: "Welcome to D.E.F.I. \n Please enter your username below.", font: fontRegular, fontSize: 20, color: "black", visibility: "visible", align: CENTER}), 
             ],
             buttons: [
-                new Button({x: 60 , y: 60 , width: 20 , height: 20, title: "x" , onClick: function(){ closePopup() }, shape: "Rect", bgColor: "black"             , fontColor: "white", fontSize: 14}), 
-                new Button({x: 60 , y: 120 , width: 20 , height: 20, title: ">" , onClick: function(){ closePopup() }, shape: "Rect", bgColor: "black"             , fontColor: "white", fontSize: 14}), 
-                new Button({x: 600 , y: 120 , width: 20 , height: 20, title: "<" , onClick: function(){ closePopup() }, shape: "Rect", bgColor: "black"             , fontColor: "white", fontSize: 14}), 
-                
-            ]
+                new Button({x: 354, y: 300 , width: 100, height: 30, title: "Save" , onClick: function(){ closePopup(); newDevice();  }, shape: "Rect", bgColor: "rgb(108,164,104)", fontColor: "white", fontSize: 14}), 
+                new Button({x: 80 , y: 190, width: 20, height: 20, title: "<" , onClick: function(){ movePopup("left") }, shape: "Rect", bgColor: "black", fontColor: "white", fontSize: 14}), 
+                new Button({x: 710, y: 190, width: 20, height: 20, title: ">" , onClick: function(){ movePopup("right")}, shape: "Rect", bgColor: "black", fontColor: "white", fontSize: 14}), 
+            ],
+            images: [
+
+            ],
+            functions: function(){ newUserPopUp() },
+        }),
+
+        new Popup({
+            name: "username",
+            numberOfSlides: 1,
+            size: createVector(700,300),
+            textBoxes: [
+                new TextBox({x: 406, y: 110, id: "title", text: "Please enter your new username below.", font: fontRegular, fontSize: 20, color: "black", visibility: "visible", align: CENTER}), 
+            ],
+            buttons: [
+                new Button({x: 516, y: 150 , width: 100, height: 45, title: "Save" , onClick: function(){ closePopup(); updateUsernameOnServer(); }, shape: "Rect", bgColor: "rgb(108,164,104)", fontColor: "white", fontSize: 14}), 
+                new Button({x: 80 , y: 190, width: 20, height: 20, title: "<" , onClick: function(){ movePopup("left") }, shape: "Rect", bgColor: "black", fontColor: "white", fontSize: 14}), 
+                new Button({x: 710, y: 190, width: 20, height: 20, title: ">" , onClick: function(){ movePopup("right")}, shape: "Rect", bgColor: "black", fontColor: "white", fontSize: 14}), 
+            ],
+            images: [
+
+            ],
+            functions: function(){ newUserPopUp() },
+        }),
+
+        new Popup({
+            name: "gameProgress",
+            numberOfSlides: 1,
+            size: createVector(700,300),
+            textBoxes: [
+                new TextBox({x: 406, y: 210, id: "title", text: "Are you sure you want to reset all of your progress?", font: fontRegular, fontSize: 20, color: "black", visibility: "visible", align: CENTER}), 
+            ],
+            buttons: [
+                new Button({x: 730, y: 60 , width: 20, height: 20, title: "x" , onClick: function(){ closePopup()      }, shape: "Rect", bgColor: "black", fontColor: "white", fontSize: 14}), 
+                //new Button({x: 304, y: 300 , width: 100, height: 30, title: "No" , onClick: function(){ closePopup()  }, shape: "Rect", bgColor: "White", fontColor: "black", fontSize: 14}), 
+                new Button({x: 366, y: 300 , width: 100, height: 30, title: "Yes" , onClick: function(){ closePopup(); resetGame(); location.reload();  }, shape: "Rect", bgColor: "rgb(255,0,0)", fontColor: "white", fontSize: 14}), 
+            ],
+            images: [
+
+            ],
+            // functions: function(){ newUserPopUp() },
         }),
     ]
+}
+
+function newUserPopUp() 
+{
+    if (popupVisibile) 
+    {
+        userNameInput.position(316 * scale.x, 150 * scale.y);
+        // classCodeInput.position(316 * scale.x, 200 * scale.y);
+        userNameInput.style("visibility", "visible");
+        // classCodeInput.style("visibility", "visible");
+    }
+    
 }
 
 function showPopUp(name)
@@ -76,6 +134,7 @@ function closePopup()
     popupVisibile = false;
     })
 
+    hideInputs();
     createPopups()
 }
 
@@ -97,6 +156,18 @@ function movePopup(direction)
         }
     });
 
+    currentPopup.images.forEach(image => {
+
+        if (direction == "left" && currentPopup.currentSlide > 0) 
+        {
+            image.x += width;
+        }
+        else if (direction == "right" && currentPopup.currentSlide < currentPopup.numberOfSlides)
+        {
+            image.x -= width;
+        }
+    });
+
     if (direction == "left" && currentPopup.currentSlide > 0) 
     {
         currentPopup.currentSlide--
@@ -107,8 +178,6 @@ function movePopup(direction)
     }
 
     console.log(currentPopup.currentSlide);
-    //console.log(currentPopup.currentSlide);
-    
 }
 
 
@@ -117,9 +186,11 @@ class Popup
     constructor(props)
     {
         this.name = props.name;
-        this.size = props.size;
+        this.size = createVector(props.size.x * scale.x, props.size.y * scale.y);
         this.textBoxes = props.textBoxes;
         this.buttons = props.buttons;
+        this.functions = props.functions;
+        this.images = props.images;
         this.visibility = props.visibility || "hidden";
 
         this.currentSlide = 0;
@@ -134,18 +205,24 @@ class Popup
             rect(0, 0, width, height);
 
             fill(255);
-            let popupX = (width - (popup.size.x * scale.x)) / 2;
-            let popupY = (height - (popup.size.y * scale.y)) / 2;
-            rect(popupX, popupY, popup.size.x * scale.x, popup.size.y * scale.y)
+            let popupX = (width - popup.size.x) / 2;
+            let popupY = (height - popup.size.y) / 2;
+            rect(popupX, popupY, popup.size.x, popup.size.y)
         pop()
 
         popup.textBoxes.forEach(textBox => {
             textBox.display();
         });
 
+        popup.images.forEach(myImage => {
+            myImage.display();
+        });
+
         popup.buttons.forEach(button =>
         {
-            if ((button.title == ">" && popup.currentSlide < popup.numberOfSlides-1) || (button.title == "<" && popup.currentSlide > 0) || (button.title != "<" && button.title != ">" )) 
+            if ((button.title == ">" && popup.currentSlide < popup.numberOfSlides-1) || 
+            (button.title == "<" && popup.currentSlide > 0) || 
+            (button.title != "<" && button.title != ">" )) 
             {
                 button.visibility = "visible";
                 button.display();
@@ -155,5 +232,10 @@ class Popup
                 button.visibility = "hidden";
             }
         });
+
+        if (popup.functions != null) 
+        {
+            popup.functions();
+        }
     } 
 }

@@ -99,7 +99,7 @@ class Track
           let x = this.points[i].x;
           let y = this.points[i].y;
 
-          vertex(x, y);
+          //vertex(x, y);
         }
       endShape();
 
@@ -161,8 +161,11 @@ function changeTrack(i)
 
   testCharges = [];
   level.testChargeStartingPositions.forEach((startingPosition, j) => {
-    testCharges[j] = new TestCharge(startingPosition, startingPosition, testChargeCharge);
+    let thisTestChargeCharge = (startingPosition.z != 0) ? testChargeCharge * -1 : testChargeCharge;
+
+    testCharges[j] = new TestCharge(startingPosition, startingPosition, thisTestChargeCharge);
   })
+
   
 
   stars = [];
@@ -171,7 +174,6 @@ function changeTrack(i)
       stars.push(new Star( p5.Vector.add(starPosition, level.trackOffset)));
   });
 
-  gameMode = "Build";
   timeElapsed = 0;  // sets elapsed time back down to 0. This is the time seen at the top of the "Level" screen
 }
 

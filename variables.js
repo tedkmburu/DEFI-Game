@@ -1,4 +1,3 @@
-'use strict';
 
 let spaceFont;
 let fontRegular;
@@ -7,8 +6,10 @@ let backgroundImage;
 let homeTrack;
 let blueprint;
 let icon;
+let popUpImage;
 
 let sounds;
+let playSounds = (localStorage.playSounds != null) ? (localStorage.playSounds == "true") : true;
 
 let trackImages;
 
@@ -16,12 +17,15 @@ let userNameInput;
 let classCodeInput;
 
 let dataSent;
+let connectingToServer = false;
+
 let consoleLog = "";
 let mouseTapped;
 
 let gameMode = "Build";
 let hitEdge = false;
 let finished = false;
+let finishedSoundsPlaying = false;
 let timeElapsed = 0;
 let currentFrameRate = 60;
 let currentLevel = 0;
@@ -46,7 +50,7 @@ let windowSize;
 let scale;
 let onScrollBar = false;
 
-let colorBlindMode = (localStorage.colorBlindMode != null) ? localStorage.colorBlindMode : false;
+let colorBlindMode = (localStorage.colorBlindMode != null) ? (localStorage.colorBlindMode == "true") : false;
 
 let popups = []
 let popupVisibile = false;
@@ -56,7 +60,7 @@ let screenStack = ["Home"];
 let currentScreen = "Home";
 
 let currentLeaderboard;
-let leaderboardData = {sort: "Score", group: 1, level: 1, section: "Global"};
+let leaderboardData = {sort: "score", group: 1, level: 1, section: "Global"};
 
 let noiseValues = {x: 0, y: 0};
 
@@ -135,6 +139,7 @@ class Icon
 
 
 let textClass;
+let buttonClass;
 
 function createTextClasses()
 {
@@ -153,7 +158,7 @@ function createTextClasses()
             visibility: "visible", 
             align: LEFT, 
             color: "black",
-            size: createVector(350, 250),
+            size: createVector(300, 300),
         }, 
         loadingScreen: {
             font: fontRegular, 
@@ -169,6 +174,36 @@ function createTextClasses()
             align: CENTER, 
             color: "white",
         }, 
+                   
+    }
+}
+
+function createButtonClasses()
+{
+    buttonClass = {
+        back: {
+            font: fontRegular, 
+            fontSize: 24, 
+            visibility: "visible", 
+            align: CENTER, 
+            color: "black",
+            size: createVector(812, 50),
+        }, 
+        delfault: {
+            font: fontRegular, 
+            fontSize: 14, 
+            visibility: "visible", 
+            align: LEFT, 
+            color: "black",
+            size: createVector(350, 250),
+        }, 
+        icon: {
+            font: fontRegular, 
+            fontSize: 20, 
+            visibility: "visible", 
+            align: LEFT, 
+            color: "white",
+        },
                    
     }
 }

@@ -1,4 +1,4 @@
-'use strict';
+
 function displayStars()
 {
     for (var i = 0; i < stars.length; i++)
@@ -29,7 +29,7 @@ class Star
         //   noStroke();
         //   let color = "yellow";
         //   fill(color)
-        //   ellipse(position.x - starRadius, position.y - starRadius, starDiameter, starDiameter);
+        //   ellipse(position.x, position.y, starDiameter, starDiameter);
         // pop()
         push();
         
@@ -38,11 +38,11 @@ class Star
         
         //ellipse(position.x, position.y, starDiameter, starDiameter);
 
-        translate(position.x - starRadius, position.y - starRadius);
+        translate(position.x, position.y);
         rotate(rotateAngle);
         //image(icon.portal2, -portalDiameter, -portalDiameter, portalDiameter * 2, portalDiameter * 2);
-
-        image(icon.star, -starRadius, -starRadius, starDiameter, starDiameter)
+        imageMode(CENTER);
+        image(icon.star, 0, 0, starDiameter, starDiameter)
         
         pop();
         

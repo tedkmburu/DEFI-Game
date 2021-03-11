@@ -1,4 +1,3 @@
-'use strict';
 
 // The preload function is used to load in all the fonts and images. I assign each one to a global variable so I can use it anywhere in the code. Because they are all loaded in the beginning, the user never waits for images to load. After the preload function is complete, the setup() function starts
 function preload() 
@@ -23,8 +22,8 @@ function preload()
         help: loadImage('images/help.png'), 
         lock: loadImage('images/lock.png'), 
         play: loadImage('images/play.png'),
-        portal1: loadImage('images/portal (1).png'), 
-        portal2: loadImage('images/portal (2).png'),
+        portal1: loadImage('images/wormhole (2).png'), 
+        portal2: loadImage('images/wormhole (2).png'),
     };
 
     // these are all the images that the tracks will use split into the "play" and "build" versions of the tracks
@@ -34,33 +33,32 @@ function preload()
         {play: loadImage('images/tracks/lv3.png'), build: loadImage('images/tracks/lv3build.png')},
         {play: loadImage('images/tracks/lv4.png'), build: loadImage('images/tracks/lv4build.png')},
         {play: loadImage('images/tracks/lv5.png'), build: loadImage('images/tracks/lv5build.png')},
-        {play: loadImage('images/tracks/lv6.png'), build: loadImage('images/tracks/lv6build.png')},
+        
         {play: loadImage('images/tracks/lv7.png'), build: loadImage('images/tracks/lv7build.png')},
         {play: loadImage('images/tracks/lv8.png'), build: loadImage('images/tracks/lv8build.png')},
         {play: loadImage('images/tracks/lv9.png'), build: loadImage('images/tracks/lv9build.png')},
         {play: loadImage('images/tracks/lv10.png'), build: loadImage('images/tracks/lv10build.png')},
         {play: loadImage('images/tracks/lv11.png'), build: loadImage('images/tracks/lv11build.png')},
+        
+        {play: loadImage('images/tracks/lv6.png'), build: loadImage('images/tracks/lv6build.png')},
+        
         {play: loadImage('images/tracks/lv3.png'),  build: loadImage('images/tracks/lv3build.png')},
         {play: loadImage('images/tracks/lv13.png'), build: loadImage('images/tracks/lv13build.png')},
         {play: loadImage('images/tracks/lv14.png'), build: loadImage('images/tracks/lv14build.png')},
         {play: loadImage('images/tracks/lv15.png'), build: loadImage('images/tracks/lv15build.png')},
 
-        // {play: loadImage('images/tracks/track (28).png'), build: loadImage('images/tracks/track (27).png')},
-        // {play: loadImage('images/tracks/track (3).png'), build: loadImage('images/tracks/track (10).png')},
-        // {play: loadImage('images/tracks/track (1).png'), build: loadImage('images/tracks/track (2).png')},
-        // {play: loadImage('images/tracks/track (13).png'), build: loadImage('images/tracks/track (14).png')},
-        // {play: loadImage('images/tracks/track (17).png'), build: loadImage('images/tracks/track (18).png')},
-        // {play: loadImage('images/tracks/track (4).png'), build: loadImage('images/tracks/track (5).png')},
-        // {play: loadImage('images/tracks/track (8).png'), build: loadImage('images/tracks/track (9).png')},
-        // {play: loadImage('images/tracks/track (6).png'), build: loadImage('images/tracks/track (7).png')},
-        // {play: loadImage('images/tracks/track (24).png'), build: loadImage('images/tracks/track (25).png')},
-        // {play: loadImage('images/tracks/track (16).png'), build: loadImage('images/tracks/track (26).png')},
-        // {play: loadImage('images/tracks/track (19).png'), build: loadImage('images/tracks/track (26).png')},
-        // {play: loadImage('images/tracks/track (1).png'), build: loadImage('images/tracks/track (2).png')},
-        // {play: loadImage('images/tracks/track (12).png'), build: loadImage('images/tracks/track (23).png')},
-        // {play: loadImage('images/tracks/track (11).png'), build: loadImage('images/tracks/track (22).png')},
-        // {play: loadImage('images/tracks/track (6).png'), build: loadImage('images/tracks/track (21).png')},
     ]
+
+    popUpImage = {
+        portal: loadImage('images/popups/popup (1).png'), 
+        multipleTestCharges: loadImage('images/popups/popup (2).png'), 
+        gameMode: loadImage('images/popups/popup (3).png'), 
+        slider: loadImage('images/popups/popup (4).png'), 
+        eField: loadImage('images/popups/popup (5).png'), 
+        track: loadImage('images/popups/popup (6).png'), 
+        negative: loadImage('images/popups/popup (7).png'), 
+
+    }
 
     soundFormats('mp3');
 
@@ -70,15 +68,21 @@ function preload()
         lose: loadSound('sounds/hit.mp3'),
         collect: loadSound('sounds/collect.mp3'),
         victory: loadSound('sounds/victory.mp3'),
+        portal: loadSound('sounds/portal.mp3'),
+        // click: loadSound('sounds/clickv2.mp3'),
+        // lose: loadSound('sounds/failv2.mp3'),
+        // collect: loadSound('sounds/starv2.mp3'),
+        //victory: loadSound('sounds/successv2.mp3'),
+        popup: loadSound('sounds/popupv2.mp3'),
         };
 
-    sounds.victory.setVolume(0.2);
+    sounds.victory.setVolume(0.1);
+    sounds.portal.setVolume(0.3);
 }
 
 
-function setup()    // This function only runs once when the page first loads. 
+async function setup()    // This function only runs once when the page first loads. 
 {
-    console.log("setup");
     
     let scaledHeight = windowWidth * (375 / 812);  // 375 / 812 is the aspect ratio of an iphone X. All of the sizes and positions of things are modeled aroung that
     let scaledWidth = windowWidth;
@@ -96,8 +100,6 @@ function setup()    // This function only runs once when the page first loads.
     frameRate(60);
     createLevels();     // this function is in the levels.js file. It creates all the levels and stores them in the levels variable
     getUserData();      // this function checks if its a new device. If so, it give it a new ID and saves a score and time of 0 on all the levels to the device. If it's not a new device, it counts all the stars the user has collected and puts that into the totalStars variable so it can be displayed on the "Level Select" screen
-
-
 
     if(getItem("userScores") != null)       // this unlocks levels that need to be unlocked and assigns the user's highscore, best time and number of stars colleceted in each level. 
     {
@@ -144,8 +146,10 @@ function setup()    // This function only runs once when the page first loads.
     userNameInput.style("zIndex", "999");
     userNameInput.position(316 * scale.x, 150 * scale.y);
     userNameInput.addClass("username");
+    userNameInput.id("username");
     userNameInput.input(updateUsername);
     userNameInput.style("visibility", "hidden");
+    document.getElementById("username").placeholder = "Enter Name Here";
 
     // creates the input box for a users class code in the Settings screen. The input box is always hidden except for when the user has clicks the button to change it in the settings screen. The input box is stored in the global variable "classCodeInput" and can be referenced anywhere using that varable.
     classCodeInput = createInput(getItem("classCode"));
@@ -153,12 +157,14 @@ function setup()    // This function only runs once when the page first loads.
     classCodeInput.style("zIndex", "999");
     classCodeInput.position(316 * scale.x, 200 * scale.y);
     classCodeInput.addClass("classCode");
+    classCodeInput.id("classCode");
     classCodeInput.input(updateClassCode);
     classCodeInput.style("visibility", "hidden");
+    document.getElementById("classCode").placeholder = "Enter Class Code Here";
 
 
-    // this connects to the database and gets the data needed to fill up the leaderboard
-    updateLeaderBoard();
+    // this connects to the database and gets the data needed to fill up the leaderboard. It then stores that data on the device
+    await updateLeaderBoard();
 
     // this finds the screen called "Level Select" and adds a button to it for each level. Each button will navigate the user to that level when it's clicked. The button objects are added to that screens buttons properties
     let screenIndex = screens.findIndex(x => x.name == "Level Select");
@@ -197,9 +203,24 @@ function setup()    // This function only runs once when the page first loads.
 
     // let loadingDiv = document.getElementById("loadingScreen");
     // loadingDiv.remove();
+
+    document.getElementById("defaultCanvas0").setAttribute("oncontextmenu", "return false");
+
     console.log("setup complete");
 
-    //popups[0].visibility = "visible"
+    if (getItem("firstOpen") == null) 
+    {
+        showPopUp("New User");
+        storeItem("firstOpen", false);
+        storeItem("gameVersion", "1.0");
+    }
+
+    if (getItem("playSounds") == null) 
+    {
+        storeItem("playSounds", true);
+    }
+
+    //showPopUp("New User")
 
     
 }
@@ -220,11 +241,49 @@ function draw() // this function runs every frame. It's used to show the screen 
 }
 
 
+function togglePlaySounds() 
+{
+    playSounds = !playSounds;
 
+    // console.log("play sounds: ", playSounds);
+
+    createScreens();
+
+    let screenIndex = screens.findIndex(x => x.name == "Level Select");
+    let screen = screens[screenIndex]
+ 
+    for (let i = 0; i < levels.length; i++) 
+    {
+        let buttonX = ((200 * scale.x * (i * 1.5  * scale.x) ) + (100 * scale.x) + levelSelectOffset) / scale.x;
+        let buttonY = height/3 / scale.y;
+        let buttonWidth = 200;
+        let buttonHeight = 200;
+
+        //  the buttons propery for the screen is having buttons added to it
+        screen.buttons.push( 
+            new Button(
+                {
+                    x: buttonX, 
+                    y: buttonY, 
+                    width: buttonWidth, 
+                    height: buttonHeight, 
+                    title: "TRACK " + (i + 1), 
+                    onClick: function(){ currentLevel = i; changeTrack(currentLevel); loadPercent = 0; navigateTo("Loading Screen");  }, 
+                    shape: "Level", 
+                    bgColor: "rgba(0,0,0,0.5)", 
+                    fontColor: "white", 
+                    fontSize: 14})
+            )
+    } 
+
+
+    navigateTo(currentScreen);
+}
 
 function updateUsername()
 {
     storeItem("userName", userNameInput.value());
+    // console.log(localStorage.userName);
 }
 
 function updateClassCode()
@@ -236,9 +295,42 @@ function toggleColorBlindMode()
     colorBlindMode = !colorBlindMode;
     storeItem("colorBlindMode", colorBlindMode);
     
-    console.log("Colorblind Mode: " + colorBlindMode);
+    // console.log("Colorblind Mode: " + colorBlindMode);
     chargeColor = getColors();
     textColor = getTextColors();
+
+    createTextClasses();
+    createScreens();
+
+    let screenIndex = screens.findIndex(x => x.name == "Level Select");
+    let screen = screens[screenIndex]
+ 
+    for (let i = 0; i < levels.length; i++) 
+    {
+        let buttonX = ((200 * scale.x * (i * 1.5  * scale.x) ) + (100 * scale.x) + levelSelectOffset) / scale.x;
+        let buttonY = height/3 / scale.y;
+        let buttonWidth = 200;
+        let buttonHeight = 200;
+
+        //  the buttons propery for the screen is having buttons added to it
+        screen.buttons.push( 
+            new Button(
+                {
+                    x: buttonX, 
+                    y: buttonY, 
+                    width: buttonWidth, 
+                    height: buttonHeight, 
+                    title: "TRACK " + (i + 1), 
+                    onClick: function(){ currentLevel = i; changeTrack(currentLevel); loadPercent = 0; navigateTo("Loading Screen");  }, 
+                    shape: "Level", 
+                    bgColor: "rgba(0,0,0,0.5)", 
+                    fontColor: "white", 
+                    fontSize: 14})
+            )
+    } 
+
+
+    navigateTo(currentScreen);
 }
 
 
@@ -275,11 +367,11 @@ window.addEventListener("orientationchange", function(event)
 
 function keyPressed() 
 {
-    if (keyCode === 46) // when the "delete" key is pressed on a keyboard
+    if (keyCode === 46 && currentScreen == "Level") // when the "delete" key is pressed on a keyboard
     {
         deleteSelectedCharge()
     }
-    if (keyCode === 32) // when the space bar is hit on a keyboard
+    if (keyCode === 32 && currentScreen == "Level") // when the space bar is hit on a keyboard
     {
         toggleGameMode()
     }
@@ -288,6 +380,7 @@ function keyPressed()
 
 function mouseClickedLevel(buttonClicked)
 {
+    //console.log(buttonClicked);
     // let notTouchingACharge = true;
     // let selectedCharge = null;
     // let mousePosition = createVector(mouseX, mouseY);
@@ -469,6 +562,7 @@ function netForceAtPoint(position)
         finalVector.add(forceVector);
     });
 
+    prevoiusFinalVector = finalVector;
     return finalVector;
 }
 
@@ -588,7 +682,7 @@ function getUserData()
         storeItem('userStars', JSON.stringify(userStars));
         storeItem('userTimes', JSON.stringify(userTimes));
 
-        newDevice();
+        // newDevice();
         
 
         totalStars = 0;
@@ -611,7 +705,7 @@ function updateScore(levelGroup, level)
 
 }
 
-function updateLeaderBoard()
+async function updateLeaderBoard()
 {
     // for (let y = 100; y < height; y+=50) 
     //                 {
@@ -626,46 +720,154 @@ function updateLeaderBoard()
     //                     text(Math.round(10000/((y/25)-1)), width - 100, y + 25);
     //                 }
 
-    let example = "{id: “sdfsdf”, level: “level”, stars_collected: 10, score: 100000, time: 45 }";
+    // let example = "{id: “sdfsdf”, level: “level”, stars_collected: 10, score: 100000, time: 45}";
     
 
 
-    currentLeaderboard = []
-    for (let a = 0; a < 10; a++) 
+    
+    let newLeaderboard = await getLevelScores()
+    if (newLeaderboard == null || newLeaderboard.length == 0)
     {
-        let id = "Username " + Math.round(random() * 1000);
-        let randomTime = Math.round(random() * 100000);
-        let randomStars = Math.round(random() * 3);
-        let randomScore = randomStars > 0 ? (randomTime * randomStars) : 100;
-        
-        let exampleArray = {id: id, level: "level", stars_collected: randomStars, score: randomScore, time: randomTime }
-
-
-        currentLeaderboard.push(JSON.stringify(exampleArray));
-        
+        currentLeaderboard = []
     }
+    else
+    {
+        currentLeaderboard = []
+
+        newLeaderboard.forEach(attempt =>
+            {
+                currentLeaderboard.push(attempt)
+            })
+
+    }
+    
+
+    // let newLeaderboard = []
+
+    // currentLeaderboard.forEach( entry => 
+    //     {
+    //         newLeaderboard.push({_id: entry._id, level: entry.attempt.level, score: entry.attempt.score, time: entry.attempt.time})
+    //     })
+
+    // currentLeaderboard = newLeaderboard;
+
+    // let whatToSortBy = (leaderboardData.sort == "score") ? "score" : "time"
+
+    // let sortAscOrDesc = (leaderboardData.sort == "time") ? "asc" : "desc"
+
+    // currentLeaderboard.sort(compareValues(whatToSortBy, sortAscOrDesc))
+
+
+    
+
+
+    //   console.log(currentLeaderboard);
+
+    
+
+
+
+
+    // lv1scores 
+
+    // for (let a = 0; a < 10; a++) 
+    // {
+    //     let id = "Username " + Math.round(random() * 1000);
+    //     let randomTime = Math.round(random() * 100000);
+    //     let randomStars = Math.round(random() * 3);
+    //     let randomScore = randomStars > 0 ? (randomTime * randomStars) : 100;
+        
+    //     let exampleArray = {id: id, level: "level", stars_collected: randomStars, score: randomScore, time: randomTime }
+
+
+    //     currentLeaderboard.push(JSON.stringify(exampleArray));
+        
+    // }
 
 
     
 
 }
 
-// all requests from this device
-function requestTest() 
+function compareValues(key, order = 'asc') 
 {
-    fetch('http://ic-research.eastus.cloudapp.azure.com:8080/device/', {
+    return function innerSort(a, b) 
+    {
+      if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) 
+      {
+        // property doesn't exist on either object
+        return 0;
+      }
+  
+      const varA = (typeof a[key] === 'string')
+        ? a[key].toUpperCase() : a[key];
+      const varB = (typeof b[key] === 'string')
+        ? b[key].toUpperCase() : b[key];
+  
+      let comparison = 0;
+      if (varA > varB) {
+        comparison = 1;
+      } else if (varA < varB) {
+        comparison = -1;
+      }
+      return (
+        (order === 'desc') ? (comparison * -1) : comparison
+      );
+    };
+}
+
+// all requests from this device
+
+async function updateUsernameOnServer() 
+{ 
+    // console.log("userId: ", localStorage.userId);
+
+    let bodyData = {student_name: localStorage.userName, class_name: "PHYS-102"};
+    let responseLink = "http://ic-research.eastus.cloudapp.azure.com:8080/device/" + localStorage.userId
+
+    // console.log(bodyData);
+    // console.log(responseLink);
+
+    const response = await fetch(responseLink, {
+        method: 'PUT',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Basic ' + window.btoa("test:test")
+        },
+        body: JSON.stringify(bodyData)
+    }).then(data => {
+        return data.json()
+    }).catch(function(err) 
+    {
+      console.error("Can't Update Username :-S", err);
+    });
+}
+
+
+async function requestTest()
+{
+    connectingToServer = true; 
+    const response = await fetch('http://ic-research.eastus.cloudapp.azure.com:8080/leaderboard?limit=10&level=' + leaderboardData.level + '&global=true', {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
             'Authorization': 'Basic ' + window.btoa("test:test")
         },
-    }).then((res) => {
-        return res.json();
-    }).then((json) => {
-        console.log(json)
-    })
+    }).catch(function(err) 
+    {
+      console.error("Can't Get Leaderboard Data :-S", err);
+    });
+
+     
+
+    //console.log(result);
+    return await response.json();
 }
+
+
+
 
 
 
@@ -673,15 +875,14 @@ function sendScore(data)
 {
      // endScore({level: 1, group: currentLevel, time: Math.round(timeElapsed), stars: numberOfStarsCollected, score: score, userId: getItem("userId")})
 
-    let dataToSend = {_id: data.userId, level: "1", track: data.group.toString(), stars_collected: data.numberOfStarsCollected, score: data.score, time: data.time};
-
+    let dataToSend = {_id: data.userId, level: (track.level + 1).toString(), track: data.group.toString(), stars_collected: data.numberOfStarsCollected, score: data.score, time: data.time, timestamp: getDate()};
 
     // //{_id: “sdfsdf”, level: “level”, stars_collected: 10, score: 100000, time: 45 }
     // //let data = {_id: localStorage.userId, level: level, group: group, stars_collected: numberOfStarsCollected, score: score, time: timeElapsed };
     // let data = {"_id": localStorage.userId, "level": level, "stars_collected": numberOfStarsCollected, score: score, time: timeElapsed };
 
     let dataJSON = JSON.stringify(dataToSend);
-    console.log(dataJSON);
+    // console.log(dataJSON);
 
 
 
@@ -697,10 +898,13 @@ function sendScore(data)
 
 
     }).then( (response) => { 
-        console.log(response);
-    })
+        // console.log(response);
+    }).catch(function(err) 
+    {
+      console.error("Can't Send Data :-S", err);
+    });
 
-    console.log("data sent");
+    // console.log("data sent");
         
 }
 
@@ -730,7 +934,6 @@ function tryFetchData()
                     console.log('Looks like there was a problem. Status Code: ' + response.status);
                     return;
                 }
-        
                 
                 response.json().then(function(data) 
                 {
@@ -741,30 +944,11 @@ function tryFetchData()
         )
     .catch(function(err) 
     {
-      console.log('Fetch Error :-S', err);
+      console.error('Fetch Error :-S', err);
     });
 
-    
-
-    // fetch("http://ic-research.eastus.cloudapp.azure.com:8080/class/", {
-    // method: "post",
-    // headers: {
-    //     'Accept': 'application/json',
-    //     'Content-Type': 'application/json'
 
 
-    // },
-
-    // //make sure to serialize your JSON body
-    // body: JSON.stringify({"_id": "11"})})
-    // .then( (response) => { 
-    //     console.log(response);
-    // //do something awesome that makes the world a better place
-    // })
-
-
-
-    
 }
 
 function newDevice()
@@ -776,13 +960,11 @@ function newDevice()
             'Content-Type': 'application/json',
             'Authorization': 'Basic ' + window.btoa("test:test")
         },
-    }).then((res) => {
-        return res.json();
+    }).then(res => {
+        return res.json()
     }).then((json) => {
-        storeItem("userId", json.InsertedID);
-        console.log("userId: ", getItem('userId'));
-        storeItem('userName', "Enter Name Here");
-        storeItem('classCode', "Enter Class Code Here");
+        storeItem("userId", json.InsertedID)
+        updateUsernameOnServer();
     })
 
     
@@ -790,36 +972,10 @@ function newDevice()
 
 
 
-// type Attempt struct {
-// 	AttemptId      primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
-// 	Level          string             `json:"level,omitempty" bson:"level,omitempty"`
-// 	StarsCollected uint8              `json:"stars_collected,omitempty" bson:"stars_collected,omitempty"`
-// 	Score          uint16             `json:"score,omitempty" bson:"score,omitempty"`
-// 	Time           uint32             `json:"time,omitempty" bson:"time,omitempty"`
-// 	Timestamp      string             `json:"timestamp,omitempty" bson:"timestamp,omitempty"`
-// }
+async function getLevelScores(levelNumber) 
+{
+    const scores = await requestTest()
 
+    return scores.stats;
 
-// fetch("http://example.com/api/endpoint/", {
-//   method: "post",
-//   headers: {
-//     'Accept': 'application/json',
-//     'Content-Type': 'application/json'
-//   },
-
-//   //make sure to serialize your JSON body
-//   body: JSON.stringify({
-//     name: myName,
-//     password: myPassword
-//   })
-// })
-// .then( (response) => { 
-//    //do something awesome that makes the world a better place
-// });
-
-
-
-// unlock hard mode at the end
-
-
-
+}

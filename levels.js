@@ -202,44 +202,13 @@ function createLevels()
 
 
 
-      {name: "TRACK 6",
-      locked: false,
-      testChargeStartingPositions: [createVector(125, 50)], 
-      starPositions: [
-        createVector(250, 55), 
-        createVector(350, 56), 
-        createVector(450, 125)
-      ],
-      points: [
-        {x: 5, y: 4},
-        {x: 404, y: 4},
-        {x: 466, y: 26},
-        {x: 499, y: 62},
-        {x: 514, y: 119},
-        {x: 504, y: 165},
-        {x: 465, y: 210},
-        {x: 399, y: 234},
-        {x: 2, y: 233},
-        {x: 1, y: 143},
-        {x: 399, y: 140},
-        {x: 411, y: 133},
-        {x: 417, y: 117},
-        {x: 410, y: 103},
-        {x: 394, y: 95},
-        {x: 3, y: 93},
-        {x: 6, y: 4}
-      ],
-      finishLines: [
-        {x: 0, y:  140, width:  50, height: 100}
-      ],
-      portals: [],
-    },
+      
 
 
 
 
 
-    {name: "TRACK 7",
+    {name: "TRACK 6",
     locked: false,
     testChargeStartingPositions: [createVector(75, 75)], 
     starPositions: [
@@ -276,7 +245,7 @@ function createLevels()
 
 
 
-    {name: "TRACK 8",
+    {name: "TRACK 7",
     locked: false,
     testChargeStartingPositions: [createVector(50, 50)], 
     starPositions: [
@@ -315,7 +284,7 @@ function createLevels()
 
 
 
-    {name: "TRACK 9",
+    {name: "TRACK 8",
     locked: false,
     testChargeStartingPositions: [createVector(240, 50), createVector(490, 50)], 
     starPositions: [
@@ -341,11 +310,6 @@ function createLevels()
     ],
     portals: [],
     },
-    
-
-
-
-
 
 
 
@@ -410,7 +374,39 @@ function createLevels()
 
 
 
-
+    {name: "TRACK 9",
+    locked: false,
+    testChargeStartingPositions: [createVector(100, 50)], 
+    starPositions: [
+      createVector(250, 55), 
+      createVector(350, 56), 
+      createVector(450, 125)
+    ],
+    points: [
+      {x: 5, y: 4},
+      {x: 404, y: 4},
+      {x: 466, y: 26},
+      {x: 499, y: 62},
+      {x: 514, y: 119},
+      {x: 504, y: 165},
+      {x: 465, y: 210},
+      {x: 399, y: 234},
+      {x: 2, y: 233},
+      {x: 1, y: 143},
+      {x: 399, y: 140},
+      {x: 411, y: 133},
+      {x: 417, y: 117},
+      {x: 410, y: 103},
+      {x: 394, y: 95},
+      {x: 3, y: 93},
+      {x: 6, y: 4}
+    ],
+    finishLines: [
+      {x: 0, y:  140, width:  50, height: 100}
+    ],
+    //{x: 30, y: 47}, {x: 80, y: 185}
+    portals: [new Portal({in: createVector(60, -5), out: createVector(60, 135)})],
+  },
 
 
 

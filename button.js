@@ -64,6 +64,10 @@ function pressRedo()
 
 
 
+function areYouSure()
+{
+    
+}
 
 function resetGame()
 {
@@ -77,23 +81,42 @@ function resetGame()
 
 function increaseLeaderboardLevel()
 {
-    let screenIndex = screens.findIndex(x => x.name == "Leaderboard");
-    let screen = screens[screenIndex];
-    let levelButton;
+    // let screenIndex = screens.findIndex(x => x.name == "Leaderboard");
+    // let screen = screens[screenIndex];
+    // let levelButton = getButtonIndex("Leaderboard", ">");
+
+    // let actualButton = getButton("Leaderboard", ">");
+
+    //console.log(levelButton);
 
     if (levels.length > leaderboardData.level) 
     {
-        levelButton = getButtonIndex("Leaderboard", leaderboardData.level)
+        // levelButton = getButtonIndex("Leaderboard", leaderboardData.level)
         leaderboardData.level++;
         
     }
     else
     {
-        levelButton = getButtonIndex("Leaderboard", levels.length)
-        leaderboardData.level = 1;
+        // levelButton = getButtonIndex("Leaderboard", levels.length)
+        // leaderboardData.level = 1;
     }
 
-    screen.buttons[levelButton].title = leaderboardData.level;
+    // screen.buttons[levelButton].title = leaderboardData.level;
+}
+
+
+function decreaseLeaderboardLevel() 
+{
+    if (1 < leaderboardData.level) 
+    {
+        leaderboardData.level--;
+        
+    }
+    else
+    {
+        // leaderboardData.level = 1;
+    }
+
 }
 
 
@@ -225,8 +248,12 @@ class Button
         {
             // try
             // {
-                sounds.click.play();
+                
                 button.onClick();
+                if (playSounds) 
+                {
+                    sounds.click.play();
+                }
             // }
             // catch(e)
             // {

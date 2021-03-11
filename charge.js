@@ -1,4 +1,3 @@
-'use strict';
 
 function createCharge(position, charge)
 {
@@ -74,7 +73,6 @@ function deleteSelectedCharge()
 function sliderChanged()
 {
   createFieldLines(); 
-  console.log("slider");
 }
 
 class Charge
@@ -93,7 +91,9 @@ class Charge
     this.slider.style("zIndex", "999");
     this.slider.style("visibility", "hidden");
     this.slider.addClass("slider");
-    this.slider.mouseMoved(sliderChanged);
+    //this.slider.mouseMoved(sliderChanged);
+    this.slider.input(sliderChanged);
+    this.slider.changed(sliderChanged);
     
   }
 

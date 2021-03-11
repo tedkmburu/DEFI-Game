@@ -1,4 +1,3 @@
-'use strict';
 
 function mouseClicked()
 {
@@ -7,12 +6,12 @@ function mouseClicked()
     let buttonClicked = false;
 
 
-    // console.log(mouseTapped);
+    // console.log(mousePosition);
 
     // consoleLog += "createVector(" + Math.round(mousePosition.x - levels[currentLevel].trackOffset.x) + ", " + Math.round(mousePosition.y - levels[currentLevel].trackOffset.y) + "), ";
-    consoleLog += "{x: " + Math.round(mousePosition.x - levels[currentLevel].trackOffset.x) + ", y: " + Math.round(mousePosition.y - levels[currentLevel].trackOffset.y) + "}, ";
+    // consoleLog += "{x: " + Math.round(mousePosition.x - levels[currentLevel].trackOffset.x) + ", y: " + Math.round(mousePosition.y - levels[currentLevel].trackOffset.y) + "}, ";
 
-    //console.log(consoleLog);
+    // console.log(consoleLog);
 
     popupVisibile = popups.some(x => x.visibility == "visible");
 
@@ -66,7 +65,7 @@ function mouseClicked()
     {
         if (screen.visibility == "visible" && !popupVisibile) 
         {
-            
+            //console.log(mouseTapped);
             screen.buttons.forEach(button => {
                 if(button.visibility != "hidden" && mouseTapped)
                 {
@@ -195,11 +194,9 @@ function mouseReleased()
     {
         if (screen.visibility == "visible" && !popupVisibile) 
         {
-
             if (screen.name == "Level")
             {
                 mouseReleasedLevel();
-                
             }
         }
     });
@@ -215,7 +212,7 @@ function mouseWheelGroupSelect(delta)
 function mouseWheelLeaderboard(delta)
 {
     let newOffset = leaderboardOffset - delta;
-    let newOffsetConstrained = constrain(newOffset, -(10 * 48) * scale.y, 0);
+    let newOffsetConstrained = constrain(newOffset, -((currentLeaderboard.length + 8) * 48) * scale.y, 0);
     leaderboardOffset = newOffsetConstrained;
 }
 
@@ -239,7 +236,7 @@ function mouseDraggedGroupSelect()
 function mouseDraggedLeaderboard()
 {
     let newOffset = leaderboardOffset - ((pmouseY - mouseY) / 1);
-    let newOffsetConstrained = constrain(newOffset, -(10 * 48) * scale.y, 0);
+    let newOffsetConstrained = constrain(newOffset, -((currentLeaderboard.length + 8) * 48) * scale.y, 0);
     leaderboardOffset = newOffsetConstrained;
 }
 

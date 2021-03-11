@@ -1,4 +1,4 @@
-'use strict';
+
 function displayTestCharges()
 {
     for (var i = 0; i < testCharges.length; i++)
@@ -154,7 +154,7 @@ class TestCharge
                     //const element = testCharge[i];
                     let dot = testCharge.trajectory[i];
                     fill(`rgba(0,0,0,${fillColorAplha})`)
-                    fillColorAplha = fillColorAplha;
+                    fillColorAplha = fillColorAplha/2;
                     ellipse(dot.x, dot.y, 4, 4);
                 }
                 // testCharge.trajectory.forEach(dot => 
@@ -285,7 +285,10 @@ class TestCharge
             if (checkCollision(shapeOne, shapeTwo) && star.collected == false) 
             {
                 star.collected = true;
-                sounds.collect.play();
+                if (playSounds) 
+                {
+                    sounds.collect.play();
+                }
             }
         });
 
@@ -299,6 +302,10 @@ class TestCharge
             if (checkCollision(shapeOne, shapeTwo)) 
             {
                 testCharge.position = createVector(portal.out.x, portal.out.y)
+                if (playSounds) 
+                {
+                    sounds.portal.play();
+                }
             }
         });
 
@@ -333,10 +340,9 @@ class TestCharge
         if(collide(testCharge.returned, track.returned) && !collided) 
         {
             collided = true;
-            if (hitEdge == false) 
+            if (hitEdge == false && playSounds) 
             {
                 sounds.lose.play();   
-                console.log("sound"); 
             }
             hitEdge = true;
         }
@@ -410,7 +416,10 @@ class TestCharge
 
         
         levels[track.level].testChargeStartingPositions.forEach((originalStartingPosition, j) => {
-            testCharges[j] = new TestCharge(originalStartingPosition, originalStartingPosition, testChargeCharge);
+
+            let thisTestChargeCharge = (originalStartingPosition.z != 0) ? testChargeCharge * -1 : testChargeCharge;
+
+            testCharges[j] = new TestCharge(originalStartingPosition, originalStartingPosition, thisTestChargeCharge);
           })
 
         testCharge.position = testCharge.startingPosition;

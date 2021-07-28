@@ -1,8 +1,7 @@
 
-function mouseClicked()
+function mouseClicked() // this is an inbuilt p5 function that runs everytime any mouse button is clicked
 {
     let mousePosition = createVector(mouseX, mouseY);
-
     let buttonClicked = false;
 
 
@@ -13,17 +12,18 @@ function mouseClicked()
 
     // console.log(consoleLog);
 
-    popupVisibile = popups.some(x => x.visibility == "visible");
+    popupVisibile = popups.some(x => x.visibility == "visible"); // if any popuip is currently visible, this will be true
 
-    if (popupVisibile) 
+    if (popupVisibile) // if a popup is visible, I want to only look at the buttons in that popup when im checking if the user has clicked a button
     {
         let popupIndex = popups.findIndex(x => x.visibility == "visible");
         let currentPopup = popups[popupIndex];
 
-        currentPopup.buttons.forEach(button => {
-            if(button.visibility != "hidden" && mouseTapped)
+        currentPopup.buttons.forEach(button => { // these will loop through all the buttons in the popup that's currently being displayed
+            if(button.visibility != "hidden" && mouseTapped) // if the button visibility is visible and the mouse has been clicked and not dragged over a button and let go this will be true
             {
-                if (button.shape == "Circle") 
+                // buttons have different shapes so they should have different collision buttons. Here I check to buttons shape and then check for collisions. If the button's shape is not defined, it will assume its a rectangle 
+                if (button.shape == "Circle")
                 {
                     let distance = mousePosition.dist(button.position);
                     if (distance < button.width / 2)
@@ -44,7 +44,7 @@ function mouseClicked()
                         buttonClicked = true;
                     }
                 }
-                else
+                else // this is a rectangle shape
                 {
                     if (mousePosition.x > button.x &&
                         mousePosition.y > button.y &&
@@ -63,12 +63,13 @@ function mouseClicked()
 
     screens.forEach(screen =>
     {
-        if (screen.visibility == "visible" && !popupVisibile) 
+        if (screen.visibility == "visible" && !popupVisibile) // this will only run if none of the popups are visible 
         {
             //console.log(mouseTapped);
-            screen.buttons.forEach(button => {
-                if(button.visibility != "hidden" && mouseTapped)
+            screen.buttons.forEach(button => { 
+                if(button.visibility != "hidden" && mouseTapped) // if a screen is visible and the mouse has been clicked and not dragged over a button and let go this will be true
                 {
+                    // buttons have different shapes so they should have different collision buttons. Here I check to buttons shape and then check for collisions. If the button's shape is not defined, it will assume its a rectangle 
                     if (button.shape == "Circle") 
                     {
                         let distance = mousePosition.dist(button.position);
@@ -127,12 +128,12 @@ function mouseClicked()
 }
 
 
-function mouseMoved() 
+function mouseMoved() // this is an inbuilt p5 function, runs when the mouse is moved in any direction
 {
     mouseTapped = false;
 }
 
-function mousePressed() 
+function mousePressed() // this is an inbuilt p5 function, runs when the mouse button goes down, the mouseClicked function runs when the mouse button goes down and back up
 {
     mouseTapped = true;
 
@@ -147,7 +148,7 @@ function mousePressed()
     }
 }
 
-function mouseWheel(event) 
+function mouseWheel(event) // this is an inbuilt p5 function, runs when the mouse wheel is scrolled or when a two finger gesture scroll on a trackpad happens
 {
     // print(event.delta);
     if (currentScreen == "Level Select" && !popupVisibile) 
@@ -161,10 +162,8 @@ function mouseWheel(event)
 }
 
 
-function mouseDragged()
+function mouseDragged() // this is an inbuilt p5 function, runs when the mouse is clicked down and moved in any direction
 {
-
-    
     mouseTapped = false;
     screens.forEach(screen =>
     {
@@ -187,7 +186,7 @@ function mouseDragged()
 
 }
 
-function mouseReleased() 
+function mouseReleased() // this is an inbuilt p5 function, runs when any mouse button is released
 {
     onScrollBar = false
     screens.forEach(screen =>

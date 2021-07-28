@@ -5,7 +5,7 @@ function toggleGameMode()   // This function is called whenever the play/buid bu
 
     stars.forEach(star => {star.collected = false}) // This sets each star to an uncollected state so it reappears if it has already been collected
 
-    if (gameMode == "Build") 
+    if (gameMode == "Build" && !finished) 
     {
         gameMode = "Play"; // switches game mode
         
@@ -13,7 +13,7 @@ function toggleGameMode()   // This function is called whenever the play/buid bu
         
         createFieldLines(); // recalculates the field lines
     }
-    else
+    else if (!finished)
     {
         gameMode = "Build"; // switches game mode
 
@@ -39,6 +39,9 @@ function pressNext() // this function navigates to the next level. It's called i
 
         // This puts each of the testcharges in the new level in its original position
         resetTestCharges()
+
+        finished = false; 
+        gameMode = "Build"
 
         // changes the screen to go to the new level
         navigateTo("Level");

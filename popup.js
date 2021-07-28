@@ -65,7 +65,8 @@ function createPopups()
                 new TextBox({x: 406, y: 110, id: "title", text: "Please enter your new username below.", font: fontRegular, fontSize: 20, color: "black", visibility: "visible", align: CENTER}), 
             ],
             buttons: [
-                new Button({x: 516, y: 150 , width: 100, height: 45, title: "Save" , onClick: function(){ closePopup(); updateUsernameOnServer(); }, shape: "Rect", bgColor: "rgb(108,164,104)", fontColor: "white", fontSize: 14}), 
+                // new Button({x: 516, y: 150 , width: 100, height: 45, title: "Save" , onClick: function(){ closePopup(); updateUsernameOnServer(); }, shape: "Rect", bgColor: "rgb(108,164,104)", fontColor: "white", fontSize: 14}), 
+                new Button({x: 516, y: 150 , width: 100, height: 45, title: "Save" , onClick: function(){ closePopup(); }, shape: "Rect", bgColor: "rgb(108,164,104)", fontColor: "white", fontSize: 14}), 
                 new Button({x: 80 , y: 190, width: 20, height: 20, title: "<" , onClick: function(){ movePopup("left") }, shape: "Rect", bgColor: "black", fontColor: "white", fontSize: 14}), 
                 new Button({x: 710, y: 190, width: 20, height: 20, title: ">" , onClick: function(){ movePopup("right")}, shape: "Rect", bgColor: "black", fontColor: "white", fontSize: 14}), 
             ],
@@ -95,7 +96,7 @@ function createPopups()
     ]
 }
 
-function newUserPopUp() 
+function newUserPopUp() // this function runs every frame when a new user opens the game for the first time 
 {
     if (popupVisibile) 
     {
@@ -107,7 +108,7 @@ function newUserPopUp()
     
 }
 
-function showPopUp(name)
+function showPopUp(name) // call this function with a popup name in it to display that popup
 {
     deselectAllCharges();
     let popupToShow = popups.find(popup => popup.name == name);
@@ -116,7 +117,7 @@ function showPopUp(name)
 
 }
 
-function displayPopups()
+function displayPopups() // this runs every frame and if a popup's visibility is set to visible, it will display it. 
 {
     popups.forEach(popUp => {
         if (popUp.visibility == "visible") 
@@ -127,7 +128,7 @@ function displayPopups()
     })
 }
 
-function closePopup()
+function closePopup() // this function sets all the popups visibility to hidden
 {
     popups.forEach(popup => {
     popup.visibility = "hidden";    
@@ -138,13 +139,13 @@ function closePopup()
     createPopups()
 }
 
-function movePopup(direction)
+function movePopup(direction) // when the left or right buttons are clicked in a popup, this function will move alll the buttons, images and textboxes in that popup to the left or right by a screen width ammount.
 {
     let popupIndex = popups.findIndex(x => x.visibility == "visible");
 
     let currentPopup = popups[popupIndex];
 
-    currentPopup.textBoxes.forEach(textBox => {
+    currentPopup.textBoxes.forEach(textBox => { // this moves all the textboxes
 
         if (direction == "left" && currentPopup.currentSlide > 0) 
         {
@@ -156,7 +157,7 @@ function movePopup(direction)
         }
     });
 
-    currentPopup.images.forEach(image => {
+    currentPopup.images.forEach(image => { // this moves all the images
 
         if (direction == "left" && currentPopup.currentSlide > 0) 
         {
@@ -177,7 +178,7 @@ function movePopup(direction)
         currentPopup.currentSlide++
     }
 
-    console.log(currentPopup.currentSlide);
+    //console.log(currentPopup.currentSlide);
 }
 
 

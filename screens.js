@@ -40,12 +40,13 @@ function displayLoadingScreen()  // this function is called every frame while on
     
     push()
         fill(255);
+        noStroke();
         rect(0,height - 20, loadPercent, 20)
         
         if(loadPercent < width)
         {
-            //loadPercent += width / 90;
-            loadPercent += width;
+            loadPercent += width / 50;
+            // loadPercent += width;
             screen.buttons[1].visibility = "hidden";
         }
         else
@@ -61,9 +62,10 @@ function displayLoadingScreen()  // this function is called every frame while on
         // this is the black rectangle behing the track preview
         let rectX = 50 * scale.x;
         let rectY = 100 * scale.y;
-        let rectWidth = width /2;
-        let rectHeight = height /2;
+        let rectWidth = width / 2;
+        let rectHeight = height / 2;
         rect(rectX, rectY, rectWidth, rectHeight);
+        //image(blueprint, rectX, rectY, rectWidth, rectHeight);
         
         // this imate is the track preview
         let imageX = (width / 4) - (level.dimentions.x / 2) + (rectX/2);
@@ -389,6 +391,8 @@ function displayLevelScreen()
             finished = false    
         }
     });
+
+    // console.log(finished);
     
 
     if (gameMode == "Play") 
@@ -429,14 +433,17 @@ function displayLevelScreen()
         let allStars = JSON.parse(getItem("userStars"))
         totalStars = 0;
 
-            allStars.forEach(starsAdd =>
-            {
-                totalStars += starsAdd;
-            })
+        allStars.forEach(starsAdd =>
+        {
+            totalStars += starsAdd;
+        })
 
         
-        setTimeout(function(){ navigateTo("Level Complete"); }, 3500);
-        if (playSounds && finishedSoundsPlaying == false) 
+        // setTimeout(function(){ navigateTo("Level Complete"); }, 3500);
+        setTimeout(function(){ navigateTo("Level Complete"); }, 0);
+
+        //if (playSounds && finishedSoundsPlaying == false) 
+        if (playSounds) 
         {
             sounds.victory.play();
             finishedSoundsPlaying = true
@@ -620,6 +627,7 @@ function displayHomeScreen()
 
 function displayScreen(screen)
 {
+    
     background("red");
     if(gameMode == "Build" && currentScreen == "Level")
     {
@@ -669,7 +677,20 @@ function displayScreen(screen)
 
             screen.buttons[i + 1].x = buttonX;
 
-            image(trackImages[i].build, imageX, imageY, imageWidth, imageHeight)
+
+            if (levels[i].locked == false) 
+            {
+                image(trackImages[i].build, imageX, imageY, imageWidth, imageHeight) 
+            }
+            else
+            {
+                imageX = buttonX + (50 * scale.x);
+                imageY = screen.buttons[i + 1].y + (50 * scale.x);
+                imageWidth = 100 * scale.x;
+                imageHeight = 100 * scale.x;
+                image(icon.lock, imageX, imageY, imageWidth, imageHeight)
+            }
+            
         })
     }
 
@@ -693,8 +714,10 @@ function displayScreen(screen)
 
 function navigateTo(screenToShow, backButton)
 {
-    sounds.victory.stop();
+    //sounds.victory.stop();
     finishedSoundsPlaying = false;
+
+    
 
     if (screenToShow == "Level") 
     {
@@ -723,7 +746,7 @@ function navigateTo(screenToShow, backButton)
         {
             leaderboardData.level = 1;
         }
-        updateLeaderBoard();
+        // updateLeaderBoard();
     }
 
 
@@ -779,7 +802,7 @@ function navigateTo(screenToShow, backButton)
         screenStack.push(screenToShow);
     }
 
-
+    // console.log(currentScreen);
    
 }
 
@@ -911,6 +934,8 @@ function createScreens()
             buttons: [
                 new Button({x: 15 , y: 10 , width: 30 , height: 30, title: "<"              , onClick: function(){ navigateBack(); updateLeaderBoard(); }, shape: "Back", bgColor: "white"             , fontColor: "black", fontSize: 14}), 
 
+                // new Button({x: 15 , y: 10 , width: 30 , height: 30, title: "<"              , onClick: function(){ navigateBack(); }, shape: "Back", bgColor: "white"             , fontColor: "black", fontSize: 14}), 
+
                 new Button({x: 316, y: 100, width: 135, height: 45, title: "Colorblind Mode", onClick: function(){ toggleColorBlindMode(); }, shape: "Rect"  , bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}),
                 new Button({x: 451, y: 100, width: 45 , height: 45, title: (colorBlindMode == true) ? "On": "Off", onClick: function(){ toggleColorBlindMode(); }, shape: "Rect"  , bgColor: "black", fontColor: "white", fontSize: 14}),
 
@@ -1009,6 +1034,7 @@ function createScreens()
                 new Button({x: 692, y: 285, width: 100, height: 50, title: "Start"    , onClick: function(){ navigateTo("Level");  }, shape: "Rect", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14, visibility: "hidden"})
                 ],
             textBoxes: [
+                new TextBox({x: 200, y: 90, class: textClass.loadingScreen, text: "Track Preview"}), 
                 new TextBox({x: 501, y: 110, class: textClass.loadingScreen, text: "Objectives: "}), 
                 new TextBox({x: 501, y: 150, class: textClass.loadingScreen, text: "1. Collect all the stars  [0/3]"}), 
                 new TextBox({x: 501, y: 180, class: textClass.loadingScreen, text: "2. Finish as fast as possible"}), 
@@ -1068,6 +1094,7 @@ function createScreens()
                 new Button({x: 480, y: 300, width: 60, height: 40, title: "Replay", onClick: function(){ pressRedo(); }        , shape: "Oval", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}), 
                 new Button({x: 600, y: 300, width: 60, height: 40, title: "Menu", onClick: function(){ navigateTo("Level Select"); }, shape: "Oval", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}), 
                 new Button({x: 720, y: 300, width: 60, height: 40, title: "Next", onClick: function(){ pressNext(); }        , shape: "Oval", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}),
+                //new Button({x: 140, y: 300 + 10, width: 100, height: 40, title: "Leaderboard", onClick: function(){ navigateTo("Leaderboard"); } , shape: "Rect", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}), 
                 new Button({x: 140, y: 300 + 10, width: 100, height: 40, title: "Leaderboard", onClick: function(){ navigateTo("Leaderboard"); } , shape: "Rect", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14}), 
                 
                 ],

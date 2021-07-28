@@ -209,7 +209,7 @@ function createLevels()
 
 
     {name: "TRACK 6",
-    locked: false,
+    locked: true,
     testChargeStartingPositions: [createVector(75, 75)], 
     starPositions: [
       createVector(125, 145), 
@@ -246,7 +246,7 @@ function createLevels()
 
 
     {name: "TRACK 7",
-    locked: false,
+    locked: true,
     testChargeStartingPositions: [createVector(50, 50)], 
     starPositions: [
         createVector(200, 50), 
@@ -285,7 +285,7 @@ function createLevels()
 
 
     {name: "TRACK 8",
-    locked: false,
+    locked: true,
     testChargeStartingPositions: [createVector(240, 50), createVector(490, 50)], 
     starPositions: [
         createVector(580, 21), 
@@ -315,7 +315,7 @@ function createLevels()
 
 
     {name: "TRACK 10",
-    locked: false,
+    locked: true,
     testChargeStartingPositions: [createVector(360, 40), createVector(40, 120)], 
     starPositions: [
       createVector(417, 13), 
@@ -345,7 +345,7 @@ function createLevels()
 
 
     {name: "TRACK 11",
-    locked: false,
+    locked: true,
     testChargeStartingPositions: [createVector(360, 40)], 
     starPositions: [
       createVector(417, 13), 
@@ -375,7 +375,7 @@ function createLevels()
 
 
     {name: "TRACK 9",
-    locked: false,
+    locked: true,
     testChargeStartingPositions: [createVector(100, 50)], 
     starPositions: [
       createVector(250, 55), 
@@ -411,7 +411,7 @@ function createLevels()
 
 
     {name: "TRACK 12",
-    locked: false,
+    locked: true,
     testChargeStartingPositions: [createVector(50, 40), createVector(50, 60)], 
     starPositions: [
         createVector(200, 50), 
@@ -447,7 +447,7 @@ function createLevels()
 
 
     {name: "TRACK 13",
-    locked: false,
+    locked: true,
     testChargeStartingPositions: [createVector(50, 134)], 
     starPositions: [
       createVector(200, 50), 
@@ -489,7 +489,7 @@ function createLevels()
 
 
     {name: "TRACK 14",
-    locked: false,
+    locked: true,
     testChargeStartingPositions: [createVector(50, 50)], 
     starPositions: [
         createVector(151, 151), 
@@ -511,7 +511,7 @@ function createLevels()
 
 
     {name: "TRACK 15",
-    locked: false,
+    locked: true,
     testChargeStartingPositions: [createVector(120, 170)], 
     starPositions: [
         createVector(167, 92), 

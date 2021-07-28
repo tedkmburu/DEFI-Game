@@ -184,11 +184,13 @@ Games used as inspiration for this
 
 ## Code
 
-Object-oriented programming is used throughout the game. The Screen, Button, FieldLine, Image, Screen, Star, TestCharge and Track classes can be found in own their self-titled files. Functions that primarily only use that one class can also be found in that classes self-titled file. 
+Object-oriented programming is used throughout the game. The Screen, Button, Popup, FieldLine, Image, Screen, Star, TestCharge and Track classes can be found in own their self-titled files. Functions that primarily only use that one class can also be found in that classes self-titled file. 
 
 The p5.js library is inside the file titled p5.min.js. It should not be tampered with. The library creates the game loop and has useful Vector math functions.
 
 There is a file called variables.js that has all global variables in it. They can technically be declared anywhere but this is a little more organized. 
+
+JavaScript has inbuild functions that can be done to arrays that are used throughout this game. Learn more about them here: [https://www.w3schools.com/jsref/jsref_obj_array.asp](https://www.w3schools.com/jsref/jsref_obj_array.asp)
 
 
 
@@ -259,6 +261,51 @@ This is how a button is created:
        fontSize: 24,        // font size - INT
        font: spaceFont      // font of text displayed - Font decared in preload()
        })
+   ```
+
+### Pop Ups
+Each Screen has its own buttons. Buttons will visually showup on the screen and will do whatever funtion is assigned to them when they are clicked. They know they are clicked because of collision detection based on the buttons shape and size. 
+
+The clicked() function inside the Button class in the button.js file tells the game what to do when the button is clicked. For now, there is a giant if statement that checks which button was clicked and runs he functions needed.
+
+This is how a button is created:
+   ```sh
+   new Popup({
+      name: "Help", // this is the name of the popup that will be used when making it visible - String
+      size: createVector(700,300),  this is the size of the popup. A full screen popup will have a width of 812 and height of 375 - Vector
+      numberOfSlides: 4, // this controls the next buttons. When the current slide number is equal to the total slides, the right button dissapears and when the current slide number is equal to 0, the left button disappears - INT
+      textBoxes: [
+          new TextBox({x: (812 * 0), y: 80, class: textClass.popUpTitle, text: "Goal"}), 
+          new TextBox({x: 150 + (812 * 0), y: 130, class: textClass.popUpBody, text: "Get the test charge to the finish line by building an electric field.\n\nDo not hit the walls of the track.\n\nCollect as many stars as possible \n\nFinish the level as fast as possible"}), 
+
+          new TextBox({x: (812 * 1), y: 80, class: textClass.popUpTitle, text: "Two Modes"}), 
+          new TextBox({x: 150 + (812 * 1), y: 130, class: textClass.popUpBody, text: " There are two game modes.\n\nIn the “Build” mode you can build an electric field\n\nIn the “Play” mode, your electric field pushes the test charge through."}), 
+
+          new TextBox({x: (812 * 2), y: 80, class: textClass.popUpTitle, text: "Creating an Electric Field"}), 
+          new TextBox({x: 150 + (812 * 2), y: 130, class: textClass.popUpBody, text: "While in the “Build” mode, click anywhere on the screen to place a charge there.\n\nUse the slider to change the slider’s magnitude and sign.\n\nYou can drag charges around.\n\nDrag charges to the bottom right to delete them."}), 
+
+          new TextBox({x: (812 * 3), y: 80, class: textClass.popUpTitle, text: "Electric Fields"}), 
+          new TextBox({x: 150 + (812 * 3), y: 130, class: textClass.popUpBody, text: "Electric fields will only exert a force on test charge in “Play” mode.\n\nAll test charges are positive so they will be pushed away from positive charges and pulled towards negative charges. "}), 
+
+          // this is where all the Textbox objects that will appear in the slide go. The x position of these will change when a user moves to a new slide.
+      ],
+      images: [
+          new MyImage({image: popUpImage.gameMode, x: 450, y: 150, size: createVector(220, (220 * (384/600)))}),
+          new MyImage({image: popUpImage.track, x: 1260, y: 150, size: createVector(230, (230 * (309/600)))}),
+          new MyImage({image: popUpImage.slider, x: 2100, y: 130, size: createVector(160, (160 * (600/537)))}),
+          new MyImage({image: popUpImage.eField, x: 2900, y: 130, size: createVector(200, (200 * (537/600)))}),
+
+          // this is where all the MyImage objects that will appear in the slide go. The x position of these will change when a user moves to a new slide.
+      ],
+      buttons: [
+          new Button({x: 730, y: 60 , width: 20, height: 20, title: "x" , onClick: function(){ closePopup()      }, shape: "Rect", bgColor: "black", fontColor: "white", fontSize: 14}), 
+          new Button({x: 80 , y: 190, width: 20, height: 20, title: "<" , onClick: function(){ movePopup("left") }, shape: "Rect", bgColor: "black", fontColor: "white", fontSize: 14}), 
+          new Button({x: 710, y: 190, width: 20, height: 20, title: ">" , onClick: function(){ movePopup("right")}, shape: "Rect", bgColor: "black", fontColor: "white", fontSize: 14}), 
+
+          // this is where all the Button objects that will appear in the slide go. The x position of these will change when a user moves to a new slide.
+      ],
+      // functions: { // this function runs every frame when the popup is visible. Comment it out if you dont want anything to run},
+  }),
    ```
 
 

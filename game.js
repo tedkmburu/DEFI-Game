@@ -49,6 +49,7 @@ function preload()
 
     ]
 
+    // these are all the images that are used in popups 
     popUpImage = {
         portal: loadImage('images/popups/popup (1).png'), 
         multipleTestCharges: loadImage('images/popups/popup (2).png'), 
@@ -59,7 +60,8 @@ function preload()
         negative: loadImage('images/popups/popup (7).png'), 
 
     }
-
+    
+    // all sound files that he game plays must be in an mp3 format
     soundFormats('mp3');
 
     // these are all the sounds that the game will use
@@ -76,6 +78,7 @@ function preload()
         popup: loadSound('sounds/popupv2.mp3'),
         };
 
+    // Here I decrease the volume that these specific sounds are played at. They are too loud without the reductions
     sounds.victory.setVolume(0.1);
     sounds.portal.setVolume(0.3);
 }
@@ -87,17 +90,17 @@ async function setup()    // This function only runs once when the page first lo
     let scaledHeight = windowWidth * (375 / 812);  // 375 / 812 is the aspect ratio of an iphone X. All of the sizes and positions of things are modeled aroung that
     let scaledWidth = windowWidth;
     createCanvas(windowWidth, windowHeight);  // here I create a canvas with the dimentions that fit on the screen
-    //textFont(calibri);
-    textFont(fontRegular);
 
-    windowSize = createVector(scaledWidth, scaledHeight).mag();
+    textFont(fontRegular); // this is the font that I defined in the preload() function
+
+    windowSize = createVector(scaledWidth, scaledHeight).mag();     // this is the size of the screen diagonally.
     scale = createVector(scaledWidth/812, scaledHeight/375);    // this scale is used to scale the size of things in the game up or down depending on the size of the screen
 
-    checkScreenRotation()
+    checkScreenRotation() // checks to make sure the device is in landscape mode
 
-    angleMode(DEGREES);
-    textAlign(CENTER);
-    frameRate(60);
+    angleMode(DEGREES);     // this switches the angle mode from radians to degrees. It's important for drawing the feild lines to be in degrees mode
+    textAlign(CENTER);      // all text drawn on the screen will now be centered by default
+    
     createLevels();     // this function is in the levels.js file. It creates all the levels and stores them in the levels variable
     getUserData();      // this function checks if its a new device. If so, it give it a new ID and saves a score and time of 0 on all the levels to the device. If it's not a new device, it counts all the stars the user has collected and puts that into the totalStars variable so it can be displayed on the "Level Select" screen
 
@@ -115,6 +118,7 @@ async function setup()    // This function only runs once when the page first lo
             if (levels[i].fastestTime != 0)
             {
                 let nextLevel = i + 1;
+                levels[i].locked = false; 
                 levels[nextLevel].locked = false;       // this unlocks the next level if you have a time saved for a previous level
             }
         }
@@ -163,10 +167,33 @@ async function setup()    // This function only runs once when the page first lo
     document.getElementById("classCode").placeholder = "Enter Class Code Here";
 
 
+    if (getItem("firstOpen") == null) 
+    {
+        showPopUp("New User");
+        storeItem("firstOpen", false);
+        storeItem("gameVersion", "1.0");
+    }
+    else
+    {
+        if (localStorage.gameVersion != "1.0")  
+        {
+            console.log("Old Version");    
+            resetGame();
+            location.reload();
+            return;
+        }
+    }
+
+    if (getItem("playSounds") == null) 
+    {
+        storeItem("playSounds", true);
+    }
+
+
     // this connects to the database and gets the data needed to fill up the leaderboard. It then stores that data on the device
     await updateLeaderBoard();
 
-    // this finds the screen called "Level Select" and adds a button to it for each level. Each button will navigate the user to that level when it's clicked. The button objects are added to that screens buttons properties
+    // this finds the screen called "Level Select" and adds a button to it for each level. Each button will navigate the user to that level when it's clicked. The button objects are added to that screens buttons properties. These buttons appear as grey squares in the level select screen
     let screenIndex = screens.findIndex(x => x.name == "Level Select");
     let screen = screens[screenIndex]
  
@@ -185,10 +212,19 @@ async function setup()    // This function only runs once when the page first lo
                     y: buttonY, 
                     width: buttonWidth, 
                     height: buttonHeight, 
-                    title: "TRACK " + (i + 1), 
-                    onClick: function(){ currentLevel = i; changeTrack(currentLevel); loadPercent = 0; navigateTo("Loading Screen");  }, 
+                    title: "TRACK " + (i + 1), // this is the title at the top of the level
+                    onClick: function() // when the button is clicked, the game creates the new track for that level and navigates to the loading screen
+                    { 
+                        if (levels[i].locked == false) 
+                        {
+                            currentLevel = i; 
+                            changeTrack(currentLevel); 
+                            loadPercent = 0; 
+                            navigateTo("Loading Screen");  
+                        }
+                    }, 
                     shape: "Level", 
-                    bgColor: "rgba(0,0,0,0.5)", 
+                    bgColor: "rgba(0,0,0,0.5)", // here is the gray backgrounhd color seen in these buttons in the level select screen
                     fontColor: "white", 
                     fontSize: 14})
             )
@@ -204,23 +240,12 @@ async function setup()    // This function only runs once when the page first lo
     // let loadingDiv = document.getElementById("loadingScreen");
     // loadingDiv.remove();
 
-    document.getElementById("defaultCanvas0").setAttribute("oncontextmenu", "return false");
+    document.getElementById("defaultCanvas0").setAttribute("oncontextmenu", "return false"); // this disables the right click context menu on the webpage
 
-    console.log("setup complete");
+    console.log("setup complete"); // this message won't show up in the console if there is an error somewhere in the setup funtion. Useful for debugging on certain devices. 
 
-    if (getItem("firstOpen") == null) 
-    {
-        showPopUp("New User");
-        storeItem("firstOpen", false);
-        storeItem("gameVersion", "1.0");
-    }
+    
 
-    if (getItem("playSounds") == null) 
-    {
-        storeItem("playSounds", true);
-    }
-
-    //showPopUp("New User")
 
     
 }
@@ -228,27 +253,22 @@ async function setup()    // This function only runs once when the page first lo
 
 function draw() // this function runs every frame. It's used to show the screen that is currently visible. the screen then has functions to show all the things that are supposed to be visible when the user is looking at that screen 
 {
+    frameRate(60);  // the game will try limit itself to 60 frames per second. If a device can't maintain 60 fps, it will run at whatever it can
 
     screens.forEach(screen =>
     {
         if (screen.name == currentScreen) 
         {
-            displayScreen(screen)
+            displayScreen(screen) // every frame, the game finds the screen object in the screens array that has a name that matches the currentScreen variable and displays that screen. This will show all buttons, images and textboxes in that screen as well as run its functions
         }
     })
 
-    checkScreenRotation()
+    // checkScreenRotation()
 }
 
 
-function togglePlaySounds() 
+function createLevelNavigationButtons() 
 {
-    playSounds = !playSounds;
-
-    // console.log("play sounds: ", playSounds);
-
-    createScreens();
-
     let screenIndex = screens.findIndex(x => x.name == "Level Select");
     let screen = screens[screenIndex]
  
@@ -259,7 +279,6 @@ function togglePlaySounds()
         let buttonWidth = 200;
         let buttonHeight = 200;
 
-        //  the buttons propery for the screen is having buttons added to it
         screen.buttons.push( 
             new Button(
                 {
@@ -267,70 +286,61 @@ function togglePlaySounds()
                     y: buttonY, 
                     width: buttonWidth, 
                     height: buttonHeight, 
-                    title: "TRACK " + (i + 1), 
-                    onClick: function(){ currentLevel = i; changeTrack(currentLevel); loadPercent = 0; navigateTo("Loading Screen");  }, 
+                    title: "TRACK " + (i + 1), // this is the title at the top of the level
+                    onClick: function() // when the button is clicked, the game creates the new track for that level and navigates to the loading screen
+                    { 
+                        if (levels[i].locked == false) 
+                        {
+                            currentLevel = i; 
+                            changeTrack(currentLevel); 
+                            loadPercent = 0; 
+                            navigateTo("Loading Screen");  
+                        }
+                    }, 
                     shape: "Level", 
-                    bgColor: "rgba(0,0,0,0.5)", 
+                    bgColor: "rgba(0,0,0,0.5)", // here is the gray backgrounhd color seen in these buttons in the level select screen
                     fontColor: "white", 
                     fontSize: 14})
             )
     } 
 
+    // the gmae then navigates back to the screen you were looking at when the function was called
+    navigateTo(currentScreen); 
+}
 
-    navigateTo(currentScreen);
+function togglePlaySounds() 
+{
+    playSounds = !playSounds; // this toggles the playSounds variable between true and false
+
+    createScreens();    // you then have to createScreens again to update the buttons in the settings menu to have the right background color and text
+
+    // after that, I recreate the buttons in the level select screen because they were removed in the createScreeens() function
+    createLevelNavigationButtons() 
 }
 
 function updateUsername()
 {
     storeItem("userName", userNameInput.value());
-    // console.log(localStorage.userName);
 }
 
 function updateClassCode()
 {
     storeItem("classCode", classCodeInput.value());
 }
+
 function toggleColorBlindMode()
 {
-    colorBlindMode = !colorBlindMode;
-    storeItem("colorBlindMode", colorBlindMode);
+    colorBlindMode = !colorBlindMode; // this toggles the colorBlindMode variable between true and false
+    storeItem("colorBlindMode", colorBlindMode); // the users color preference is then stored locally on the device for the next time they play the game
     
-    // console.log("Colorblind Mode: " + colorBlindMode);
-    chargeColor = getColors();
-    textColor = getTextColors();
 
-    createTextClasses();
-    createScreens();
+    chargeColor = getColors(); // this function changes the charge colors to match the color mode. The chargeColor variable is also used to display the color of some buttons. Those will change too. 
+    textColor = getTextColors(); // this function changes the text colors to match the color mode
 
-    let screenIndex = screens.findIndex(x => x.name == "Level Select");
-    let screen = screens[screenIndex]
- 
-    for (let i = 0; i < levels.length; i++) 
-    {
-        let buttonX = ((200 * scale.x * (i * 1.5  * scale.x) ) + (100 * scale.x) + levelSelectOffset) / scale.x;
-        let buttonY = height/3 / scale.y;
-        let buttonWidth = 200;
-        let buttonHeight = 200;
+    createTextClasses(); // the classes for textboxes are recreated with the new color mode
+    createScreens(); // you then have to createScreens again to update the buttons in the settings menu to have the right background color and text
 
-        //  the buttons propery for the screen is having buttons added to it
-        screen.buttons.push( 
-            new Button(
-                {
-                    x: buttonX, 
-                    y: buttonY, 
-                    width: buttonWidth, 
-                    height: buttonHeight, 
-                    title: "TRACK " + (i + 1), 
-                    onClick: function(){ currentLevel = i; changeTrack(currentLevel); loadPercent = 0; navigateTo("Loading Screen");  }, 
-                    shape: "Level", 
-                    bgColor: "rgba(0,0,0,0.5)", 
-                    fontColor: "white", 
-                    fontSize: 14})
-            )
-    } 
-
-
-    navigateTo(currentScreen);
+    createLevelNavigationButtons() // recreate the buttons in the level select screen because they were removed in the createScreeens() function
 }
 
 
@@ -369,11 +379,11 @@ function keyPressed()
 {
     if (keyCode === 46 && currentScreen == "Level") // when the "delete" key is pressed on a keyboard
     {
-        deleteSelectedCharge()
+        deleteSelectedCharge() // if a charge has its selected propoerty as true, it gets deleted from the charges array
     }
     if (keyCode === 32 && currentScreen == "Level") // when the space bar is hit on a keyboard
     {
-        toggleGameMode()
+        toggleGameMode() // toggles between differnt game modes
     }
 }
 
@@ -424,29 +434,29 @@ function mouseClickedLevel(buttonClicked)
     
 }
 
-function mouseDraggedLevel()
+function mouseDraggedLevel() // only runs when the screen that's currently being displayed is the level screen
 {
     if (gameMode == "Build") 
     {
         let mousePosition = createVector(mouseX, mouseY);
-        let draggingCharge = null;
+        let draggingCharge = null; // this will store the index of the charge that's being dragged
 
-        charges.forEach((charge, i) => {
-            if (charge.dragging)
+        charges.forEach((charge, i) => { // loop through all charges. Used a JavaScript array function
+            if (charge.dragging)    // if the charge's dragging property is true
             {
-                draggingCharge = i;
+                draggingCharge = i; // set dragging chages to that charges index
             }
         })
 
 
-        if (draggingCharge == null)
+        if (draggingCharge == null) // if no charge is being dragged
         {
-            charges.forEach(charge => {
-                let distance = mousePosition.dist(charge.position);
-                if (distance < chargeRadius)
+            charges.forEach(charge => { // loop through all charges. Used a JavaScript array function
+                let distance = mousePosition.dist(charge.position); // get distance between two points. Used p5 vector.dist(vector) function
+                if (distance < chargeRadius)    // this is true when the user is dragging a point inside a charge
                 {
                     draggingCharge = charge;
-                    charge.dragging = true;
+                    charge.dragging = true; // this sets dragging equal to true so the next time the mouseDraggedLevel() funciton is called, draggingCharge will not be null
                 }
             })
         }
@@ -533,33 +543,33 @@ function mouseDraggedLevel()
 
 
 
-function netForceAtPoint(position)
+function netForceAtPoint(position) // this return the net force at a point as a Vector object
 {
-    let finalVector = createVector(0,0);
+    let finalVector = createVector(0,0); // new force will start as a 0 vector then I will add all the force from each charge to it to get the net force
     
-    charges.forEach(charge =>
+    charges.forEach(charge => // loop through all the charges
     {
-        let chargePosition = createVector(charge.x, charge.y);
+        let chargePosition = createVector(charge.x, charge.y); 
 
         //F = KQ / (r^2)
         let kq = charge.charge * k;
         let r = p5.Vector.dist(position, chargePosition);
         if (r < 5)
         {
-            r = 5;
+            r = 5; // this will avoid having extremely large or infinite forces 
         }
         let rSquared = Math.pow(r,2);
 
         //F = KQ / (r^2)
-        let force = kq / rSquared;
+        let force = kq / rSquared; // magnitude of force
 
-        let theta = chargePosition.sub(position).heading();
-        let forceX = force * cos(theta);
-        let forceY = force * sin(theta);
+        let theta = chargePosition.sub(position).heading(); // angle of force
+        let forceX = force * cos(theta); // x component of force
+        let forceY = force * sin(theta); // y component of force
 
-        let forceVector = createVector(forceX, forceY).mult(-1);
+        let forceVector = createVector(forceX, forceY).mult(-1); // force as a vector at one point
         
-        finalVector.add(forceVector);
+        finalVector.add(forceVector); // add the force from the charge to the net force.
     });
 
     prevoiusFinalVector = finalVector;
@@ -567,11 +577,11 @@ function netForceAtPoint(position)
 }
 
 
-function displayFrameRate()
+function displayFrameRate() // every 20 frames, this will update the frame rate displayed on the screen. If I change it every frame, it is too fast to read
 {
     if (frameCount % 20 == 0) 
     {
-        currentFrameRate = frameRate();
+        currentFrameRate = frameRate(); 
     }
     push();
         noStroke();
@@ -581,7 +591,7 @@ function displayFrameRate()
     pop();
 }
 
-function displayTime()
+function displayTime() // this will display the timer at the top of the level
 {
     push();
         textFont('Arial')
@@ -592,7 +602,7 @@ function displayTime()
     pop();
 }
 
-function displayTrash()
+function displayTrash() // this will display the trash can icon at the bottom left of the screen.
 {
     
 
@@ -602,46 +612,45 @@ function displayTrash()
         rect(0, height - 50, 50, 50);
     pop();
 
+    
     let chargeIsBeingDragged = charges.some(charge => charge.dragging);
     let chargeIsSelected = charges.some(charge => charge.selected);
 
-    if(chargeIsBeingDragged && mouseIsPressed)
+    if(chargeIsBeingDragged && mouseIsPressed) // if a charge is being dragged, the trash can will move around 
     {
         image(icon.delete, 5 + (Math.random() * 5) - 2.5, height - 45+ (Math.random() * 5) - 2.5, 40, 40);
     }
-    else
+    else    // if no cahrge is being dragged, the trash can will remain in place
     {
         image(icon.delete, 5 , height - 45, 40, 40);
     }
     
 
-    charges.forEach((charge, i) =>
+    charges.forEach((charge, i) => 
     {
-        if (charge.x < 50 && charge.y > height - 50)
+        if (charge.x < 50 && charge.y > height - 50) // if a charge is positined in the same place as the trash can, it will be deleted
         {
-            charges.splice(i,1);
-            createFieldLines(); 
+            charges.splice(i,1); // this removes the charge from the charges array or "deletes" it
+            createFieldLines(); // after the charge is deleted, the game needs to recalculate the field lines
         }
     })
     
 }
 
-function millisecondsToTimeFormat(millis) 
+function millisecondsToTimeFormat(millis) // this converts time from a millisecond format to a minutes:seconds.milliseconds format
 {
     var minutes = Math.floor(millis / 60000);
     var seconds = ((millis % 60000) / 1000).toFixed(2);
     return (minutes < 10 ? '0' : '') + minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
 }
 
-function windowResized()
+function windowResized() // when the windown is resized, these functions will run. This is a p5 inbuilt function
 {
-
-
     setup();    
-    createTracks()
+    createTracks();
 }
 
-function openFullscreen() 
+function openFullscreen() // this funciton will launch the game in fullscreen. It's currently not called anywhere 
 {
     fullscreen();
     resizeCanvas(windowWidth, windowHeight);
@@ -682,7 +691,7 @@ function getUserData()
         storeItem('userStars', JSON.stringify(userStars));
         storeItem('userTimes', JSON.stringify(userTimes));
 
-        // newDevice();
+        newDevice();
         
 
         totalStars = 0;
@@ -707,23 +716,7 @@ function updateScore(levelGroup, level)
 
 async function updateLeaderBoard()
 {
-    // for (let y = 100; y < height; y+=50) 
-    //                 {
-    //                     fill("rgba(255, 255, 255, 0.25)")
-    //                     noStroke();
-    //                     rect(75, y, width - 150, 40);
-
-    //                     fill(255);
-    //                     text(((y/50)-1) + ".", 125, y + 25);
-    //                     text("NAME " + ((y/50)-1), width/2 - 100, y + 25);
-    //                     text("IC PHYS 101", width /2 + 100, y + 25);
-    //                     text(Math.round(10000/((y/25)-1)), width - 100, y + 25);
-    //                 }
-
     // let example = "{id: “sdfsdf”, level: “level”, stars_collected: 10, score: 100000, time: 45}";
-    
-
-
     
     let newLeaderboard = await getLevelScores()
     if (newLeaderboard == null || newLeaderboard.length == 0)
@@ -823,7 +816,7 @@ async function updateUsernameOnServer()
     // console.log("userId: ", localStorage.userId);
 
     let bodyData = {student_name: localStorage.userName, class_name: "PHYS-102"};
-    let responseLink = "http://ic-research.eastus.cloudapp.azure.com:8080/device/" + localStorage.userId
+    let responseLink = "https://ic-research.eastus.cloudapp.azure.com/api/device/" + localStorage.userId
 
     // console.log(bodyData);
     // console.log(responseLink);
@@ -840,15 +833,16 @@ async function updateUsernameOnServer()
         return data.json()
     }).catch(function(err) 
     {
-      console.error("Can't Update Username :-S", err);
+      console.error("Can't Update Username: ", err);
     });
 }
 
 
 async function requestTest()
 {
+
     connectingToServer = true; 
-    const response = await fetch('http://ic-research.eastus.cloudapp.azure.com:8080/leaderboard?limit=10&level=' + leaderboardData.level + '&global=true', {
+    const response = await fetch('https://ic-research.eastus.cloudapp.azure.com/api/leaderboard?limit=10&level=' + leaderboardData.level + '&global=true', {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
@@ -857,12 +851,9 @@ async function requestTest()
         },
     }).catch(function(err) 
     {
-      console.error("Can't Get Leaderboard Data :-S", err);
+      console.error("Can't Get Leaderboard Data: ", err);
     });
 
-     
-
-    //console.log(result);
     return await response.json();
 }
 
@@ -873,39 +864,24 @@ async function requestTest()
 
 function sendScore(data)
 {
-     // endScore({level: 1, group: currentLevel, time: Math.round(timeElapsed), stars: numberOfStarsCollected, score: score, userId: getItem("userId")})
-
     let dataToSend = {_id: data.userId, level: (track.level + 1).toString(), track: data.group.toString(), stars_collected: data.numberOfStarsCollected, score: data.score, time: data.time, timestamp: getDate()};
-
-    // //{_id: “sdfsdf”, level: “level”, stars_collected: 10, score: 100000, time: 45 }
-    // //let data = {_id: localStorage.userId, level: level, group: group, stars_collected: numberOfStarsCollected, score: score, time: timeElapsed };
-    // let data = {"_id": localStorage.userId, "level": level, "stars_collected": numberOfStarsCollected, score: score, time: timeElapsed };
-
     let dataJSON = JSON.stringify(dataToSend);
-    // console.log(dataJSON);
 
-
-
-    fetch("http://ic-research.eastus.cloudapp.azure.com:8080/device/", {
+    fetch("https://ic-research.eastus.cloudapp.azure.com/api/device/", {
     method: "post",
     headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Authorization': 'Basic ' + window.btoa("test:test")
     },
-
     body: dataJSON
-
-
     }).then( (response) => { 
         // console.log(response);
     }).catch(function(err) 
     {
-      console.error("Can't Send Data :-S", err);
+      console.error("Can't Send Data: ", err);
     });
-
-    // console.log("data sent");
-        
+         
 }
 
 
@@ -921,39 +897,10 @@ function getDate()
     return today;
 }
 
-function tryFetchData()
-{
-    //https://virtserver.swaggerhub.com/efieldrestful-api-IC/efield/1.0/device/
-    //http://ic-research.eastus.cloudapp.azure.com:8080/class/
-    fetch('http://ic-research.eastus.cloudapp.azure.com:8080/device/' + localStorage.userId)
-        .then(
-            function(response) 
-            {
-                if (response.status !== 200) 
-                {
-                    console.log('Looks like there was a problem. Status Code: ' + response.status);
-                    return;
-                }
-                
-                response.json().then(function(data) 
-                {
-                    console.log(data);
-                    return data;
-                });
-            } 
-        )
-    .catch(function(err) 
-    {
-      console.error('Fetch Error :-S', err);
-    });
-
-
-
-}
 
 function newDevice()
 {
-    fetch('http://ic-research.eastus.cloudapp.azure.com:8080/device/', {
+    fetch('http://ic-research.eastus.cloudapp.azure.com:9000/device/', {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -964,13 +911,11 @@ function newDevice()
         return res.json()
     }).then((json) => {
         storeItem("userId", json.InsertedID)
-        updateUsernameOnServer();
+        //updateUsernameOnServer();
     })
 
-    
+    storeItem("userId", "No Id")
 }
-
-
 
 async function getLevelScores(levelNumber) 
 {

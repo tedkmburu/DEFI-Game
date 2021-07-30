@@ -102,7 +102,7 @@ async function setup()    // This function only runs once when the page first lo
     textAlign(CENTER);      // all text drawn on the screen will now be centered by default
     
     createLevels();     // this function is in the levels.js file. It creates all the levels and stores them in the levels variable
-    getUserData();      // this function checks if its a new device. If so, it give it a new ID and saves a score and time of 0 on all the levels to the device. If it's not a new device, it counts all the stars the user has collected and puts that into the totalStars variable so it can be displayed on the "Level Select" screen
+    // getUserData();      // this function checks if its a new device. If so, it give it a new ID and saves a score and time of 0 on all the levels to the device. If it's not a new device, it counts all the stars the user has collected and puts that into the totalStars variable so it can be displayed on the "Level Select" screen
 
     if(getItem("userScores") != null)       // this unlocks levels that need to be unlocked and assigns the user's highscore, best time and number of stars colleceted in each level. 
     {
@@ -816,13 +816,14 @@ async function updateUsernameOnServer()
     // console.log("userId: ", localStorage.userId);
 
     let bodyData = {student_name: localStorage.userName, class_name: "PHYS-102"};
-    let responseLink = "https://ic-research.eastus.cloudapp.azure.com/api/device/" + localStorage.userId
+    // let responseLink = "https://ic-research.eastus.cloudapp.azure.com/api/device/" + localStorage.userId
+    let responseLink = "http://ic-research.eastus.cloudapp.azure.com:9000/updateName/"
 
     // console.log(bodyData);
     // console.log(responseLink);
 
     const response = await fetch(responseLink, {
-        method: 'PUT',
+        method: 'POST',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -842,7 +843,7 @@ async function requestTest()
 {
 
     connectingToServer = true; 
-    const response = await fetch('https://ic-research.eastus.cloudapp.azure.com/api/leaderboard?limit=10&level=' + leaderboardData.level + '&global=true', {
+    const response = await fetch('http://ic-research.eastus.cloudapp.azure.com:9000/leaderboard?limit=10&level=' + leaderboardData.level + '&global=true', {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
@@ -854,7 +855,7 @@ async function requestTest()
       console.error("Can't Get Leaderboard Data: ", err);
     });
 
-    return await response.json();
+    return await response;
 }
 
 
@@ -867,7 +868,7 @@ function sendScore(data)
     let dataToSend = {_id: data.userId, level: (track.level + 1).toString(), track: data.group.toString(), stars_collected: data.numberOfStarsCollected, score: data.score, time: data.time, timestamp: getDate()};
     let dataJSON = JSON.stringify(dataToSend);
 
-    fetch("https://ic-research.eastus.cloudapp.azure.com/api/device/", {
+    fetch("http://ic-research.eastus.cloudapp.azure.com:9000/addScore/", {
     method: "post",
     headers: {
         'Accept': 'application/json',
@@ -881,7 +882,7 @@ function sendScore(data)
     {
       console.error("Can't Send Data: ", err);
     });
-         
+
 }
 
 
@@ -900,8 +901,8 @@ function getDate()
 
 function newDevice()
 {
-    fetch('http://ic-research.eastus.cloudapp.azure.com:9000/device/', {
-        method: 'POST',
+    fetch('http://ic-research.eastus.cloudapp.azure.com:9080/device/', {
+        method: 'GET',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -921,6 +922,6 @@ async function getLevelScores(levelNumber)
 {
     const scores = await requestTest()
 
-    return scores.stats;
+    return scores;
 
 }

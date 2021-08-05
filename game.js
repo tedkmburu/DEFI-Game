@@ -719,20 +719,21 @@ async function updateLeaderBoard()
     // let example = "{id: “sdfsdf”, level: “level”, stars_collected: 10, score: 100000, time: 45}";
     
     let newLeaderboard = await getLevelScores()
-    if (newLeaderboard == null || newLeaderboard.length == 0)
-    {
-        currentLeaderboard = []
-    }
-    else
-    {
-        currentLeaderboard = []
+    // if (newLeaderboard == null || newLeaderboard.length == 0)
+    // {
+    //     currentLeaderboard = []
+    // }
+    // else
+    // {
+    //     currentLeaderboard = []
 
-        newLeaderboard.forEach(attempt =>
-            {
-                currentLeaderboard.push(attempt)
-            })
 
-    }
+    //     newLeaderboard.forEach(attempt =>
+    //     {
+    //         currentLeaderboard.push(attempt)
+    //     })
+
+    // }
     
 
     // let newLeaderboard = []
@@ -813,47 +814,118 @@ function compareValues(key, order = 'asc')
 
 async function updateUsernameOnServer() 
 { 
-    // console.log("userId: ", localStorage.userId);
 
-    let bodyData = {student_name: localStorage.userName, class_name: "PHYS-102"};
-    // let responseLink = "https://ic-research.eastus.cloudapp.azure.com/api/device/" + localStorage.userId
-    let responseLink = "http://ic-research.eastus.cloudapp.azure.com:9000/updateName/"
+    let bodyData = {student_name: localStorage.userName, class_name: "PHYS-102", userId: localStorage.userId};
+    let dataToSend = JSON.stringify(bodyData)
 
-    // console.log(bodyData);
-    // console.log(responseLink);
+    console.log(dataToSend);
+
+    let responseLink = "https://ic-research.eastus.cloudapp.azure.com:9000/updateName/"
+    
 
     const response = await fetch(responseLink, {
-        method: 'POST',
+        method: "POST",
         headers: {
             'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'Authorization': 'Basic ' + window.btoa("test:test")
+            'Content-Type': 'application/json'
         },
-        body: JSON.stringify(bodyData)
+        body: dataToSend
     }).then(data => {
-        return data.json()
+        console.log(data);
+        return data
     }).catch(function(err) 
     {
       console.error("Can't Update Username: ", err);
     });
 }
 
+function sendScore(data)
+{
+    // console.log("sending score");
+    // let dataToSend = {_id: data.userId, level: (track.level + 1).toString(), track: data.group.toString(), stars_collected: data.numberOfStarsCollected, score: data.score, time: data.time, timestamp: getDate()};
+    // let dataJSON = JSON.stringify(dataToSend);
+
+    // fetch("http://ic-research.eastus.cloudapp.azure.com:9000/addScore/", {
+    // method: "POST",
+    // headers: {
+    //     'Accept': 'application/json',
+    //     'Content-Type': 'application/json',
+    //     'Authorization': 'Basic ' + window.btoa("test:test")
+    // },
+    // body: dataJSON
+    // }).then( (response) => { 
+    //     console.log(response);
+    // }).catch(function(err) 
+    // {
+    //   console.error("Can't Send Data: ", err);
+    // });
+
+ 
+
+    connectingToServer = true; 
+
+    // {_id: data.userId, level: (track.level + 1).toString(), track: data.group.toString(), stars_collected: data.numberOfStarsCollected, score: data.score, time: data.time, timestamp: getDate()};
+
+    // {"time":9133,"timestamp":"8-4-2021","score":19817,"track":"1","_id":"086cf177-f53f-11eb-bb0b-000d3a162721"}
+    // {time:"3456", timestamp:"10/20/2021", score:"264", stars_collected:"1", track:"1", _id:"8a7436fe-f3c2-11eb-bb0b-000d3a162721"}
+    // console.log( "stars: " + data.stars);
+    let bodyData = {time: data.time, timestamp: getDate(), score: data.score, stars_collected: data.stars, track: (track.level + 1).toString(), _id: data.userId}
+
+    let dataToSend = JSON.stringify(bodyData);
+
+    console.log("data to send: " + dataToSend);
+
+    fetch('https://ic-research.eastus.cloudapp.azure.com:9000/addScore', {
+
+        method: 'POST',
+
+        body:dataToSend,
+
+        headers: {
+
+            'Accept': 'application/json',
+
+            //'Content-Type': 'application/x-www-form-urlencoded',
+
+            'Content-Type': 'application/json',
+
+        }   
+
+    
+
+    })  
+
+    .then(res => res.json())
+
+    .then(json => console.log(json))
+
+    .catch(function(err) 
+
+    {   
+
+      console.error("Can't Get Leaderboard Data: ", err);
+
+    }); 
+
+
+
+}
 
 async function requestTest()
 {
-
     connectingToServer = true; 
-    const response = await fetch('http://ic-research.eastus.cloudapp.azure.com:9000/leaderboard?limit=10&level=' + leaderboardData.level + '&global=true', {
+    const response = await fetch('https://ic-research.eastus.cloudapp.azure.com:9000/leaderboard?limit=10&level=' + leaderboardData.level + '&global=true', {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'Authorization': 'Basic ' + window.btoa("test:test")
+            'Content-Type': 'application/json'
         },
-    }).catch(function(err) 
-    {
+    }).then(res => res.json())
+    .then(json => currentLeaderboard = json)
+    .catch(function(err) 
+    {   
       console.error("Can't Get Leaderboard Data: ", err);
-    });
+    }); 
 
     return await response;
 }
@@ -863,27 +935,7 @@ async function requestTest()
 
 
 
-function sendScore(data)
-{
-    let dataToSend = {_id: data.userId, level: (track.level + 1).toString(), track: data.group.toString(), stars_collected: data.numberOfStarsCollected, score: data.score, time: data.time, timestamp: getDate()};
-    let dataJSON = JSON.stringify(dataToSend);
 
-    fetch("http://ic-research.eastus.cloudapp.azure.com:9000/addScore/", {
-    method: "post",
-    headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': 'Basic ' + window.btoa("test:test")
-    },
-    body: dataJSON
-    }).then( (response) => { 
-        // console.log(response);
-    }).catch(function(err) 
-    {
-      console.error("Can't Send Data: ", err);
-    });
-
-}
 
 
 function getDate()
@@ -901,21 +953,24 @@ function getDate()
 
 function newDevice()
 {
-    fetch('http://ic-research.eastus.cloudapp.azure.com:9080/device/', {
+    fetch('https://ic-research.eastus.cloudapp.azure.com:9000/device/', {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'Authorization': 'Basic ' + window.btoa("test:test")
+            'Content-Type': 'application/json'
         },
     }).then(res => {
         return res.json()
     }).then((json) => {
-        storeItem("userId", json.InsertedID)
-        //updateUsernameOnServer();
+       // console.log(json);
+        storeItem("userId", json)
+        updateUsernameOnServer();
     })
 
-    storeItem("userId", "No Id")
+    
+    // storeItem("userId", "No Id")
+    console.log("end");
+
 }
 
 async function getLevelScores(levelNumber) 

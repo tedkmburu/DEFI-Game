@@ -65,8 +65,8 @@ function createPopups()
                 new TextBox({x: 406, y: 110, id: "title", text: "Please enter your new username below.", font: fontRegular, fontSize: 20, color: "black", visibility: "visible", align: CENTER}), 
             ],
             buttons: [
-                // new Button({x: 516, y: 150 , width: 100, height: 45, title: "Save" , onClick: function(){ closePopup(); updateUsernameOnServer(); }, shape: "Rect", bgColor: "rgb(108,164,104)", fontColor: "white", fontSize: 14}), 
-                new Button({x: 516, y: 150 , width: 100, height: 45, title: "Save" , onClick: function(){ closePopup(); }, shape: "Rect", bgColor: "rgb(108,164,104)", fontColor: "white", fontSize: 14}), 
+                new Button({x: 516, y: 150 , width: 100, height: 45, title: "Save" , onClick: function(){  console.log("updating"); closePopup(); updateUsernameOnServer(); }, shape: "Rect", bgColor: "rgb(108,164,104)", fontColor: "white", fontSize: 14}), 
+                // new Button({x: 516, y: 150 , width: 100, height: 45, title: "Save" , onClick: function(){ closePopup(); }, shape: "Rect", bgColor: "rgb(108,164,104)", fontColor: "white", fontSize: 14}), 
                 new Button({x: 80 , y: 190, width: 20, height: 20, title: "<" , onClick: function(){ movePopup("left") }, shape: "Rect", bgColor: "black", fontColor: "white", fontSize: 14}), 
                 new Button({x: 710, y: 190, width: 20, height: 20, title: ">" , onClick: function(){ movePopup("right")}, shape: "Rect", bgColor: "black", fontColor: "white", fontSize: 14}), 
             ],
@@ -136,7 +136,7 @@ function closePopup() // this function sets all the popups visibility to hidden
     })
 
     hideInputs();
-    createPopups()
+    createPopups();
 }
 
 function movePopup(direction) // when the left or right buttons are clicked in a popup, this function will move alll the buttons, images and textboxes in that popup to the left or right by a screen width ammount.

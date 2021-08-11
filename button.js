@@ -251,8 +251,8 @@ class Button
         {
             // try
             // {
-                
                 button.onClick();
+
                 if (playSounds) 
                 {
                     sounds.click.play();

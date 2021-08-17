@@ -39,6 +39,35 @@ function createPopups()
             // functions: {},
         }),
 
+
+
+        new Popup({
+            name: "Toggle",
+            size: createVector(400,300),
+            numberOfSlides: 4,
+            textBoxes: [
+                // new TextBox({x: (812 * 0), y: 80, class: textClass.popUpTitle, text: "Goal"}), 
+                new TextBox({x: (812 / 2) - 140, y: 80, class: textClass.popUpBody, text: "You can toggle between the build mode and play mode with this button"}), 
+            ],
+            images: [
+                // popUpImage = {
+                //     portal: loadImage('images/popups/popup (1).png'), 
+                //     multipleTestCharges: loadImage('images/popups/popup (2).png'), 
+                //     gameMode: loadImage('images/popups/popup (3).png'), 
+                //     slider: loadImage('images/popups/popup (4).png'), 
+                //     eField: loadImage('images/popups/popup (5).png'), 
+                // }
+                new MyImage({image: popUpImage.toggle, x: 300, y: 130, size: createVector(220, (220 * (1322/1836)))}),
+                new MyImage({image: icon.circle, x: 747, y: 310, size: createVector(50, 50)}),
+            ],
+            buttons: [
+                new Button({x: 380, y: 310 , width: 60, height: 20, title: "Got It!" , onClick: function(){ closePopup()      }, shape: "Rect", bgColor: "black", fontColor: "white", fontSize: 14}),
+            ],
+            // functions: {},
+        }),
+
+
+
         new Popup({
             name: "New User",
             numberOfSlides: 1,

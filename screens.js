@@ -328,38 +328,64 @@ function displayLevelSelectScreen()
 
 function tutorial()
 {
-    // push();
-    //     fill(255);
-    //     stroke(0);
-    //     textSize(14);
+    push();
+        fill(255);
+        stroke(0);
+        textSize(24);
 
-    //     if(charges.length == 0)
-    //     {
-    //         text("Tap inside the circle\n to create a charge", track.offset.x - 80, track.offset.y - 20);
-    //     }
-    //     else if(slider.visibility == "visible")
-    //     {
-    //         if (charges[0].charge > 0)
-    //         {
-    //             text("Press Play \n to test\n your build", width - 50, height - 130);
-    //         }
-    //         else
-    //         {
-    //             textAlign(LEFT);
-    //             fill(0);
-    //             rect(width - 185, height/2, 150, 100);
-    //             fill(255);
-    //             text("We call the sign \nand magnitude \nof the charge", width - 165, height/2 + 20);
-    //             textAlign(CENTER);
-    //             text("Use the slider to give the charge a positive charge", width/2, height - 30);
-    //             textSize(24);
-    //             text("Q.", width - 115, height/2 + 90);
-    //         }
-    //     }
+        if(charges.length == 0)
+        {
+            text("Tap inside the circle\n to create a  point charge", track.offset.x - 80, track.offset.y - 20);
+            image(icon.circle, track.offset.x - 80, track.offset.y + 40, chargeDiameter + 20, chargeDiameter + 20);
+            ellipse(track.offset.x - 50, track.offset.y + 70, 10, 10)
+
+        }
+        else if(charges[0].charge != 5)
+        {
+            fill(255);
+            textAlign(CENTER);
+            text("Use the slider to give the point charge a +5 charge", track.offset.x - 80, track.offset.y - 10);
+            image(icon.circle, track.offset.x - 80, track.offset.y + 40, chargeDiameter + 20, chargeDiameter + 20);
+        }
+        else if(charges.length == 1 && charges[0].charge == 5)
+        {
+            if (charges[0].charge > 0)
+            {
+                
+                text("Create a +1 point charge here", track.offset.x + 270, track.offset.y - 100);
+                image(icon.circle, track.offset.x + 280, track.offset.y - 80, chargeDiameter + 20, chargeDiameter + 20);
+            }
+            else
+            {
+                textSize(24);
+                textAlign(LEFT);
+                fill(0);
+                rect(width - 185, height/2, 150, 100);
+                fill(255);
+                text("We call the sign \nand magnitude \nof the charge", width - 165, height/2 + 20);
+                
+                textSize(24);
+                text("Q.", width - 115, height/2 + 90);
+            }
+        }
+        else if (charges.length == 2 && charges[1].charge != 1) 
+        {
+            text("Create a +1 point charge here", track.offset.x + 270, track.offset.y - 100);
+            image(icon.circle, track.offset.x + 280, track.offset.y - 80, chargeDiameter + 20, chargeDiameter + 20);
+        }
+        else if (charges.length == 2 && charges[1].charge == 1 && charges[0].charge == 5) 
+        {
+            text("Press Play \n to test\n your build", width - 50, height - 130);
+        }
+        else
+        {
+
+        }
        
-    //     image(icon.circle, track.offset.x - 100, track.offset.y + 20, chargeDiameter + 20, chargeDiameter + 20);
         
-    // pop();
+        
+        
+    pop();
 
     // let scaledHeight = windowWidth * (375 / 812);
     // image(helpScreen, 0, 0, width, scaledHeight);
@@ -412,9 +438,9 @@ function displayLevelScreen()
     }
     else
     {
-        if (currentLevel == 0 && currentLevel == 0)
+        if (currentLevel == 0)
         {
-            //tutorial()
+            tutorial()
         }
     }
 
@@ -722,9 +748,10 @@ function navigateTo(screenToShow, backButton)
     if (screenToShow == "Level") 
     {
         dataSent = false;
-        if(track.level == 0 && JSON.parse(localStorage.userScores)[0] == 0)
+        // if(track.level == 0 && JSON.parse(localStorage.userScores)[0] == 0)
+        if(true)
         {
-            showPopUp("Help");
+            showPopUp("Toggle");
         }    
     }
     
@@ -746,7 +773,7 @@ function navigateTo(screenToShow, backButton)
         {
             leaderboardData.level = 1;
         }
-        // updateLeaderBoard();
+        updateLeaderBoard();
     }
 
 

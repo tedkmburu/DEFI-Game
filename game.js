@@ -52,6 +52,7 @@ function preload()
     // these are all the images that are used in popups 
     popUpImage = {
         portal: loadImage('images/popups/popup (1).png'), 
+        toggle: loadImage('images/popups/toggle.png'), 
         multipleTestCharges: loadImage('images/popups/popup (2).png'), 
         gameMode: loadImage('images/popups/popup (3).png'), 
         slider: loadImage('images/popups/popup (4).png'), 
@@ -714,74 +715,74 @@ function updateScore(levelGroup, level)
 
 }
 
-async function updateLeaderBoard()
-{
-    // let example = "{id: “sdfsdf”, level: “level”, stars_collected: 10, score: 100000, time: 45}";
+// async function updateLeaderBoard()
+// {
+//     // let example = "{id: “sdfsdf”, level: “level”, stars_collected: 10, score: 100000, time: 45}";
     
-    let newLeaderboard = await getLevelScores()
-    // if (newLeaderboard == null || newLeaderboard.length == 0)
-    // {
-    //     currentLeaderboard = []
-    // }
-    // else
-    // {
-    //     currentLeaderboard = []
+//     let newLeaderboard = await getLevelScores()
+//     // if (newLeaderboard == null || newLeaderboard.length == 0)
+//     // {
+//     //     currentLeaderboard = []
+//     // }
+//     // else
+//     // {
+//     //     currentLeaderboard = []
 
 
-    //     newLeaderboard.forEach(attempt =>
-    //     {
-    //         currentLeaderboard.push(attempt)
-    //     })
+//     //     newLeaderboard.forEach(attempt =>
+//     //     {
+//     //         currentLeaderboard.push(attempt)
+//     //     })
 
-    // }
-    
-
-    // let newLeaderboard = []
-
-    // currentLeaderboard.forEach( entry => 
-    //     {
-    //         newLeaderboard.push({_id: entry._id, level: entry.attempt.level, score: entry.attempt.score, time: entry.attempt.time})
-    //     })
-
-    // currentLeaderboard = newLeaderboard;
-
-    // let whatToSortBy = (leaderboardData.sort == "score") ? "score" : "time"
-
-    // let sortAscOrDesc = (leaderboardData.sort == "time") ? "asc" : "desc"
-
-    // currentLeaderboard.sort(compareValues(whatToSortBy, sortAscOrDesc))
-
-
+//     // }
     
 
+//     // let newLeaderboard = []
 
-    //   console.log(currentLeaderboard);
+//     // currentLeaderboard.forEach( entry => 
+//     //     {
+//     //         newLeaderboard.push({_id: entry._id, level: entry.attempt.level, score: entry.attempt.score, time: entry.attempt.time})
+//     //     })
+
+//     // currentLeaderboard = newLeaderboard;
+
+//     // let whatToSortBy = (leaderboardData.sort == "score") ? "score" : "time"
+
+//     // let sortAscOrDesc = (leaderboardData.sort == "time") ? "asc" : "desc"
+
+//     // currentLeaderboard.sort(compareValues(whatToSortBy, sortAscOrDesc))
+
 
     
 
 
+//     //   console.log(currentLeaderboard);
+
+    
 
 
-    // lv1scores 
 
-    // for (let a = 0; a < 10; a++) 
-    // {
-    //     let id = "Username " + Math.round(random() * 1000);
-    //     let randomTime = Math.round(random() * 100000);
-    //     let randomStars = Math.round(random() * 3);
-    //     let randomScore = randomStars > 0 ? (randomTime * randomStars) : 100;
+
+//     // lv1scores 
+
+//     // for (let a = 0; a < 10; a++) 
+//     // {
+//     //     let id = "Username " + Math.round(random() * 1000);
+//     //     let randomTime = Math.round(random() * 100000);
+//     //     let randomStars = Math.round(random() * 3);
+//     //     let randomScore = randomStars > 0 ? (randomTime * randomStars) : 100;
         
-    //     let exampleArray = {id: id, level: "level", stars_collected: randomStars, score: randomScore, time: randomTime }
+//     //     let exampleArray = {id: id, level: "level", stars_collected: randomStars, score: randomScore, time: randomTime }
 
 
-    //     currentLeaderboard.push(JSON.stringify(exampleArray));
+//     //     currentLeaderboard.push(JSON.stringify(exampleArray));
         
-    // }
+//     // }
 
 
     
 
-}
+// }
 
 function compareValues(key, order = 'asc') 
 {
@@ -841,27 +842,6 @@ async function updateUsernameOnServer()
 
 function sendScore(data)
 {
-    // console.log("sending score");
-    // let dataToSend = {_id: data.userId, level: (track.level + 1).toString(), track: data.group.toString(), stars_collected: data.numberOfStarsCollected, score: data.score, time: data.time, timestamp: getDate()};
-    // let dataJSON = JSON.stringify(dataToSend);
-
-    // fetch("http://ic-research.eastus.cloudapp.azure.com:9000/addScore/", {
-    // method: "POST",
-    // headers: {
-    //     'Accept': 'application/json',
-    //     'Content-Type': 'application/json',
-    //     'Authorization': 'Basic ' + window.btoa("test:test")
-    // },
-    // body: dataJSON
-    // }).then( (response) => { 
-    //     console.log(response);
-    // }).catch(function(err) 
-    // {
-    //   console.error("Can't Send Data: ", err);
-    // });
-
- 
-
     connectingToServer = true; 
 
     // {_id: data.userId, level: (track.level + 1).toString(), track: data.group.toString(), stars_collected: data.numberOfStarsCollected, score: data.score, time: data.time, timestamp: getDate()};
@@ -911,7 +891,7 @@ function sendScore(data)
 
 }
 
-async function requestTest()
+async function updateLeaderBoard()
 {
     connectingToServer = true; 
     const response = await fetch('https://ic-research.eastus.cloudapp.azure.com:9000/leaderboard?limit=10&level=' + leaderboardData.level + '&global=true', {

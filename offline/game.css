@@ -1,0 +1,92 @@
+body
+{
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+  /* touch-action: manipulation; */
+  touch-action: none;
+  background-color: black;
+}
+div.loadingScreen
+{
+  position: fixed;
+  background-color: black;
+  color: white;
+  text-align: center;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  padding-top: 25%;
+  z-index: 999;
+}
+canvas
+{
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: auto;
+  z-index: 0;
+}
+
+input.slider
+{
+  height: 5px;
+  width: 150px;
+  border-radius: 5px;
+  background: "rgb(83,83,83)";
+  outline: none;
+  opacity: 0.9;
+  -webkit-transition: .2s;
+  transition: background .2s;
+  -webkit-appearance: none;
+  appearance: none;
+}
+input.username
+{
+  font-size: 18pt;
+  background-color: "white";
+
+  position: absolute;
+  outline: none;
+  opacity: 0.9;
+  text-align: center;
+  z-index: 999;
+}
+
+input.classCode
+{
+  font-size: 18pt;
+  background-color: "white";
+
+  position: absolute;
+  outline: none;
+  opacity: 0.9;
+  text-align: center;
+  z-index: 999;
+}
+input.slider:hover
+{
+  background: "rgb(255,255,255)";
+}
+input.slider::-webkit-slider-thumb
+{
+  -webkit-appearance: none;
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #616161;
+  cursor: pointer;
+}
+input.slider::-moz-range-thumb
+{
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #616161;
+  cursor: pointer;
+}

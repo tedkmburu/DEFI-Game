@@ -337,7 +337,7 @@ function tutorial()
         {
             text("Tap inside the circle\n to create a  point charge", track.offset.x - 80, track.offset.y - 20);
             image(icon.circle, track.offset.x - 80, track.offset.y + 40, chargeDiameter + 20, chargeDiameter + 20);
-            ellipse(track.offset.x - 50, track.offset.y + 70, 10, 10)
+            // ellipse(track.offset.x - 50, track.offset.y + 70, 10, 10)
 
         }
         else if(charges[0].charge != 5)
@@ -375,7 +375,7 @@ function tutorial()
         }
         else if (charges.length == 2 && charges[1].charge == 1 && charges[0].charge == 5) 
         {
-            text("Press Play \n to test\n your build", width - 50, height - 130);
+            text("Press Play \n to test\n your build", width - 100, height - 310);
         }
         else
         {
@@ -743,8 +743,6 @@ function navigateTo(screenToShow, backButton)
     //sounds.victory.stop();
     finishedSoundsPlaying = false;
 
-    
-
     if (screenToShow == "Level") 
     {
         dataSent = false;
@@ -773,7 +771,7 @@ function navigateTo(screenToShow, backButton)
         {
             leaderboardData.level = 1;
         }
-        updateLeaderBoard();
+        updateLeaderBoardScreen();
     }
 
 

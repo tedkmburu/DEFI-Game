@@ -103,7 +103,7 @@ async function setup()    // This function only runs once when the page first lo
     textAlign(CENTER);      // all text drawn on the screen will now be centered by default
     
     createLevels();     // this function is in the levels.js file. It creates all the levels and stores them in the levels variable
-    // getUserData();      // this function checks if its a new device. If so, it give it a new ID and saves a score and time of 0 on all the levels to the device. If it's not a new device, it counts all the stars the user has collected and puts that into the totalStars variable so it can be displayed on the "Level Select" screen
+    getUserData();      // this function checks if its a new device. If so, it give it a new ID and saves a score and time of 0 on all the levels to the device. If it's not a new device, it counts all the stars the user has collected and puts that into the totalStars variable so it can be displayed on the "Level Select" screen
 
     if(getItem("userScores") != null)       // this unlocks levels that need to be unlocked and assigns the user's highscore, best time and number of stars colleceted in each level. 
     {
@@ -172,11 +172,11 @@ async function setup()    // This function only runs once when the page first lo
     {
         showPopUp("New User");
         storeItem("firstOpen", false);
-        storeItem("gameVersion", "1.0");
+        storeItem("gameVersion", "2.0");
     }
     else
     {
-        if (localStorage.gameVersion != "1.0")  
+        if (localStorage.gameVersion != "2.0")  
         {
             console.log("Old Version");    
             resetGame();
@@ -189,6 +189,8 @@ async function setup()    // This function only runs once when the page first lo
     {
         storeItem("playSounds", true);
     }
+
+    
 
 
     // this connects to the database and gets the data needed to fill up the leaderboard. It then stores that data on the device
@@ -694,7 +696,6 @@ function getUserData()
 
         newDevice();
         
-
         totalStars = 0;
     }
     else
@@ -893,6 +894,27 @@ function sendScore(data)
 
 async function updateLeaderBoard()
 {
+    connectingToServer = true; 
+    const response = await fetch('https://ic-research.eastus.cloudapp.azure.com:9000/leaderboard?limit=10&level=' + leaderboardData.level + '&global=true', {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+    }).then(res => res.json())
+    .then(json => currentLeaderboard = json)
+    .catch(function(err) 
+    {   
+      console.error("Can't Get Leaderboard Data: ", err);
+    }); 
+
+    return await response;
+}
+
+async function updateLeaderBoardScreen() 
+{
+    setTimeout(function(){ updateLeaderBoardScreen(); console.log("updated data"); }, 5000);
+
     connectingToServer = true; 
     const response = await fetch('https://ic-research.eastus.cloudapp.azure.com:9000/leaderboard?limit=10&level=' + leaderboardData.level + '&global=true', {
         method: 'GET',

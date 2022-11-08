@@ -850,7 +850,14 @@ function sendScore(data)
     // {"time":9133,"timestamp":"8-4-2021","score":19817,"track":"1","_id":"086cf177-f53f-11eb-bb0b-000d3a162721"}
     // {time:"3456", timestamp:"10/20/2021", score:"264", stars_collected:"1", track:"1", _id:"8a7436fe-f3c2-11eb-bb0b-000d3a162721"}
     // console.log( "stars: " + data.stars);
-    let bodyData = {time: data.time, timestamp: getDate(), score: data.score, stars_collected: data.stars, track: (track.level + 1).toString(), _id: data.userId}
+    let bodyData = {
+        time: data.time, 
+        timestamp: getDate(), 
+        score: data.score, 
+        stars_collected: data.stars, 
+        track: (track.level + 1).toString(), 
+        _id: data.userId
+    }
 
     let dataToSend = JSON.stringify(bodyData);
 

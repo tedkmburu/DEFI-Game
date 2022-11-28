@@ -176,7 +176,7 @@ async function setup()    // This function only runs once when the page first lo
     }
     else
     {
-        if (localStorage.gameVersion != "2.0")  
+        if (localStorage.gameVersion != "3.0")  
         {
             console.log("Old Version");    
             resetGame();
@@ -677,23 +677,8 @@ function openFullscreen() // this funciton will launch the game in fullscreen. I
 
 function getUserData()
 {
-    if(localStorage.length == 0)
+    if(getItem("userID") == null)
     {
-        let userScores = [];
-        let userStars = [];
-        let userTimes = [];
-
-        levels.forEach(level =>
-        {
-            userScores.push(0);
-            userStars.push(0);
-            userTimes.push(0);
-        })
-
-        storeItem('userScores', JSON.stringify(userScores));
-        storeItem('userStars', JSON.stringify(userStars));
-        storeItem('userTimes', JSON.stringify(userTimes));
-
         newDevice();
         
         totalStars = 0;
@@ -856,37 +841,39 @@ function sendScore(data)
 
     console.log("data to send: " + dataToSend);
 
-    fetch('https://ic-research.eastus.cloudapp.azure.com:9000/addScore', {
+    
 
-        method: 'POST',
+    // fetch('https://ic-research.eastus.cloudapp.azure.com:9000/addScore', {
 
-        body:dataToSend,
+    //     method: 'POST',
 
-        headers: {
+    //     body:dataToSend,
 
-            'Accept': 'application/json',
+    //     headers: {
 
-            //'Content-Type': 'application/x-www-form-urlencoded',
+    //         'Accept': 'application/json',
 
-            'Content-Type': 'application/json',
+    //         //'Content-Type': 'application/x-www-form-urlencoded',
 
-        }   
+    //         'Content-Type': 'application/json',
+
+    //     }   
 
     
 
-    })  
+    // })  
 
-    .then(res => res.json())
+    // .then(res => res.json())
 
-    .then(json => console.log(json))
+    // .then(json => console.log(json))
 
-    .catch(function(err) 
+    // .catch(function(err) 
 
-    {   
+    // {   
 
-      console.error("Can't Get Leaderboard Data: ", err);
+    //   console.error("Can't Get Leaderboard Data: ", err);
 
-    }); 
+    // }); 
 
 
 
@@ -955,23 +942,41 @@ function getDate()
 
 function newDevice()
 {
-    fetch('https://ic-research.eastus.cloudapp.azure.com:9000/device/', {
-        method: 'GET',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-    }).then(res => {
-        return res.json()
-    }).then((json) => {
-       // console.log(json);
-        storeItem("userId", json)
-        updateUsernameOnServer();
-    })
+    // fetch('https://ic-research.eastus.cloudapp.azure.com:9000/device/', {
+    //     method: 'GET',
+    //     headers: {
+    //         'Accept': 'application/json',
+    //         'Content-Type': 'application/json'
+    //     },
+    // }).then(res => {
+    //     return res.json()
+    // }).then((json) => {
+    //    // console.log(json);
+    //     storeItem("userId", json)
+    //     updateUsernameOnServer();
+    // })
 
     
-    // storeItem("userId", "No Id")
-    console.log("end");
+    // // storeItem("userId", "No Id")
+    // console.log("end");
+
+    let userScores = [];
+    let userStars = [];
+    let userTimes = [];
+
+    levels.forEach(level =>
+    {
+        userScores.push(0);
+        userStars.push(0);
+        userTimes.push(0);
+    })
+
+    storeItem('userScores', JSON.stringify(userScores));
+    storeItem('userStars', JSON.stringify(userStars));
+    storeItem('userTimes', JSON.stringify(userTimes));
+
+    storeItem("userId", 123456)
+
 
 }
 

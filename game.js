@@ -179,7 +179,7 @@ async function setup()    // This function only runs once when the page first lo
     }
     else
     {
-        if (localStorage.gameVersion != "2.0")  
+        if (localStorage.gameVersion != "3.0")  
         {
             console.log("Old Version");    
             resetGame();
@@ -680,23 +680,8 @@ function openFullscreen() // this funciton will launch the game in fullscreen. I
 
 function getUserData()
 {
-    if(localStorage.length == 0)
+    if(getItem("userID") == null)
     {
-        let userScores = [];
-        let userStars = [];
-        let userTimes = [];
-
-        levels.forEach(level =>
-        {
-            userScores.push(0);
-            userStars.push(0);
-            userTimes.push(0);
-        })
-
-        storeItem('userScores', JSON.stringify(userScores));
-        storeItem('userStars', JSON.stringify(userStars));
-        storeItem('userTimes', JSON.stringify(userTimes));
-
         newDevice();
         
         totalStars = 0;
@@ -868,7 +853,7 @@ function sendScore(data)
     console.log("date and time of completion; ", datetime);
     
 
-    // fetch('https://ic-research.eastus.cloudapp.azure.com:9000/addScore', {
+        method: 'POST',
 
     //     method: 'POST',
 
@@ -882,11 +867,9 @@ function sendScore(data)
 
     //         'Content-Type': 'application/json',
 
-    //     }   
-
     
 
-    // })  
+    })  
 
     // .then(res => res.json())
 
@@ -969,31 +952,23 @@ function getDate()
 
 function newDevice()
 {
-    // www.game.com?id=2489&user=tom&score=123
-    // fetch('https://ic-research.eastus.cloudapp.azure.com:9000/device/', {
-    //     method: 'GET',
-    //     headers: {
-    //         'Accept': 'application/json',
-    //         'Content-Type': 'application/json'
-    //     },
-    // }).then(res => {
-    //     return res.json()
-    // }).then((json) => {
-    //    // console.log(json);
-    //     storeItem("userId", json)
-    //     updateUsernameOnServer();
-    // })
+    fetch('https://ic-research.eastus.cloudapp.azure.com:9000/device/', {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+    }).then(res => {
+        return res.json()
+    }).then((json) => {
+       // console.log(json);
+        storeItem("userId", json)
+        updateUsernameOnServer();
+    })
 
     
     // storeItem("userId", "No Id")
-    storeItem("userId", 123456)
-    updateUsernameOnServer();
-    console.log("new user created");
-    console.log(localStorage.userName, localStorage.userId );
-
-    // TODO: 
-    // get user ID from server
-    // save user ID
+    console.log("end");
 
 }
 

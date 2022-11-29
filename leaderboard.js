@@ -103,7 +103,7 @@ async function setup()    // This function only runs once when the page first lo
     textAlign(CENTER);      // all text drawn on the screen will now be centered by default
     
     createLevels();     // this function is in the levels.js file. It creates all the levels and stores them in the levels variable
-    // getUserData();      // this function checks if its a new device. If so, it give it a new ID and saves a score and time of 0 on all the levels to the device. If it's not a new device, it counts all the stars the user has collected and puts that into the totalStars variable so it can be displayed on the "Level Select" screen
+    getUserData();      // this function checks if its a new device. If so, it give it a new ID and saves a score and time of 0 on all the levels to the device. If it's not a new device, it counts all the stars the user has collected and puts that into the totalStars variable so it can be displayed on the "Level Select" screen
 
     if(getItem("userScores") != null)       // this unlocks levels that need to be unlocked and assigns the user's highscore, best time and number of stars colleceted in each level. 
     {
@@ -678,8 +678,9 @@ function openFullscreen() // this funciton will launch the game in fullscreen. I
 
 function getUserData()
 {
-    if(localStorage.length == 0)
-    {
+    // if(localStorage.length == 0)
+    // {
+        console.log("asdf");
         let userScores = [];
         let userStars = [];
         let userTimes = [];
@@ -699,18 +700,18 @@ function getUserData()
         
 
         totalStars = 0;
-    }
-    else
-    {
-        let stars = JSON.parse(getItem("userStars"))
+    // }
+    // else
+    // {
+    //     let stars = JSON.parse(getItem("userStars"))
  
-        totalStars = 0;
+    //     totalStars = 0;
 
-        stars.forEach(stars =>
-        {
-            totalStars += stars;
-        })
-    }
+    //     stars.forEach(stars =>
+    //     {
+    //         totalStars += stars;
+    //     })
+    // }
 }
 
 function updateScore(levelGroup, level)

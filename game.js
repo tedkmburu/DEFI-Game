@@ -249,10 +249,6 @@ async function setup()    // This function only runs once when the page first lo
     document.getElementById("defaultCanvas0").setAttribute("oncontextmenu", "return false"); // this disables the right click context menu on the webpage
 
     console.log("setup complete"); // this message won't show up in the console if there is an error somewhere in the setup funtion. Useful for debugging on certain devices. 
-
-    
-
-
     
 }
 
@@ -952,23 +948,24 @@ function getDate()
 
 function newDevice()
 {
-    fetch('https://ic-research.eastus.cloudapp.azure.com:9000/device/', {
-        method: 'GET',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-    }).then(res => {
-        return res.json()
-    }).then((json) => {
-       // console.log(json);
-        storeItem("userId", json)
-        updateUsernameOnServer();
-    })
+    // fetch('https://ic-research.eastus.cloudapp.azure.com:9000/device/', {
+    //     method: 'GET',
+    //     headers: {
+    //         'Accept': 'application/json',
+    //         'Content-Type': 'application/json'
+    //     },
+    // }).then(res => {
+    //     return res.json()
+    // }).then((json) => {
+    //    // console.log(json);
+    //     storeItem("userId", json)
+    //     updateUsernameOnServer();
+    // })
 
     
-    // storeItem("userId", "No Id")
-    console.log("end");
+    storeItem("userId", 123456)
+    updateUsernameOnServer();
+    // console.log("end");
 
 }
 

@@ -787,15 +787,21 @@ function navigateTo(screenToShow, backButton)
 
 
 
-    let allStars = JSON.parse(getItem("userStars"))
+    // let allStars = JSON.parse(getItem("userStars"))
     totalStars = 0;
-    allStars.forEach(starsAdd =>
-    {
-        totalStars += starsAdd;
-    })
+    // allStars.forEach(starsAdd =>
+    // {
+    //     totalStars += starsAdd;
+    // })
 
     if (screenToShow == "Level Select") 
     {
+        let allStars = JSON.parse(getItem("userStars"))
+        totalStars = 0;
+        allStars.forEach(starsAdd =>
+        {
+            totalStars += starsAdd;
+        })
         getScreen("Level Select").title = totalStars + "/45";
     }
 

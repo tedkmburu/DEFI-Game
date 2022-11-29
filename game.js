@@ -965,6 +965,21 @@ function newDevice()
     
     storeItem("userId", 123456)
     updateUsernameOnServer();
+
+    let userScores = [];
+    let userStars = [];
+    let userTimes = [];
+
+    levels.forEach(level =>
+    {
+        userScores.push(0);
+        userStars.push(0);
+        userTimes.push(0);
+    })
+
+    storeItem('userScores', JSON.stringify(userScores));
+    storeItem('userStars', JSON.stringify(userStars));
+    storeItem('userTimes', JSON.stringify(userTimes));
     // console.log("end");
 
 }

@@ -1,7 +1,10 @@
+// data to send: {"time":12299,"timestamp":"11-28-2022","score":19754,"stars_collected":2,"track":"1","_id":123456}
+
 
 // The preload function is used to load in all the fonts and images. I assign each one to a global variable so I can use it anywhere in the code. Because they are all loaded in the beginning, the user never waits for images to load. After the preload function is complete, the setup() function starts
 function preload() 
 {
+    localStorage.clear();
     spaceFont = loadFont('fonts/Anurati.otf');
     fontRegular = loadFont('fonts/Helvetica.ttf');
 
@@ -817,34 +820,41 @@ function compareValues(key, order = 'asc')
 async function updateUsernameOnServer() 
 { 
 
-    let bodyData = {student_name: localStorage.userName, class_name: "PHYS-102", userId: localStorage.userId};
-    let dataToSend = JSON.stringify(bodyData)
+    // let bodyData = {student_name: localStorage.userName, class_name: "PHYS-102", userId: localStorage.userId};
+    // let dataToSend = JSON.stringify(bodyData)
 
-    console.log(dataToSend);
+    // console.log(dataToSend);
 
-    let responseLink = "https://ic-research.eastus.cloudapp.azure.com:9000/updateName/"
+    // let responseLink = "https://ic-research.eastus.cloudapp.azure.com:9000/updateName/"
     
 
-    const response = await fetch(responseLink, {
-        method: "POST",
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body: dataToSend
-    }).then(data => {
-        console.log(data);
-        return data
-    }).catch(function(err) 
-    {
-      console.error("Can't Update Username: ", err);
-    });
+    // const response = await fetch(responseLink, {
+    //     method: "POST",
+    //     headers: {
+    //         'Accept': 'application/json',
+    //         'Content-Type': 'application/json'
+    //     },
+    //     body: dataToSend
+    // }).then(data => {
+    //     console.log(data);
+    //     return data
+    // }).catch(function(err) 
+    // {
+    //   console.error("Can't Update Username: ", err);
+    // });
 }
 
 function sendScore(data)
 {
     connectingToServer = true; 
 
+    let currentdate = new Date(); 
+    let datetime = currentdate.getDate() + "/"
+                    + (currentdate.getMonth()+1)  + "/" 
+                    + currentdate.getFullYear() + " @ "  
+                    + currentdate.getHours() + ":"  
+                    + currentdate.getMinutes() + ":" 
+                    + currentdate.getSeconds();
     // {_id: data.userId, level: (track.level + 1).toString(), track: data.group.toString(), stars_collected: data.numberOfStarsCollected, score: data.score, time: data.time, timestamp: getDate()};
 
     // {"time":9133,"timestamp":"8-4-2021","score":19817,"track":"1","_id":"086cf177-f53f-11eb-bb0b-000d3a162721"}
@@ -855,38 +865,40 @@ function sendScore(data)
     let dataToSend = JSON.stringify(bodyData);
 
     console.log("data to send: " + dataToSend);
+    console.log("date and time of completion; ", datetime);
+    
 
-    fetch('https://ic-research.eastus.cloudapp.azure.com:9000/addScore', {
+    // fetch('https://ic-research.eastus.cloudapp.azure.com:9000/addScore', {
 
-        method: 'POST',
+    //     method: 'POST',
 
-        body:dataToSend,
+    //     body:dataToSend,
 
-        headers: {
+    //     headers: {
 
-            'Accept': 'application/json',
+    //         'Accept': 'application/json',
 
-            //'Content-Type': 'application/x-www-form-urlencoded',
+    //         //'Content-Type': 'application/x-www-form-urlencoded',
 
-            'Content-Type': 'application/json',
+    //         'Content-Type': 'application/json',
 
-        }   
+    //     }   
 
     
 
-    })  
+    // })  
 
-    .then(res => res.json())
+    // .then(res => res.json())
 
-    .then(json => console.log(json))
+    // .then(json => console.log(json))
 
-    .catch(function(err) 
+    // .catch(function(err) 
 
-    {   
+    // {   
 
-      console.error("Can't Get Leaderboard Data: ", err);
+    //   console.error("Can't Get Leaderboard Data: ", err);
 
-    }); 
+    // }); 
 
 
 
@@ -895,20 +907,22 @@ function sendScore(data)
 async function updateLeaderBoard()
 {
     connectingToServer = true; 
-    const response = await fetch('https://ic-research.eastus.cloudapp.azure.com:9000/leaderboard?limit=10&level=' + leaderboardData.level + '&global=true', {
-        method: 'GET',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-    }).then(res => res.json())
-    .then(json => currentLeaderboard = json)
-    .catch(function(err) 
-    {   
-      console.error("Can't Get Leaderboard Data: ", err);
-    }); 
+    // const response = await fetch('https://ic-research.eastus.cloudapp.azure.com:9000/leaderboard?limit=10&level=' + leaderboardData.level + '&global=true', {
+    //     method: 'GET',
+    //     headers: {
+    //         'Accept': 'application/json',
+    //         'Content-Type': 'application/json'
+    //     },
+    // }).then(res => res.json())
+    // .then(json => currentLeaderboard = json)
+    // .catch(function(err) 
+    // {   
+    //   console.error("Can't Get Leaderboard Data: ", err);
+    // }); 
 
-    return await response;
+    // return await response;
+
+    console.log("getting data from server");
 }
 
 async function updateLeaderBoardScreen() 
@@ -955,23 +969,31 @@ function getDate()
 
 function newDevice()
 {
-    fetch('https://ic-research.eastus.cloudapp.azure.com:9000/device/', {
-        method: 'GET',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-    }).then(res => {
-        return res.json()
-    }).then((json) => {
-       // console.log(json);
-        storeItem("userId", json)
-        updateUsernameOnServer();
-    })
+    // www.game.com?id=2489&user=tom&score=123
+    // fetch('https://ic-research.eastus.cloudapp.azure.com:9000/device/', {
+    //     method: 'GET',
+    //     headers: {
+    //         'Accept': 'application/json',
+    //         'Content-Type': 'application/json'
+    //     },
+    // }).then(res => {
+    //     return res.json()
+    // }).then((json) => {
+    //    // console.log(json);
+    //     storeItem("userId", json)
+    //     updateUsernameOnServer();
+    // })
 
     
     // storeItem("userId", "No Id")
-    console.log("end");
+    storeItem("userId", 123456)
+    updateUsernameOnServer();
+    console.log("new user created");
+    console.log(localStorage.userName, localStorage.userId );
+
+    // TODO: 
+    // get user ID from server
+    // save user ID
 
 }
 

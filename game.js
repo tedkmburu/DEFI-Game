@@ -853,7 +853,7 @@ function sendScore(data)
     console.log("date and time of completion; ", datetime);
     
 
-        method: 'POST',
+        // method: 'POST',
 
     //     method: 'POST',
 
@@ -869,7 +869,7 @@ function sendScore(data)
 
     
 
-    })  
+    // })  
 
     // .then(res => res.json())
 

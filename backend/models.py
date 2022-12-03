@@ -1,6 +1,6 @@
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
-from app import db, login
+from backend import db, login
 
 
 class Teachers(db.Model, UserMixin):
@@ -50,23 +50,3 @@ class Courses(db.Model):
     courseName = db.Column(db.String(32)) 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-class Event(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    event_name = db.Column(db.String(32))
-    event_date = db.Column(db.Date)
-    artist_id = db.Column(db.Integer, db.ForeignKey('artist.id'))
-    venue_id = db.Column(db.Integer, db.ForeignKey('venue.id'))
-    def __repr__(self):
-        return '<Event {}>'.format(self.eventName)

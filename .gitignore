@@ -1,7 +1,11 @@
 *.py[cod]
-
+/.idea/.gitignore
+/.idea/DEFI-Game.iml
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/inspectionProfiles/profiles_settings.xml
+/.idea/vcs.xml
 venv
 app.db
 app.log*
-
 .flaskenv

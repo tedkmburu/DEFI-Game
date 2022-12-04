@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block app_content %}
+    <h4 style=" display: inline-block; text-align: left; font-weight: normal">{{ course_info.courseName }}</h4>
+    <h4 style="display: inline-block; text-align: right; margin-left: 810px; font-weight: normal">Class
+        Code: {{ course_info.courseCode }}</h4>
+    <br>
+    <br>
+    <ul>
+        <div class="container">
+            <table class="table" style="margin-left: -50px">
+                <thead style="background-color: #040720">
+                <tr style="color: white">
+                    <th>Rank</th>
+                    <th>Username</th>
+                    <th>Track</th>
+                    <th>Score</th>
+{#                    <th>Time</th>#}
+                </tr>
+                </thead>
+                {% for student in students %}
+                    <tbody>
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ student.username }}</td>
+                        <td>{{ student.track }}</td>
+                        <td>{{ student.score }}</td>
+{#                        <td>{{ student.time }}</td>#}
+                    </tr>
+                    </tbody>
+
+                {% endfor %}
+            </table>
+        </div>
+    </ul>
+{% endblock %}

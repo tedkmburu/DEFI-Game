@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+{% block app_content %}
+    <div>
+        <h1>Welcome, {{ current_user.firstName }} {{ current_user.lastName }}!</h1>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-5 col-md-5 col-sm-5">
+            <div class="panel panel-default">
+                <div class="panel-heading">Create a new course</div>
+                <div class="panel-body">
+                    <div style="width:1000px">
+                        {% block new_course_form %}
+                            <div class="row">
+                                <div class="col-md-4" style="justify-content: center">
+                                    {{ wtf.quick_form(form) }}
+                                </div>
+                            </div>
+                        {% endblock %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-5 col-md-5 col-sm-5" style="margin-left: 170px">
+            <div class="panel panel-default">
+                <div class="panel-heading">Instructions</div>
+                <div class="panel-body" style="margin-left: -20px">
+                    <ul>
+                        <li>
+                            Enter name of the course (Be sure to not enter same name again!)
+                        </li>
+                        <br>
+                        <li>
+                            Put your course code for students to use in the game (Make sure it's at least 7 characters
+                            long!)
+                        </li>
+                        <br>
+                        <li>
+                            The leaderboard can be accessed for a particular course, or between all courses globally.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {#    <div class="row">#}
+    {#        <div class="col-md-4">#}
+    {#            <div class="panel panel-default">#}
+    {#            <div class="panel-heading">Panel Heading</div>#}
+    {#            <div class="panel-body">Panel Content</div>#}
+    {#        </div>#}
+    {#        </div>#}
+    {#    </div>#}
+
+{% endblock %}

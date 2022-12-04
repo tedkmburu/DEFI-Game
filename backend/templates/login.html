@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+{% block navbar %}{% endblock %}
+
+{% block app_content %}
+    <h1>D.E.F.I Teacher Portal</h1>
+    <div class="row">
+        <div class="col-md-4" style="justify-content: center">
+            {{ wtf.quick_form(form) }}
+        </div>
+    </div>
+    <br>
+    <p>New User? <a href="{{ url_for('register') }}">Click to create an account!</a></p>
+{% endblock %}

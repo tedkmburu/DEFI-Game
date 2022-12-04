@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+    <div class="list-group">
+        {% for course in courses %}
+            <a href="{{ url_for('course', name=course.courseName) }}" class="list-group-item list-group-item-action">
+                {{ course.courseName }}
+            </a>
+        {% endfor %}
+    </div>
+
+{% endblock %}

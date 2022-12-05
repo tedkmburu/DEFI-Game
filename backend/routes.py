@@ -155,15 +155,23 @@ def leaderboardGame():
             for sc in scores:
                 if s.id == e.student_id and s.id == sc.student_id:
                     global_info = {
-                        'username': s.username,
+                        'name': s.username,
                         'track': sc.track,
                         'score': sc.score,
-                        'course': Course.query.get(e.course_id).courseName
-                        # 'time': sc.timeToComplete
+                        'class': Course.query.get(e.course_id).courseName,
+                        'time': sc.timeToComplete
                     }
                     students_list.append(global_info)
 
+
+ 
+
     ranked_students = sorted(students_list, key=itemgetter('score'), reverse=True)
+    jsonString = json.dumps(ranked_students)
+    jsonFile = open("leaderboard2.txt", "w")
+    jsonFile.write(jsonString)
+    jsonFile.close()
+
     print(ranked_students)
     return render_template("leaderboardGame.html", students=ranked_students)
 

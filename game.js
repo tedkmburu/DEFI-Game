@@ -641,8 +641,8 @@ function displayTrash() // this will display the trash can icon at the bottom le
 
 function millisecondsToTimeFormat(millis) // this converts time from a millisecond format to a minutes:seconds.milliseconds format
 {
-    var minutes = Math.floor(millis / 60000);
-    var seconds = ((millis % 60000) / 1000).toFixed(2);
+    let minutes = Math.floor(millis / 60000);
+    let seconds = ((millis % 60000) / 1000).toFixed(2);
     return (minutes < 10 ? '0' : '') + minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
 }
 

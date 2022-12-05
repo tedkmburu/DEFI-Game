@@ -1,8 +1,9 @@
-{% extends "base.html" %}
 {% block app_content %}
     [
         {% for student in students %}
-        "index:" {{ loop.index }}, "name":{{ student.username }}, "track":{{ student.track }}, "course":{{ student.course }}, "score":{{ student.score }}, "time":{{ student.time }}
+        {
+            "index:" {{ loop.index }}, "name":{{ student.username }}, "track":{{ student.track }}, "course":{{ student.course }}, "score":{{ student.score }}, "time":{{ student.time }}
+            },
         {% endfor %}
     ]
 

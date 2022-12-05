@@ -884,7 +884,7 @@ function sendScore(data)
 }
 $.myjQuery = function() {
     // alert("jQuery");
-    $.get("leaderboard.txt", function(response){
+    $.get("http://127.0.0.1:5000/leaderboardGame", function(response){
         currentLeaderboard = JSON.parse(response)
         //  console.log(currentLeaderboard);
 

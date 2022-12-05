@@ -180,7 +180,8 @@ def leaderboardGame():
 def sendData():
     studentsId =request.args.get('_id')
     time = request.args.get('time')
-    timestamp = request.args.get('timestamp')
+    # timestamp = request.args.get('timestamp')
+    timestamp = date(2022, 12, 3)
     score = request.args.get('score')
     starsCollected = request.args.get('stars_collected')
     track = request.args.get('track')
@@ -193,7 +194,7 @@ def sendData():
                    timestamp=timestamp
                    )
 
-    db.session.add_all(score)
+    db.session.add(score)
     db.session.commit()
 
     # sendData?_id=123&time=213&timestamp=213&score=123456&stars_collected=3&track=1

@@ -178,12 +178,12 @@ def leaderboardGame():
 
 @app.route('/sendData', methods=['GET', 'POST'])
 def sendData():
-    studentsId = request.form['_id']
-    time = request.form['time']
-    timestamp = request.form['timestamp']
-    score = request.form['score']
-    starsCollected = request.form['stars_collected']
-    track = request.form['track']
+    studentsId =request.args.get('_id')
+    time = request.args.get('time')
+    timestamp = request.args.get('timestamp')
+    score = request.args.get('score')
+    starsCollected = request.args.get('stars_collected')
+    track = request.args.get('track')
 
     score = Score(student_id=studentsId,
                    score=score,

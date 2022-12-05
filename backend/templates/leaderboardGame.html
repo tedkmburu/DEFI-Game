@@ -1,19 +1,9 @@
 {% extends "base.html" %}
 {% block app_content %}
-    <table>
+    [
         {% for student in students %}
-            <tbody>
-            <tr>
-                <td>{{ loop.index }}</td>
-                <td>{{ student.username }}</td>
-                <td>{{ student.track }}</td>
-                <td>{{ student.course }}</td>
-                <td>{{ student.score }}</td>
-                {#                        <td>{{ student.time }}</td>#}
-            </tr>
-            </tbody>
-
+        "index:" {{ loop.index }}, "name":{{ student.username }}, "track":{{ student.track }}, "course":{{ student.course }}, "score":{{ student.score }}, "time":{{ student.time }}
         {% endfor %}
-    </table>
+    ]
 
 {% endblock %}

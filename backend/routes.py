@@ -1,3 +1,4 @@
+import json
 import flask_login
 from flask import render_template, redirect, url_for, flash, request
 from flask_login import login_required, current_user, login_user, logout_user
@@ -194,6 +195,8 @@ def sendData():
 
     db.session.add_all(score)
     db.session.commit()
+
+    # sendData?_id=123&
     
     return render_template("sendData.html")
 

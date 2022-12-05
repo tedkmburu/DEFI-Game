@@ -142,6 +142,30 @@ def leaderboard():
     print(ranked_students)
     return render_template("leaderboard.html", students=ranked_students)
 
+@app.route('/leaderboardGame')
+def leaderboardGame():
+    students_list = []
+    enrollment = Enrollment.query.all()
+    all_students = Student.query.all()
+    scores = Score.query.all()
+
+    for e in enrollment:
+        for s in all_students:
+            for sc in scores:
+                if s.id == e.student_id and s.id == sc.student_id:
+                    global_info = {
+                        'username': s.username,
+                        'track': sc.track,
+                        'score': sc.score,
+                        'course': Course.query.get(e.course_id).courseName
+                        # 'time': sc.timeToComplete
+                    }
+                    students_list.append(global_info)
+
+    ranked_students = sorted(students_list, key=itemgetter('score'), reverse=True)
+    print(ranked_students)
+    return render_template("leaderboardGame.html", students=ranked_students)
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

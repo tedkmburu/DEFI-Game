@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block app_content %}
+    <table>
+        {% for student in students %}
+            <tbody>
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ student.username }}</td>
+                <td>{{ student.track }}</td>
+                <td>{{ student.course }}</td>
+                <td>{{ student.score }}</td>
+                {#                        <td>{{ student.time }}</td>#}
+            </tr>
+            </tbody>
+
+        {% endfor %}
+    </table>
+
+{% endblock %}

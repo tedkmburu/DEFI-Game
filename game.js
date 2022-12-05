@@ -885,7 +885,7 @@ function sendScore(data)
 $.myjQuery = function() {
     // alert("jQuery");
     $.get("leaderboard.txt", function(response){
-         currentLeaderboard = JSON.parse(response)
+        currentLeaderboard = JSON.parse(response)
         //  console.log(currentLeaderboard);
 
     });

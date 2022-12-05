@@ -167,6 +167,39 @@ def leaderboardGame():
     return render_template("leaderboardGame.html", students=ranked_students)
 
 
+# {
+#     time: data.time, 
+#     timestamp: getDate(), 
+#     score: data.score, 
+#     stars_collected: data.stars, 
+#     track: (track.level + 1).toString(), 
+#     _id: data.userId}
+
+@app.route('/sendData', methods=['GET', 'POST'])
+def sendData():
+    studentsId = request.form['_id']
+    time = request.form['time']
+    timestamp = request.form['timestamp']
+    score = request.form['score']
+    starsCollected = request.form['stars_collected']
+    track = request.form['track']
+
+    score = Score(student_id=studentsId,
+                   score=score,
+                   track=track,
+                   starsCollected=starsCollected,
+                   timeToComplete=time,
+                   timestamp=timestamp
+                   )
+
+    db.session.add_all(score)
+    db.session.commit()
+    
+    return render_template("sendData.html")
+
+
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:

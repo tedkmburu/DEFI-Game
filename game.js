@@ -4,7 +4,6 @@
 // The preload function is used to load in all the fonts and images. I assign each one to a global variable so I can use it anywhere in the code. Because they are all loaded in the beginning, the user never waits for images to load. After the preload function is complete, the setup() function starts
 function preload() 
 {
-    localStorage.clear();
     spaceFont = loadFont('fonts/Anurati.otf');
     fontRegular = loadFont('fonts/Helvetica.ttf');
 
@@ -798,7 +797,7 @@ function compareValues(key, order = 'asc')
 
 // all requests from this device
 
-async function updateUsernameOnServer() 
+function updateUsernameOnServer() 
 { 
 
     // let bodyData = {student_name: localStorage.userName, class_name: "PHYS-102", userId: localStorage.userId};
@@ -823,6 +822,28 @@ async function updateUsernameOnServer()
     // {
     //   console.error("Can't Update Username: ", err);
     // });
+    
+    $.ajax({
+        type: "GET",
+        url: "http://localhost:5000/createStudent",
+        data: {
+            username: localStorage.userName,
+            storedId: 123
+        }, 
+        success: function(msg){
+            console.log(msg);
+        }
+    });
+}
+
+function makeid(length) {
+    var result           = '';
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
 }
 
 function sendScore(data)
@@ -841,47 +862,124 @@ function sendScore(data)
     // {"time":9133,"timestamp":"8-4-2021","score":19817,"track":"1","_id":"086cf177-f53f-11eb-bb0b-000d3a162721"}
     // {time:"3456", timestamp:"10/20/2021", score:"264", stars_collected:"1", track:"1", _id:"8a7436fe-f3c2-11eb-bb0b-000d3a162721"}
     // console.log( "stars: " + data.stars);
-    let bodyData = {time: data.time, timestamp: getDate(), score: data.score, stars_collected: data.stars, track: (track.level + 1).toString(), _id: data.userId}
+    let bodyData = {
+        time: data.time, 
+        timestamp: getDate(), 
+        score: data.score, 
+        stars_collected: data.stars, 
+        track: (track.level + 1).toString(), 
+        _id: 3
+    }
 
     let dataToSend = JSON.stringify(bodyData);
 
     console.log("data to send: " + dataToSend);
     console.log("date and time of completion; ", datetime);
-    
 
-        // method: 'POST',
-
-    //     method: 'POST',
-
-    //     body:dataToSend,
-
-    //     headers: {
-
-    //         'Accept': 'application/json',
-
-    //         //'Content-Type': 'application/x-www-form-urlencoded',
-
-    //         'Content-Type': 'application/json',
+    $.ajax({
+        type: "GET",
+        url: "http://localhost:5000/sendData",
+        data: {
+            _id: data.id,
+            time: data.time, 
+            timestamp: getDate(),
+            score: data.score,
+            stars_collected: data.stars,
+            track: (track.level + 1)
+        }
+    });
 
     
 
-    // })  
 
-    // .then(res => res.json())
+    // fetch(".backend/sendData?_id=12345678&time=213&timestamp=213&score=123456&stars_collected=3&track=1").then(function(response) {
+    //     return response.json();
+    //   }).then(function(data) {
+    //     console.log(data);
+    //   }).catch(function() {
+    //     console.log("Booo");
+    //   });
 
-    // .then(json => console.log(json))
-
-    // .catch(function(err) 
-
-    // {   
-
-    //   console.error("Can't Get Leaderboard Data: ", err);
-
-    // }); 
-
+    // fetch('.backend/sendData?_id=12345678&time=213&timestamp=213&score=123456&stars_collected=3&track=1').then(
+    //     (response) => response.json()).then(
+    //         (data) => console.log(data));
 
 
 }
+
+function testSendData()
+{
+    // fetch('http://localhost:5000/sendData?_id=12345678&time=213&timestamp=213&score=123456&stars_collected=3&track=1').then(
+    //     (response) => response.json()).then(
+    //         (data) => console.log(data));
+
+    $.ajax({
+        type: "GET",
+        url: "http://localhost:5000/sendData",
+        data: {
+            _id: localStorage.userId,
+            time: 123456, 
+            timestamp: 123,
+            score: 123456,
+            stars_collected: 3,
+            track: 1
+        },   // <== change is here
+        success: function(msg){
+            // alert(msg);
+            
+        }
+        
+    });
+
+    // $.get( "http://localhost:5000/sendData?_id=12345678&time=213&timestamp=213&score=123456&stars_collected=3&track=1" );
+
+    // return false
+    // let xhttp = new XMLHttpRequest();
+    // xhttp.open("GET", "http://localhost:5000/sendData?_id=1234567890&time=213&timestamp=213&score=123456&stars_collected=3&track=1");
+    // xhttp.send();
+}
+
+function testleaderboard(level)
+{
+    // fetch('http://localhost:5000/leaderboardGame/' + level).then(
+    //     (response) => response.json()).then(
+    //         (data) => console.log(data));
+
+    // let xhttp = new XMLHttpRequest();
+    // xhttp.open("GET", "http://localhost:5000/leaderboardGame/" + level);
+    // xhttp.send();
+
+//     $.getJSON("localhost:5000/leaderboardGame/" + level, function(data) {
+//     console.log(data);
+// });
+
+    // fetch("http://localhost:5000/leaderboardGame" + level).then(function(response) {
+    //     return response.json();
+    //   }).then(function(data) {
+    //     console.log(data);
+    //   }).catch(function() {
+    //     console.log("Booo");
+    //   });
+
+    //   $.ajax({
+    //     type: "GET",
+    //     url: "http://localhost:5000/leaderboardGame/" + level,
+    //     data: {
+    //         _id: localStorage.userId,
+    //         time: 123456, 
+    //         timestamp: 123,
+    //         score: 123456,
+    //         stars_collected: 3,
+    //         track: 1
+    //     },   // <== change is here
+    //     success: function(msg){
+    //         alert(msg);
+            
+    //     }
+    // });
+}
+
+
 $.myjQuery = function() {
     // alert("jQuery");
     $.get("./leaderboard2.txt", function(response){
@@ -893,7 +991,7 @@ $.myjQuery = function() {
 function display() {
     $.myjQuery();
 };
-async function updateLeaderBoard()
+function updateLeaderBoard()
 {
     connectingToServer = true; 
     // const response = await fetch('https://ic-research.eastus.cloudapp.azure.com:9000/leaderboard?limit=10&level=' + leaderboardData.level + '&global=true', {
@@ -911,7 +1009,18 @@ async function updateLeaderBoard()
 
     // return await response;
     $.myjQuery();
-   
+
+    // $.ajax({
+    //     type: "GET",
+    //     url: "http://localhost:5000/leaderboardGame",
+    //     data: {},  
+    //     success: function(msg){
+            
+    //         currentLeaderboard = JSON.parse(msg)
+    //         console.log(currentLeaderboard);
+    //     }
+        
+    // });
 
     // console.log("getting data from server");
 }
@@ -975,7 +1084,7 @@ function newDevice()
     // })
 
     
-    storeItem("userId", 123456)
+    storeItem("userID", 3)
     updateUsernameOnServer();
 
     let userScores = [];

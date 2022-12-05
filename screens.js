@@ -124,6 +124,11 @@ function toggleLeaderboardSort()  // this function is called every time the butt
 
 function displayLeaderboardScreen()     // this function is called every frame while on the "Leaderboard" screen. It's called in the Screen object on screens.
 {
+    
+
+
+
+
     push()
         noStroke()
         fill("rgba(0, 0, 0, 0.5)");
@@ -150,11 +155,11 @@ function displayLeaderboardScreen()     // this function is called every frame w
 
         textSize(16 * scale.x)
 
-        
-        for (let i = 0; i < currentLeaderboard.length; i++) 
+        levelLeaderboard = currentLeaderboard.filter(entry => entry.track == leaderboardData.level)
+        for (let i = 0; i < levelLeaderboard.length; i++) 
         {
             //console.log(user);
-            let stat = currentLeaderboard[i];
+            let stat = levelLeaderboard[i];
 
             let studentName = stat.name;
             let className = stat.class;
@@ -198,7 +203,7 @@ function displayLeaderboardScreen()     // this function is called every frame w
         text("Level: " + leaderboardData.level, 620 * scale.x, 33 * scale.y);
 
 
-        if (currentLeaderboard.length == 0) 
+        if (levelLeaderboard.length == 0) 
         {
             textSize(16 * scale.x)
             fill(255);
@@ -544,7 +549,13 @@ function displayLevelCompleteScreen()
 
 
 
-        sendScore({level: 1, group: currentLevel, time: Math.round(timeElapsed), stars: numberOfStarsCollected, score: score, userId: getItem("userId")})
+        sendScore({
+            level: 1, 
+            group: currentLevel, 
+            time: Math.round(timeElapsed), 
+            stars: numberOfStarsCollected, 
+            score: score, 
+            userID: 3})
     }
     
 
@@ -734,7 +745,7 @@ function displayScreen(screen)
 
     displayPopups();
 
-    displayFrameRate();
+    // displayFrameRate();
 }
 
 

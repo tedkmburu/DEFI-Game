@@ -1,4 +1,5 @@
 import json
+import sys
 import flask_login
 from flask import render_template, redirect, url_for, flash, request
 from flask_login import login_required, current_user, login_user, logout_user
@@ -150,6 +151,7 @@ def leaderboardGame():
     all_students = Student.query.all()
     scores = Score.query.all()
 
+
     for e in enrollment:
         for s in all_students:
             for sc in scores:
@@ -164,15 +166,13 @@ def leaderboardGame():
                     students_list.append(global_info)
 
 
- 
-
     ranked_students = sorted(students_list, key=itemgetter('score'), reverse=True)
     jsonString = json.dumps(ranked_students)
     jsonFile = open("leaderboard2.txt", "w")
     jsonFile.write(jsonString)
     jsonFile.close()
 
-    print(ranked_students)
+    # print(ranked_students)
     return render_template("leaderboardGame.html", students=ranked_students)
 
 
@@ -186,7 +186,7 @@ def leaderboardGame():
 
 @app.route('/sendData', methods=['GET', 'POST'])
 def sendData():
-    studentsId =request.args.get('_id')
+    studentsId =int(request.args.get('_id'))
     time = request.args.get('time')
     # timestamp = request.args.get('timestamp')
     timestamp = date(2022, 12, 3)
@@ -201,6 +201,7 @@ def sendData():
                    timeToComplete=time,
                    timestamp=timestamp
                    )
+    print(score)
 
     db.session.add(score)
     db.session.commit()
@@ -208,6 +209,14 @@ def sendData():
     # sendData?_id=123&time=213&timestamp=213&score=123456&stars_collected=3&track=1
     
     return render_template("sendData.html")
+
+@app.route('/createStudent', methods=['GET', 'POST'])
+def createStudent():
+    username =request.args.get('username')
+    score = Student(username=username)
+    db.session.add(score)
+    db.session.commit()
+    return render_template("createStudent.html")
 
 
 

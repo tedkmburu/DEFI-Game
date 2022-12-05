@@ -880,12 +880,15 @@ function sendScore(data)
         type: "GET",
         url: "http://localhost:5000/sendData",
         data: {
-            _id: data.id,
+            _id: 3,
             time: data.time, 
             timestamp: getDate(),
             score: data.score,
             stars_collected: data.stars,
             track: (track.level + 1)
+        },   // <== change is here
+        success: function(msg){
+            
         }
     });
 

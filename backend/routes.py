@@ -193,7 +193,7 @@ def sendData():
     score = request.args.get('score')
     starsCollected = request.args.get('stars_collected')
     track = request.args.get('track')
-
+    
     score = Score(student_id=studentsId,
                    score=score,
                    track=track,

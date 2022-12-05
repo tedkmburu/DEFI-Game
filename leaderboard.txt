@@ -1,0 +1,11 @@
+[
+{"name": "Tomomi Casey", "class": "IC PHYS 102", "score": 340000, "time": 123456},
+{"name": "Taqqiq Rio", "class": "IC PHYS 102", "score": 234000, "time": 123456},
+{"name": "Chizoba Sydney", "class": "IC PHYS 102", "score": 1234000, "time": 123456},
+{"name": "Ronnie Kalani", "class": "IC PHYS 102", "score": 1234000, "time": 123456},
+{"name": "Kiran Yanick", "class": "IC PHYS 102", "score": 123400, "time": 123456},
+{"name": "Sonam Chisom", "class": "IC PHYS 102", "score": 12340, "time": 123456},
+{"name": "Sunan Remington", "class": "IC PHYS 102", "score": 4000, "time": 123456},
+{"name": "Martie Hennie", "class": "IC PHYS 102", "score": 3400, "time": 123456},
+{"name": "Chandra Diyar", "class": "IC PHYS 102", "score": 2340, "time": 123456},
+{"name": "Rajani Chijindum", "class": "IC PHYS 102", "score": 1234, "time": 123456}]

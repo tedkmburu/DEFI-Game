@@ -156,10 +156,11 @@ function displayLeaderboardScreen()     // this function is called every frame w
             //console.log(user);
             let stat = currentLeaderboard[i];
 
-            let studentName = stat.student_name;
-            let className = stat.class_name;
+            let studentName = stat.name;
+            let className = stat.class;
 
-            let attempt = stat.top_attempt;
+            let attempt = stat.score;
+            let time = stat.time;
 
             
             fill("rgba(255, 255, 255, 0.25)");
@@ -177,10 +178,10 @@ function displayLeaderboardScreen()     // this function is called every frame w
             text(className, 406 * scale.x, (y + 37.5 * scale.y) + leaderboardOffset);
 
             // time
-            text(millisecondsToTimeFormat((attempt.time == null ? "N/A" : attempt.time)), 580 * scale.x, (y + 37.5 * scale.y) + leaderboardOffset); 
+            text(millisecondsToTimeFormat((time == null ? "N/A" : time)), 580 * scale.x, (y + 37.5 * scale.y) + leaderboardOffset); 
             
             // score
-            text((attempt.score == null ? "N/A" : attempt.score), 682 * scale.x, (y + 37.5 * scale.y) + leaderboardOffset);   
+            text((attempt == null ? "N/A" : attempt), 682 * scale.x, (y + 37.5 * scale.y) + leaderboardOffset);   
             
             y += 75 * scale.y;
         }
@@ -1047,7 +1048,7 @@ function createScreens()
                 new Button({x: 652, y: 15, width:  30, height: 25, title: ">" , onClick: function(){ increaseLeaderboardLevel(); updateLeaderBoard(); }, shape: "Rect", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14})
                 ],
             textBoxes: [],
-            functions: function(){ displayLeaderboardScreen() },
+            functions: function(){ updateLeaderBoard(); displayLeaderboardScreen() },
             }),
             
 

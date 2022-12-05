@@ -882,7 +882,17 @@ function sendScore(data)
 
 
 }
+$.myjQuery = function() {
+    // alert("jQuery");
+    $.get("leaderboard.txt", function(response){
+         currentLeaderboard = JSON.parse(response)
+        //  console.log(currentLeaderboard);
 
+    });
+};
+function display() {
+    $.myjQuery();
+};
 async function updateLeaderBoard()
 {
     connectingToServer = true; 
@@ -900,29 +910,31 @@ async function updateLeaderBoard()
     // }); 
 
     // return await response;
+    $.myjQuery();
+   
 
-    console.log("getting data from server");
+    // console.log("getting data from server");
 }
 
-async function updateLeaderBoardScreen() 
+function updateLeaderBoardScreen() 
 {
-    setTimeout(function(){ updateLeaderBoardScreen(); console.log("updated data"); }, 5000);
+    // setTimeout(function(){ updateLeaderBoardScreen(); console.log("updated data"); }, 5000);
 
-    connectingToServer = true; 
-    const response = await fetch('https://ic-research.eastus.cloudapp.azure.com:9000/leaderboard?limit=10&level=' + leaderboardData.level + '&global=true', {
-        method: 'GET',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-    }).then(res => res.json())
-    .then(json => currentLeaderboard = json)
-    .catch(function(err) 
-    {   
-      console.error("Can't Get Leaderboard Data: ", err);
-    }); 
+    // connectingToServer = true; 
+    // const response = await fetch('https://ic-research.eastus.cloudapp.azure.com:9000/leaderboard?limit=10&level=' + leaderboardData.level + '&global=true', {
+    //     method: 'GET',
+    //     headers: {
+    //         'Accept': 'application/json',
+    //         'Content-Type': 'application/json'
+    //     },
+    // }).then(res => res.json())
+    // .then(json => currentLeaderboard = json)
+    // .catch(function(err) 
+    // {   
+    //   console.error("Can't Get Leaderboard Data: ", err);
+    // }); 
 
-    return await response;
+    // return await response;
 }
 
 

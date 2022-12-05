@@ -196,7 +196,7 @@ def sendData():
     db.session.add_all(score)
     db.session.commit()
 
-    # sendData?_id=123&
+    # sendData?_id=123&time=213&timestamp=213&score=123456&stars_collected=3&track=1
     
     return render_template("sendData.html")
 

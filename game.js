@@ -675,6 +675,7 @@ function openFullscreen() // this funciton will launch the game in fullscreen. I
 
 function getUserData()
 {
+    console.log(getItem("userID"));
     if(getItem("userID") == null)
     {
         newDevice();
@@ -699,74 +700,7 @@ function updateScore(levelGroup, level)
 
 }
 
-// async function updateLeaderBoard()
-// {
-//     // let example = "{id: “sdfsdf”, level: “level”, stars_collected: 10, score: 100000, time: 45}";
-    
-//     let newLeaderboard = await getLevelScores()
-//     // if (newLeaderboard == null || newLeaderboard.length == 0)
-//     // {
-//     //     currentLeaderboard = []
-//     // }
-//     // else
-//     // {
-//     //     currentLeaderboard = []
 
-
-//     //     newLeaderboard.forEach(attempt =>
-//     //     {
-//     //         currentLeaderboard.push(attempt)
-//     //     })
-
-//     // }
-    
-
-//     // let newLeaderboard = []
-
-//     // currentLeaderboard.forEach( entry => 
-//     //     {
-//     //         newLeaderboard.push({_id: entry._id, level: entry.attempt.level, score: entry.attempt.score, time: entry.attempt.time})
-//     //     })
-
-//     // currentLeaderboard = newLeaderboard;
-
-//     // let whatToSortBy = (leaderboardData.sort == "score") ? "score" : "time"
-
-//     // let sortAscOrDesc = (leaderboardData.sort == "time") ? "asc" : "desc"
-
-//     // currentLeaderboard.sort(compareValues(whatToSortBy, sortAscOrDesc))
-
-
-    
-
-
-//     //   console.log(currentLeaderboard);
-
-    
-
-
-
-
-//     // lv1scores 
-
-//     // for (let a = 0; a < 10; a++) 
-//     // {
-//     //     let id = "Username " + Math.round(random() * 1000);
-//     //     let randomTime = Math.round(random() * 100000);
-//     //     let randomStars = Math.round(random() * 3);
-//     //     let randomScore = randomStars > 0 ? (randomTime * randomStars) : 100;
-        
-//     //     let exampleArray = {id: id, level: "level", stars_collected: randomStars, score: randomScore, time: randomTime }
-
-
-//     //     currentLeaderboard.push(JSON.stringify(exampleArray));
-        
-//     // }
-
-
-    
-
-// }
 
 function compareValues(key, order = 'asc') 
 {
@@ -910,29 +844,43 @@ function sendScore(data)
 
 }
 
-function testSendData()
+async function fetchText() 
 {
-    // fetch('http://localhost:5000/sendData?_id=12345678&time=213&timestamp=213&score=123456&stars_collected=3&track=1').then(
-    //     (response) => response.json()).then(
-    //         (data) => console.log(data));
+    let sendDataLink = 'http://localhost:5000/leaderboardGame'
+    let response = await fetch(sendDataLink);
+    let data = await response.text();
+    console.log("data", data);
+}
 
-    $.ajax({
-        type: "GET",
-        url: "http://localhost:5000/sendData",
-        data: {
-            _id: localStorage.userId,
-            time: 123456, 
-            timestamp: 123,
-            score: 123456,
-            stars_collected: 3,
-            track: 1
-        },   // <== change is here
-        success: function(msg){
-            // alert(msg);
+async function testSendData()
+{
+    let sendDataLink = 'http://localhost:5000/sendData?_id=1234567890123&time=213&timestamp=213&score=123456&stars_collected=3&track=1'
+    let response = await fetch(sendDataLink).then(
+        (response) => response.json()).then(
+            (data) => console.log(data));
+
+            postData('https://example.com/answer', { answer: 42 })
+            .then((data) => {
+              console.log(data); // JSON data parsed by `data.json()` call
+            });
+
+    // $.ajax({
+    //     type: "GET",
+    //     url: "http://localhost:5000/sendData",
+    //     data: {
+    //         _id: localStorage.userId,
+    //         time: 123456, 
+    //         timestamp: 123,
+    //         score: 123456,
+    //         stars_collected: 3,
+    //         track: 1
+    //     },   // <== change is here
+    //     success: function(msg){
+    //         // alert(msg);
             
-        }
+    //     }
         
-    });
+    // });
 
     // $.get( "http://localhost:5000/sendData?_id=12345678&time=213&timestamp=213&score=123456&stars_collected=3&track=1" );
 
@@ -994,38 +942,16 @@ $.myjQuery = function() {
 function display() {
     $.myjQuery();
 };
-function updateLeaderBoard()
+async function updateLeaderBoard()
 {
     connectingToServer = true; 
-    // const response = await fetch('https://ic-research.eastus.cloudapp.azure.com:9000/leaderboard?limit=10&level=' + leaderboardData.level + '&global=true', {
-    //     method: 'GET',
-    //     headers: {
-    //         'Accept': 'application/json',
-    //         'Content-Type': 'application/json'
-    //     },
-    // }).then(res => res.json())
-    // .then(json => currentLeaderboard = json)
-    // .catch(function(err) 
-    // {   
-    //   console.error("Can't Get Leaderboard Data: ", err);
-    // }); 
 
-    // return await response;
-    $.myjQuery();
+    let leaderboardLink = 'http://localhost:5000/leaderboardGame'
+    let response = await fetch(leaderboardLink);
+    let responseJSON = await response.text()
+    currentLeaderboard = JSON.parse(responseJSON.slice(0, -2) + "]");
 
-    // $.ajax({
-    //     type: "GET",
-    //     url: "http://localhost:5000/leaderboardGame",
-    //     data: {},  
-    //     success: function(msg){
-            
-    //         currentLeaderboard = JSON.parse(msg)
-    //         console.log(currentLeaderboard);
-    //     }
-        
-    // });
-
-    // console.log("getting data from server");
+    console.log("leaderboard updated");
 }
 
 function updateLeaderBoardScreen() 

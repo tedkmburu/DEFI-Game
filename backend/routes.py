@@ -167,12 +167,12 @@ def leaderboardGame():
 
 
     ranked_students = sorted(students_list, key=itemgetter('score'), reverse=True)
-    jsonString = json.dumps(ranked_students)
-    jsonFile = open("leaderboard2.txt", "w")
-    jsonFile.write(jsonString)
-    jsonFile.close()
+    # jsonString = json.dumps(ranked_students)
+    # jsonFile = open("leaderboard2.txt", "w")
+    # jsonFile.write(jsonString)
+    # jsonFile.close()
 
-    # print(ranked_students)
+    print(ranked_students)
     return render_template("leaderboardGame.html", students=ranked_students)
 
 

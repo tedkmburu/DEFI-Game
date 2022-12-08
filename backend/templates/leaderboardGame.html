@@ -1,3 +1,1 @@
-{% block app_content %}
-[{% for student in students %}{"index:" {{ loop.index }}, "name":{{ student.username }}, "track":{{ student.track }}, "course":{{ student.course }}, "score":{{ student.score }}, "time":{{ student.time }}},{% endfor %}]
-{% endblock %}
+{% block app_content %}[{% for student in students %}{"index": {{ loop.index }}, "name": "{{ student.name }}", "track":{{ student.track }}, "course": "{{ student.class }}", "score": {{ student.score }}, "time": {{ student.time }}},{% endfor %}]{% endblock %}

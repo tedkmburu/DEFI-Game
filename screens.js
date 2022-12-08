@@ -783,6 +783,7 @@ function navigateTo(screenToShow, backButton)
         {
             leaderboardData.level = 1;
         }
+        updateLeaderBoard();
         updateLeaderBoardScreen();
     }
 
@@ -1059,7 +1060,7 @@ function createScreens()
                 new Button({x: 652, y: 15, width:  30, height: 25, title: ">" , onClick: function(){ increaseLeaderboardLevel(); updateLeaderBoard(); }, shape: "Rect", bgColor: chargeColor.positive, fontColor: "white", fontSize: 14})
                 ],
             textBoxes: [],
-            functions: function(){ updateLeaderBoard(); displayLeaderboardScreen() },
+            functions: function(){ displayLeaderboardScreen() },
             }),
             
 

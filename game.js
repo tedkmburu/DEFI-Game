@@ -844,26 +844,46 @@ function sendScore(data)
 
 }
 
-async function fetchText() 
+async function updateLeaderBoard()
 {
-    let sendDataLink = 'http://localhost:5000/leaderboardGame'
-    let response = await fetch(sendDataLink);
-    let data = await response.text();
-    console.log("data", data);
+    connectingToServer = true; 
+
+    let leaderboardLink = 'http://localhost:5000/leaderboardGame'
+    let response = await fetch(leaderboardLink);
+    let responseJSON = await response.text()
+    currentLeaderboard = JSON.parse(responseJSON.slice(0, -2) + "]");
+
+    console.log("leaderboard updated");
 }
 
 async function testSendData()
 {
-    let sendDataLink = 'http://localhost:5000/sendData?_id=1234567890123&time=213&timestamp=213&score=123456&stars_collected=3&track=1'
-    let response = await fetch(sendDataLink).then(
-        (response) => response.json()).then(
-            (data) => console.log(data));
+    let sendDataLink = 'http://localhost:5000/sendData'
+    // let sendDataLink2 = 'http://localhost:5000/sendData?_id=1234567890123&time=213&timestamp=213&score=123456&stars_collected=3&track=1'
+    // let response = await fetch(sendDataLink2).then(
+    //     (response) => response.json()).then(
+    //         (data) => console.log(data));
 
-            postData('https://example.com/answer', { answer: 42 })
-            .then((data) => {
-              console.log(data); // JSON data parsed by `data.json()` call
-            });
+    //         postData('https://example.com/answer', { answer: 42 })
+    //         .then((data) => {
+    //           console.log(data); // JSON data parsed by `data.json()` call
+    //         });
+    
+    let bodyData = {
+        time: 123456, 
+        timestamp: getDate(), 
+        score: 123456, 
+        stars_collected: 5, 
+        track: 1, 
+        _id: 3
+    }
 
+    let response2 = await fetch(sendDataLink, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: bodyData
+    }).then(response => response.json())
+    .then((data) => console.log(data));
     // $.ajax({
     //     type: "GET",
     //     url: "http://localhost:5000/sendData",
@@ -928,30 +948,6 @@ function testleaderboard(level)
             
     //     }
     // });
-}
-
-
-$.myjQuery = function() {
-    // alert("jQuery");
-    $.get("./leaderboard2.txt", function(response){
-        currentLeaderboard = JSON.parse(response)
-        //  console.log(currentLeaderboard);
-
-    });
-};
-function display() {
-    $.myjQuery();
-};
-async function updateLeaderBoard()
-{
-    connectingToServer = true; 
-
-    let leaderboardLink = 'http://localhost:5000/leaderboardGame'
-    let response = await fetch(leaderboardLink);
-    let responseJSON = await response.text()
-    currentLeaderboard = JSON.parse(responseJSON.slice(0, -2) + "]");
-
-    console.log("leaderboard updated");
 }
 
 function updateLeaderBoardScreen() 

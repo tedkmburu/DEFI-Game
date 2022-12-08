@@ -1,9 +1,10 @@
 import json
 import sys
 import flask_login
-from flask import render_template, redirect, url_for, flash, request
+from flask import render_template, redirect, url_for, flash, request, Flask
 from flask_login import login_required, current_user, login_user, logout_user
 from werkzeug.urls import url_parse
+from flask_cors import CORS
 
 from backend import app, db
 from backend.forms import LoginForm, RegistrationForm, NewCourseForm
@@ -22,6 +23,9 @@ pip install python-dotenv
 make a .flaskenv file inside DEFI-Game folder which has FLASK_APP=defi_app.py inside.
 """
 
+app = Flask(__name__)
+app.config["DEBUG"] = True
+CORS(app)
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
@@ -94,7 +98,7 @@ def students():
                 if c.id == e.course_id and s.id == e.student_id:
                     students_list.append(s.username)
 
-    print(students_list)
+    # print(students_list)
     return render_template('students.html', students=students_list)
 
 

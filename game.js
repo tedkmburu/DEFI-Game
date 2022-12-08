@@ -858,7 +858,16 @@ async function updateLeaderBoard()
 
 async function testSendData()
 {
-    let sendDataLink = 'http://localhost:5000/sendData'
+    let bodyData = {
+        time: 123456, 
+        timestamp: getDate(), 
+        score: 123456, 
+        stars_collected: 5, 
+        track: 1, 
+        _id: 3
+    }
+
+    let sendDataLink = 'http://localhost:5000/sendData?_id=1234567890123&time=213&timestamp=213&score=123456&stars_collected=3&track=1'
     // let sendDataLink2 = 'http://localhost:5000/sendData?_id=1234567890123&time=213&timestamp=213&score=123456&stars_collected=3&track=1'
     // let response = await fetch(sendDataLink2).then(
     //     (response) => response.json()).then(
@@ -869,19 +878,11 @@ async function testSendData()
     //           console.log(data); // JSON data parsed by `data.json()` call
     //         });
     
-    let bodyData = {
-        time: 123456, 
-        timestamp: getDate(), 
-        score: 123456, 
-        stars_collected: 5, 
-        track: 1, 
-        _id: 3
-    }
+    
 
     let response2 = await fetch(sendDataLink, {
-        method: 'POST',
+        method: 'GET',
         headers: { 'Content-Type': 'application/json' },
-        body: bodyData
     }).then(response => response.json())
     .then((data) => console.log(data));
     // $.ajax({

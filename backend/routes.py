@@ -4,7 +4,7 @@ import flask_login
 from flask import render_template, redirect, url_for, flash, request, Flask
 from flask_login import login_required, current_user, login_user, logout_user
 from werkzeug.urls import url_parse
-from flask_cors import CORS
+
 
 from backend import app, db
 from backend.forms import LoginForm, RegistrationForm, NewCourseForm
@@ -23,9 +23,6 @@ pip install python-dotenv
 make a .flaskenv file inside DEFI-Game folder which has FLASK_APP=defi_app.py inside.
 """
 
-app = Flask(__name__)
-app.config["DEBUG"] = True
-CORS(app)
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
@@ -188,8 +185,9 @@ def leaderboardGame():
 #     track: (track.level + 1).toString(), 
 #     _id: data.userId}
 
-@app.route('/sendData', methods=['GET', 'POST'])
+@app.route('/sendData', methods=['POST', 'GET'])
 def sendData():
+
     studentsId =int(request.args.get('_id'))
     time = request.args.get('time')
     # timestamp = request.args.get('timestamp')
@@ -207,8 +205,8 @@ def sendData():
                    )
     print(score)
 
-    db.session.add(score)
-    db.session.commit()
+    # db.session.add(score)
+    # db.session.commit()
 
     # sendData?_id=123&time=213&timestamp=213&score=123456&stars_collected=3&track=1
     

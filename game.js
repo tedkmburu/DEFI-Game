@@ -774,7 +774,7 @@ function updateClassCodeOnServer()
                 if (msg == "classDoesNotExist")
                 {
                     showPopUp("classDoesNotExist");
-                    storeItem("classCode", 000);
+                    storeItem("classCode", defaultClassCode);
                 }
                 else
                 {
@@ -1055,7 +1055,7 @@ function newDevice()
     storeItem('userScores', JSON.stringify(userScores));
     storeItem('userStars', JSON.stringify(userStars));
     storeItem('userTimes', JSON.stringify(userTimes));
-    storeItem('classCode', 0);
+    storeItem('classCode', defaultClassCode);
     // console.log("end");
 
 }

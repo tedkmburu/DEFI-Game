@@ -76,6 +76,8 @@ const buttonRadius = 30;
 const portalRadius = 10;
 const portalDiameter = portalRadius * 2;
 
+const defaultClassCode = 000;
+
 const fieldLinesPerCoulomb = 4;
 
 let displayScore = 0;

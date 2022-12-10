@@ -162,7 +162,7 @@ function displayLeaderboardScreen()     // this function is called every frame w
             let stat = levelLeaderboard[i];
 
             let studentName = stat.name;
-            let className = stat.class;
+            let className = stat.course;
 
             let attempt = stat.score;
             let time = stat.time;
@@ -550,12 +550,11 @@ function displayLevelCompleteScreen()
 
 
         sendScore({
-            level: 1, 
-            group: currentLevel, 
+            level: currentLevel + 1,
             time: Math.round(timeElapsed), 
             stars: numberOfStarsCollected, 
             score: score, 
-            userID: 3})
+            userID: getItem("userID")})
     }
     
 
@@ -957,10 +956,11 @@ function createScreens()
             titleFontSize: 48,
             visibility: "hidden", 
             buttons: [
-                new Button({x: 662, y: 75, width: 100, height: 40, title: "PLAY" , onClick: function(){ navigateTo("Level Select"); }, shape: "Home", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 24, font: spaceFont}), 
-                new Button({x: 512, y: 150, width: 250, height: 40, title: "LEADERBOARD", onClick: function(){ navigateTo("Leaderboard"); }, shape: "Home", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 24, font: spaceFont}), 
-                new Button({x: 612, y: 225, width: 150, height: 40, title: "SETTINGS", onClick: function(){ navigateTo("Settings"); }, shape: "Home", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 24, font: spaceFont}), 
-                new Button({x: 662, y: 300, width: 100, height: 40, title: "HELP"    , onClick: function(){ showPopUp("Help") }, shape: "Home", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 24, font: spaceFont}),
+                new Button({x: 662, y: 60, width: 100, height: 40, title: "PLAY" , onClick: function(){ navigateTo("Level Select"); }, shape: "Home", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 24, font: spaceFont}), 
+                new Button({x: 512, y: 120, width: 250, height: 40, title: "LEADERBOARD", onClick: function(){ navigateTo("Leaderboard"); }, shape: "Home", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 24, font: spaceFont}), 
+                new Button({x: 612, y: 180, width: 150, height: 40, title: "SETTINGS", onClick: function(){ navigateTo("Settings"); }, shape: "Home", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 24, font: spaceFont}), 
+                new Button({x: 662, y: 240, width: 100, height: 40, title: "HELP"    , onClick: function(){ showPopUp("Help") }, shape: "Home", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 24, font: spaceFont}),
+                new Button({x: 590, y: 300, width: 100, height: 40, title: "JOIN A CLASS"    , onClick: function(){  }, shape: "Home", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 24, font: spaceFont}),
                 //new Button({x:  10, y:  10, width: 140, height: 20, title: "Change Username", onClick: function(){ navigateTo("Settings"); }, shape: "Rect", bgColor: "rgba(0,0,0,0)", fontColor: "white", fontSize: 16, font: fontRegular})
                 ],
             textBoxes: [],

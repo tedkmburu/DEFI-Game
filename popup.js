@@ -86,6 +86,31 @@ function createPopups()
             functions: function(){ newUserPopUp() },
         }),
 
+
+
+        new Popup({
+            name: "student already exists",
+            numberOfSlides: 1,
+            size: createVector(700,300),
+            textBoxes: [
+                new TextBox({x: 406, y: 110, id: "title", text: "Welcome to D.E.F.I. \n This username is already taken.", font: fontRegular, fontSize: 20, color: "black", visibility: "visible", align: CENTER}), 
+            ],
+            buttons: [
+                new Button({x: 354, y: 300 , width: 100, height: 30, title: "Save" , onClick: function(){ closePopup(); newDevice();  }, shape: "Rect", bgColor: "rgb(108,164,104)", fontColor: "white", fontSize: 14}), 
+                new Button({x: 80 , y: 190, width: 20, height: 20, title: "<" , onClick: function(){ movePopup("left") }, shape: "Rect", bgColor: "black", fontColor: "white", fontSize: 14}), 
+                new Button({x: 710, y: 190, width: 20, height: 20, title: ">" , onClick: function(){ movePopup("right")}, shape: "Rect", bgColor: "black", fontColor: "white", fontSize: 14}), 
+            ],
+            images: [
+
+            ],
+            functions: function(){ newUserPopUp() },
+        }),
+
+
+
+
+        
+
         new Popup({
             name: "username",
             numberOfSlides: 1,

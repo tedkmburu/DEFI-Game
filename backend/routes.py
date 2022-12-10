@@ -142,7 +142,7 @@ def leaderboard():
                     students_list.append(global_info)
 
     ranked_students = sorted(students_list, key=itemgetter('score'), reverse=True)
-    print(ranked_students)
+    # print(ranked_students)
     return render_template("leaderboard.html", students=ranked_students)
 
 @app.route('/leaderboardGame')
@@ -173,7 +173,7 @@ def leaderboardGame():
     # jsonFile.write(jsonString)
     # jsonFile.close()
 
-    print(ranked_students)
+    # print(ranked_students)
     return render_template("leaderboardGame.html", students=ranked_students)
 
 
@@ -188,6 +188,15 @@ def leaderboardGame():
 @app.route('/sendData', methods=['POST', 'GET'])
 def sendData():
 
+    # print()
+    # print()
+    # print()
+    # print()
+    # print(request.form.get("time"))
+    # print()
+    # print()
+    # print()
+    # print()
     studentsId =int(request.args.get('_id'))
     time = request.args.get('time')
     # timestamp = request.args.get('timestamp')
@@ -203,10 +212,10 @@ def sendData():
                    timeToComplete=time,
                    timestamp=timestamp
                    )
-    print(score)
+    # print(score)
 
-    # db.session.add(score)
-    # db.session.commit()
+    db.session.add(score)
+    db.session.commit()
 
     # sendData?_id=123&time=213&timestamp=213&score=123456&stars_collected=3&track=1
     
@@ -215,10 +224,29 @@ def sendData():
 @app.route('/createStudent', methods=['GET', 'POST'])
 def createStudent():
     username =request.args.get('username')
+    classCode =request.args.get('classCode')
+
+    all_students = Student.query.all()
+    for s in all_students:
+        if s.username == username:
+            return render_template("studentAlreadyExists.html")
+
     score = Student(username=username)
     db.session.add(score)
     db.session.commit()
-    return render_template("createStudent.html")
+
+    studentId = ""
+    all_students = Student.query.all()
+    for s in all_students:
+        if s.username == username:
+            studentId = int(s.id)
+
+    enrollment = Enrollment(student_id=studentId, course_id=classCode)
+    db.session.add(enrollment)
+    db.session.commit()
+
+    # print(all_students)
+    return render_template("createStudent.html", studentId=studentId)
 
 
 

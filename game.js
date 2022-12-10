@@ -756,18 +756,30 @@ function updateUsernameOnServer()
     // {
     //   console.error("Can't Update Username: ", err);
     // });
-    
-    $.ajax({
-        type: "GET",
-        url: "http://localhost:5000/createStudent",
-        data: {
-            username: localStorage.userName,
-            storedId: 123
-        }, 
-        success: function(msg){
-            console.log(msg);
-        }
-    });
+    if (getItem("userName") != null && getItem("userName") != "")
+    {
+        $.ajax({
+            type: "GET",
+            url: "http://localhost:5000/createStudent",
+            data: {
+                username: localStorage.userName,
+                classCode: getItem("classCode")
+            }, 
+            success: function(msg){
+                if (msg == "studentAlreadyExists")
+                {
+                    showPopUp("student already exists");
+                }
+                else
+                {
+                    // console.log(msg);
+                    storeItem("userID", msg)
+                    console.log("user Id is:", getItem("userID"));
+                }
+                
+            }
+        });
+    }
 }
 
 function makeid(length) {
@@ -780,51 +792,57 @@ function makeid(length) {
     return result;
 }
 
-function sendScore(data)
+async function sendScore(data)
 {
     connectingToServer = true; 
 
-    let currentdate = new Date(); 
-    let datetime = currentdate.getDate() + "/"
-                    + (currentdate.getMonth()+1)  + "/" 
-                    + currentdate.getFullYear() + " @ "  
-                    + currentdate.getHours() + ":"  
-                    + currentdate.getMinutes() + ":" 
-                    + currentdate.getSeconds();
+    // let currentdate = new Date(); 
+    // let datetime = currentdate.getDate() + "/"
+    //                 + (currentdate.getMonth()+1)  + "/" 
+    //                 + currentdate.getFullYear() + " @ "  
+    //                 + currentdate.getHours() + ":"  
+    //                 + currentdate.getMinutes() + ":" 
+    //                 + currentdate.getSeconds();
     // {_id: data.userId, level: (track.level + 1).toString(), track: data.group.toString(), stars_collected: data.numberOfStarsCollected, score: data.score, time: data.time, timestamp: getDate()};
 
     // {"time":9133,"timestamp":"8-4-2021","score":19817,"track":"1","_id":"086cf177-f53f-11eb-bb0b-000d3a162721"}
     // {time:"3456", timestamp:"10/20/2021", score:"264", stars_collected:"1", track:"1", _id:"8a7436fe-f3c2-11eb-bb0b-000d3a162721"}
     // console.log( "stars: " + data.stars);
-    let bodyData = {
-        time: data.time, 
-        timestamp: getDate(), 
-        score: data.score, 
-        stars_collected: data.stars, 
-        track: (track.level + 1).toString(), 
-        _id: 3
-    }
+    // let bodyData = {
+    //     time: data.time, 
+    //     timestamp: getDate(), 
+    //     score: data.score, 
+    //     stars_collected: data.stars, 
+    //     track: (track.level + 1).toString(), 
+    //     _id: 3
+    // }
 
-    let dataToSend = JSON.stringify(bodyData);
+    // let dataToSend = JSON.stringify(bodyData);
 
-    console.log("data to send: " + dataToSend);
-    console.log("date and time of completion; ", datetime);
+    // console.log("data to send: " + dataToSend);
+    // console.log("date and time of completion; ", datetime);
 
-    $.ajax({
-        type: "GET",
-        url: "http://localhost:5000/sendData",
-        data: {
-            _id: 3,
-            time: data.time, 
-            timestamp: getDate(),
-            score: data.score,
-            stars_collected: data.stars,
-            track: (track.level + 1)
-        },   // <== change is here
-        success: function(msg){
+    // $.ajax({
+    //     type: "GET",
+    //     url: "http://localhost:5000/sendData",
+    //     data: {
+    //         _id: 3,
+    //         time: data.time, 
+    //         timestamp: getDate(),
+    //         score: data.score,
+    //         stars_collected: data.stars,
+    //         track: (track.level + 1)
+    //     },   // <== change is here
+    //     success: function(msg){
             
-        }
-    });
+    //     }
+    // });
+
+    let sendDataLink = `http://localhost:5000/sendData?_id=${data.userID}&time=${data.time}&timestamp=${getDate()}&score=${data.score}&stars_collected=${data.stars}&track=${data.level}`
+    let response = await fetch(sendDataLink, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+    })
 
     
 
@@ -859,7 +877,7 @@ async function updateLeaderBoard()
 async function testSendData()
 {
     let bodyData = {
-        time: 123456, 
+        time: 987123456, 
         timestamp: getDate(), 
         score: 123456, 
         stars_collected: 5, 
@@ -867,7 +885,16 @@ async function testSendData()
         _id: 3
     }
 
-    let sendDataLink = 'http://localhost:5000/sendData?_id=1234567890123&time=213&timestamp=213&score=123456&stars_collected=3&track=1'
+    // let formDataList = new FormData();
+    // formDataList.append("_id", 4)
+    // formDataList.append("time", 5784573)
+    // formDataList.append("timestamp", getDate())
+    // formDataList.append("score", 12334634)
+    // formDataList.append("stars_collected", 6)
+    // formDataList.append("track", 1)
+
+    // console.log(formDataList);
+
     // let sendDataLink2 = 'http://localhost:5000/sendData?_id=1234567890123&time=213&timestamp=213&score=123456&stars_collected=3&track=1'
     // let response = await fetch(sendDataLink2).then(
     //     (response) => response.json()).then(
@@ -879,12 +906,22 @@ async function testSendData()
     //         });
     
     
-
+    let sendDataLink = 'http://localhost:5000/sendData?_id=1234567890123&time=213&timestamp=213&score=123456&stars_collected=3&track=1'
     let response2 = await fetch(sendDataLink, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
-    }).then(response => response.json())
-    .then((data) => console.log(data));
+    })
+
+    console.log(encodeURIComponent(JSON.stringify(JSON.parse(bodyData))))
+
+    // let sendDataLink = 'http://localhost:5000/sendData'
+    // let response2 = await fetch(sendDataLink, {
+    //     method: 'POST',
+    //     headers: { 'Content-Type': 'application/json' },
+    //     body: formDataList
+    // })
+
+    // console.log(response2);
     // $.ajax({
     //     type: "GET",
     //     url: "http://localhost:5000/sendData",
@@ -995,7 +1032,7 @@ function getDate()
 
 function newDevice()
 {
-    // fetch('https://ic-research.eastus.cloudapp.azure.com:9000/device/', {
+    // fetch('https://ic-research.eastus.updateUsernameOnServercloudapp.azure.com:9000/device/', {
     //     method: 'GET',
     //     headers: {
     //         'Accept': 'application/json',
@@ -1010,7 +1047,7 @@ function newDevice()
     // })
 
     
-    storeItem("userID", 3)
+   
     updateUsernameOnServer();
 
     let userScores = [];
@@ -1027,6 +1064,7 @@ function newDevice()
     storeItem('userScores', JSON.stringify(userScores));
     storeItem('userStars', JSON.stringify(userStars));
     storeItem('userTimes', JSON.stringify(userTimes));
+    storeItem('classCode', 0);
     // console.log("end");
 
 }

@@ -174,7 +174,7 @@ async function setup()    // This function only runs once when the page first lo
     {
         showPopUp("New User");
         storeItem("firstOpen", false);
-        storeItem("gameVersion", "2.0");
+        storeItem("gameVersion", "3.0");
     }
     else
     {
@@ -675,7 +675,7 @@ function openFullscreen() // this funciton will launch the game in fullscreen. I
 
 function getUserData()
 {
-    console.log(getItem("userID"));
+    console.log("userID", getItem("userID"));
     if(getItem("userID") == null)
     {
         newDevice();
@@ -733,29 +733,6 @@ function compareValues(key, order = 'asc')
 
 function updateUsernameOnServer() 
 { 
-
-    // let bodyData = {student_name: localStorage.userName, class_name: "PHYS-102", userId: localStorage.userId};
-    // let dataToSend = JSON.stringify(bodyData)
-
-    // console.log(dataToSend);
-
-    // let responseLink = "https://ic-research.eastus.cloudapp.azure.com:9000/updateName/"
-    
-
-    // const response = await fetch(responseLink, {
-    //     method: "POST",
-    //     headers: {
-    //         'Accept': 'application/json',
-    //         'Content-Type': 'application/json'
-    //     },
-    //     body: dataToSend
-    // }).then(data => {
-    //     console.log(data);
-    //     return data
-    // }).catch(function(err) 
-    // {
-    //   console.error("Can't Update Username: ", err);
-    // });
     if (getItem("userName") != null && getItem("userName") != "")
     {
         $.ajax({
@@ -775,6 +752,36 @@ function updateUsernameOnServer()
                     // console.log(msg);
                     storeItem("userID", msg)
                     console.log("user Id is:", getItem("userID"));
+                }
+                
+            }
+        });
+    }
+}
+
+function updateClassCodeOnServer()
+{
+    if (getItem("userID") != null && getItem("userID") != "")
+    {
+        $.ajax({
+            type: "GET",
+            url: "http://localhost:5000/updateClassCode",
+            data: {
+                user_ID: localStorage.userID,
+                classCode: getItem("classCode")
+            }, 
+            success: function(msg){
+                if (msg == "classDoesNotExist")
+                {
+                    showPopUp("classDoesNotExist");
+                    storeItem("classCode", 000);
+                }
+                else
+                {
+                    console.log("works");
+                    // console.log(msg);
+                    // storeItem("userID", msg)
+                    // console.log("user Id is:", getItem("userID"));
                 }
                 
             }
@@ -1032,22 +1039,6 @@ function getDate()
 
 function newDevice()
 {
-    // fetch('https://ic-research.eastus.updateUsernameOnServercloudapp.azure.com:9000/device/', {
-    //     method: 'GET',
-    //     headers: {
-    //         'Accept': 'application/json',
-    //         'Content-Type': 'application/json'
-    //     },
-    // }).then(res => {
-    //     return res.json()
-    // }).then((json) => {
-    //    // console.log(json);
-    //     storeItem("userId", json)
-    //     updateUsernameOnServer();
-    // })
-
-    
-   
     updateUsernameOnServer();
 
     let userScores = [];

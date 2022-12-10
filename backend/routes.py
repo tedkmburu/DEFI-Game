@@ -223,7 +223,7 @@ def sendData():
 
 @app.route('/createStudent', methods=['GET', 'POST'])
 def createStudent():
-    username =request.args.get('username')
+    username = request.args.get('username')
     classCode =request.args.get('classCode')
 
     all_students = Student.query.all()
@@ -247,6 +247,25 @@ def createStudent():
 
     # print(all_students)
     return render_template("createStudent.html", studentId=studentId)
+
+
+
+@app.route('/updateClassCode', methods=['GET', 'POST'])
+def updateClassCode():
+    userID = request.args.get('user_ID')
+    classCode =request.args.get('classCode')
+
+    courses = Course.query.filter_by(courseCode = classCode).first()
+    
+    if courses != None:
+
+        enrollments = Enrollment.query.filter_by(student_id = userID).first()
+        enrollments.course_id = courses.id
+        db.session.commit()
+
+        return render_template("classExists.html")
+    else: 
+        return render_template("classDoesNotExist.html")
 
 
 

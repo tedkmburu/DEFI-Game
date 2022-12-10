@@ -107,6 +107,44 @@ function createPopups()
         }),
 
 
+        new Popup({
+            name: "Join A Class",
+            numberOfSlides: 1,
+            size: createVector(700,300),
+            textBoxes: [
+                new TextBox({x: 406, y: 110, id: "title", text: "You can join a class to compete with your classmates in the leaderboard. \n Teachers generate class codes here", font: fontRegular, fontSize: 20, color: "black", visibility: "visible", align: CENTER}), 
+            ],
+            buttons: [
+                new Button({x: 354, y: 300 , width: 100, height: 30, title: "Save" , onClick: function(){ closePopup(); console.log("new class code: ", localStorage.classCode); updateClassCodeOnServer()   }, shape: "Rect", bgColor: "rgb(108,164,104)", fontColor: "white", fontSize: 14}), 
+                new Button({x: 80 , y: 190, width: 20, height: 20, title: "<" , onClick: function(){ movePopup("left") }, shape: "Rect", bgColor: "black", fontColor: "white", fontSize: 14}), 
+                new Button({x: 710, y: 190, width: 20, height: 20, title: ">" , onClick: function(){ movePopup("right")}, shape: "Rect", bgColor: "black", fontColor: "white", fontSize: 14}), 
+            ],
+            images: [
+
+            ],
+            functions: function(){ joinAClassPopUp() },
+        }),
+
+
+        new Popup({
+            name: "classDoesNotExist",
+            numberOfSlides: 1,
+            size: createVector(700,300),
+            textBoxes: [
+                new TextBox({x: 406, y: 110, id: "title", text: "The class code you entered does not exist \n Teachers generate class codes here", font: fontRegular, fontSize: 20, color: "black", visibility: "visible", align: CENTER}), 
+            ],
+            buttons: [
+                new Button({x: 354, y: 300 , width: 100, height: 30, title: "Save" , onClick: function(){ closePopup(); console.log("new class code: ", localStorage.classCode); updateClassCodeOnServer()   }, shape: "Rect", bgColor: "rgb(108,164,104)", fontColor: "white", fontSize: 14}), 
+                new Button({x: 80 , y: 190, width: 20, height: 20, title: "<" , onClick: function(){ movePopup("left") }, shape: "Rect", bgColor: "black", fontColor: "white", fontSize: 14}), 
+                new Button({x: 710, y: 190, width: 20, height: 20, title: ">" , onClick: function(){ movePopup("right")}, shape: "Rect", bgColor: "black", fontColor: "white", fontSize: 14}), 
+            ],
+            images: [
+
+            ],
+            functions: function(){ joinAClassPopUp() },
+        }),
+
+
 
 
         
@@ -160,6 +198,17 @@ function newUserPopUp() // this function runs every frame when a new user opens 
         // classCodeInput.style("visibility", "visible");
     }
     
+}
+
+function joinAClassPopUp()
+{
+    if (popupVisibile) 
+    {
+        classCodeInput.position(316 * scale.x, 150 * scale.y);
+        // classCodeInput.position(316 * scale.x, 200 * scale.y);
+        classCodeInput.style("visibility", "visible");
+        // classCodeInput.style("visibility", "visible");
+    }
 }
 
 function showPopUp(name) // call this function with a popup name in it to display that popup

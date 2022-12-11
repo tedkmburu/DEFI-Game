@@ -879,7 +879,9 @@ async function updateLeaderBoard()
     connectingToServer = true; 
 
     let leaderboardLink = 'http://localhost:5000/leaderboardGame'
-    let response = await fetch(leaderboardLink);
+    let response = await fetch(leaderboardLink, {
+        mode: 'cors',
+        credentials: 'same-origin'});
     let responseJSON = await response.text()
     currentLeaderboard = JSON.parse(responseJSON.slice(0, -2) + "]");
 

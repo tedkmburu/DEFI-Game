@@ -4,6 +4,7 @@ import flask_login
 from flask import render_template, redirect, url_for, flash, request, Flask
 from flask_login import login_required, current_user, login_user, logout_user
 from werkzeug.urls import url_parse
+from flask_cors import cross_origin
 
 
 from backend import app, db
@@ -146,6 +147,7 @@ def leaderboard():
     return render_template("leaderboard.html", students=ranked_students)
 
 @app.route('/leaderboardGame')
+@cross_origin()
 def leaderboardGame():
     students_list = []
     all_enrollments = Enrollment.query.all()
@@ -177,6 +179,7 @@ def leaderboardGame():
 
 
 @app.route('/sendData', methods=['POST', 'GET'])
+@cross_origin()
 def sendData():
 
     # print()
@@ -213,6 +216,7 @@ def sendData():
     return render_template("sendData.html")
 
 @app.route('/createStudent', methods=['GET', 'POST'])
+@cross_origin()
 def createStudent():
     username = request.args.get('username')
     classCode =request.args.get('classCode')
@@ -250,6 +254,7 @@ def createStudent():
 
 
 @app.route('/updateClassCode', methods=['GET', 'POST'])
+@cross_origin()
 def updateClassCode():
     userID = request.args.get('user_ID')
     classCode =request.args.get('classCode')

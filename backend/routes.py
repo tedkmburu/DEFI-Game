@@ -148,42 +148,33 @@ def leaderboard():
 @app.route('/leaderboardGame')
 def leaderboardGame():
     students_list = []
-    enrollment = Enrollment.query.all()
+    all_enrollments = Enrollment.query.all()
     all_students = Student.query.all()
-    scores = Score.query.all()
+    all_scores = Score.query.all()
 
+    for score in all_scores: 
+        for student in all_students:
+            for enrollmentRow in all_enrollments:
+                if student.id == enrollmentRow.student_id and student.id == score.student_id:
+                    username =  student.username
+                    courseId =  enrollmentRow.course_id
+                    courseName = Course.query.get(courseId).courseName
 
-    for e in enrollment:
-        for s in all_students:
-            for sc in scores:
-                if s.id == e.student_id and s.id == sc.student_id:
                     global_info = {
-                        'name': s.username,
-                        'track': sc.track,
-                        'score': sc.score,
-                        'class': Course.query.get(e.course_id).courseName,
-                        'time': sc.timeToComplete
+                        'name': username,
+                        'track': score.track,
+                        'score': score.score,
+                        'class': courseName,
+                        'time': score.timeToComplete
                     }
                     students_list.append(global_info)
 
 
     ranked_students = sorted(students_list, key=itemgetter('score'), reverse=True)
-    # jsonString = json.dumps(ranked_students)
-    # jsonFile = open("leaderboard2.txt", "w")
-    # jsonFile.write(jsonString)
-    # jsonFile.close()
 
     # print(ranked_students)
     return render_template("leaderboardGame.html", students=ranked_students)
 
-
-# {
-#     time: data.time, 
-#     timestamp: getDate(), 
-#     score: data.score, 
-#     stars_collected: data.stars, 
-#     track: (track.level + 1).toString(), 
-#     _id: data.userId}
 
 @app.route('/sendData', methods=['POST', 'GET'])
 def sendData():
@@ -226,6 +217,8 @@ def createStudent():
     username = request.args.get('username')
     classCode =request.args.get('classCode')
 
+    print(classCode)
+
     all_students = Student.query.all()
     for s in all_students:
         if s.username == username:
@@ -241,7 +234,13 @@ def createStudent():
         if s.username == username:
             studentId = int(s.id)
 
-    enrollment = Enrollment(student_id=studentId, course_id=classCode)
+    courseId = ""
+    all_Courses = Course.query.all()
+    for s in all_Courses:
+        if s.courseCode == classCode:
+            courseId = int(s.id)
+
+    enrollment = Enrollment(student_id=studentId, course_id=courseId)
     db.session.add(enrollment)
     db.session.commit()
 
@@ -350,7 +349,7 @@ def populate_db():
                 teacher_id=t3.id)
 
     c6 = Course(courseName="n/a",
-                courseCode="000",
+                courseCode="123",
                 teacher_id=t4.id)
 
     db.session.add_all([c1, c2, c3, c4, c5, c6])

@@ -678,7 +678,10 @@ function getUserData()
     console.log("userID", getItem("userID"));
     if(getItem("userID") == null)
     {
+        
         newDevice();
+
+        
         
         totalStars = 0;
     }
@@ -733,14 +736,16 @@ function compareValues(key, order = 'asc')
 
 function updateUsernameOnServer() 
 { 
+    
     if (getItem("userName") != null && getItem("userName") != "")
     {
+        console.log("updated username on server");
         $.ajax({
             type: "GET",
             url: "http://localhost:5000/createStudent",
             data: {
                 username: localStorage.userName,
-                classCode: getItem("classCode")
+                classCode: "123"
             }, 
             success: function(msg){
                 if (msg == "studentAlreadyExists")
@@ -778,7 +783,7 @@ function updateClassCodeOnServer()
                 }
                 else
                 {
-                    console.log("works");
+                    console.log("classCodeUpdated");
                     // console.log(msg);
                     // storeItem("userID", msg)
                     // console.log("user Id is:", getItem("userID"));

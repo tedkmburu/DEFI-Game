@@ -8,7 +8,7 @@ from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
 app.config["DEBUG"] = True
-CORS(app, support_credentials=True)
+CORS(app, resources={r"/api/*": {"origins": "*"}})
 app.config.from_object(Config)
 db = SQLAlchemy(app)
 login = LoginManager(app)

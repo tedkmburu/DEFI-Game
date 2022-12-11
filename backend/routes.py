@@ -452,3 +452,8 @@ def reset_db():
         db.session.execute(table.delete())
     db.session.commit()
     return render_template('courses.html')
+
+
+@app.route('/game')
+def game():
+    return render_template('game.html')

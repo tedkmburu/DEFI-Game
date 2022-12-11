@@ -320,9 +320,12 @@ def populate_db():
     t2.set_password("123")
 
     t3 = Teacher(firstName="Bob", lastName="Smith", email="bsmith@mail.edu")
-    t2.set_password("123")
+    t3.set_password("123")
 
-    db.session.add_all([t1, t2, t3])
+    t4 = Teacher(firstName="admin", lastName="admin", email="admin@mail.edu")
+    t4.set_password("123")
+
+    db.session.add_all([t1, t2, t3, t4])
     db.session.commit()
 
     # Course
@@ -331,7 +334,7 @@ def populate_db():
                 teacher_id=t1.id)
 
     c2 = Course(courseName="Test Course 102",
-                courseCode="HG1273C8",
+                courseCode="AG1273C8",
                 teacher_id=t1.id)
 
     c3 = Course(courseName="HS Physics E&M I",
@@ -339,14 +342,18 @@ def populate_db():
                 teacher_id=t2.id)
 
     c4 = Course(courseName="HS Physics E&M II",
-                courseCode="HG1273C8",
+                courseCode="FG1273C8",
                 teacher_id=t2.id)
 
     c5 = Course(courseName="College Intro Physics II",
                 courseCode="HG1273C8",
                 teacher_id=t3.id)
 
-    db.session.add_all([c1, c2, c3, c4, c5])
+    c6 = Course(courseName="n/a",
+                courseCode="000",
+                teacher_id=t4.id)
+
+    db.session.add_all([c1, c2, c3, c4, c5, c6])
     db.session.commit()
 
     # Student

@@ -10,3 +10,4 @@ app.db
 app.log*
 .flaskenv
 .venv
+defi_app
